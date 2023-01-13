@@ -42,4 +42,11 @@ void Server::create_soket()
 		std::cout << "ERROR socket address" << std::endl;
 		exit(1);
 	}
+
+	//コネクト要求をいくつまで待つかを設定
+	if (listen(socket_fd, SOMAXCONN) == -1)
+	{
+		std::cout << "ERROR " << std::endl;
+		exit(1);
+	}
 }
