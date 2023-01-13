@@ -36,5 +36,10 @@ void Server::create_soket()
 	reader_addr.sin_addr.s_addr = INADDR_ANY;
 	reader_addr.sin_port = htonl(port_);
 
-	
+	//ソケットにアドレスを結びつける
+	if (bind(socket_fd, (struct sockaddr *)&reader_addr, sizeof(reader_addr)) < 0)
+	{
+		std::cout << "ERROR socket address" << std::endl;
+		exit(1);
+	}
 }
