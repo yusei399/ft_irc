@@ -6,11 +6,19 @@ Server::~Server(){}
 
 void Server::create_soket()
 {
+	int enable = 1;
 	// ソケット作成、アドレスドメイン、ソケットタイプ、プロトコル
 	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socket_fd < 0)
 	{
 		std::cout << "ERROR socket" << std::strerror(errno);
+		exit(1);
+	}
+
+	//ソケットオプションの有効　　有効にしたい場合は０以外を設定、失敗した場合は-1が返ってくる
+	if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable)) == -1)
+	{
+		std::cout << "ERROR socket option" << std::endl;
 		exit(1);
 	}
 }
