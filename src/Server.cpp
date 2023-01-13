@@ -21,4 +21,11 @@ void Server::create_soket()
 		std::cout << "ERROR socket option" << std::endl;
 		exit(1);
 	}
+	//ファイルディスクリプタをノンブロッキングモードで使用する
+	if (fcntl(socket_fd, F_SETFL, O_NONBLOCK) == -1)
+	{
+		std::cout << "ERROR Fcntl" << std::endl;
+		exit(1);
+	}
+	
 }

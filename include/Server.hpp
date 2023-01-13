@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <unistd.h> 
 #include <string> 
+#include <fcntl.h>
 class Server
 {
 private:
