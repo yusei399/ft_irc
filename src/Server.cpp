@@ -1,7 +1,7 @@
 #include "../include/Server.hpp"
 
 Server::Server () {}
-Server::Server(int port, std::string &password) : port_(port), password_(password) {}
+Server::Server(int port, std::string &password) : _port(port), _password(password) {}
 Server::~Server(){}
 
 void Server::create_soket()
@@ -34,7 +34,7 @@ void Server::create_soket()
 	bzero((char *) &reader_addr, sizeof(reader_addr));
 	reader_addr.sin_family = AF_INET;
 	reader_addr.sin_addr.s_addr = INADDR_ANY;
-	reader_addr.sin_port = htonl(port_);
+	reader_addr.sin_port = htonl(_port);
 
 	//ソケットにアドレスを結びつける
 	if (bind(socket_fd, (struct sockaddr *)&reader_addr, sizeof(reader_addr)) < 0)
@@ -48,5 +48,19 @@ void Server::create_soket()
 	{
 		std::cout << "ERROR " << std::endl;
 		exit(1);
+	}
+	std::cout << "socket create ok" << std::endl;
+}
+
+void Server::start()
+{
+	this->signal_init();
+	this->create_soket();
+	std::cout << "server start" << std::endl;
+
+	while (1)
+	{
+		if (poll(fds, nfds, ,TIMEOUT) == -1)
+			
 	}
 }

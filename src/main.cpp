@@ -1,6 +1,18 @@
+#include "../include/Server.hpp"
+
+Server *server;
 int main(int argc, char **argv){
-	if (argc != 3)
+	if (argc == 3)
 	{
-		return (0);
+		int port = atoi(argv[1]);
+		std::string password(argv[2]);
+		Server Irc(port, password);
+		server = &Irc;
+		Irc.start();
+	}
+	else
+	{
+		std::cout << "Error " << std::endl;
+		return 1;
 	}
 }
