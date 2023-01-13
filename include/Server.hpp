@@ -9,6 +9,7 @@ class Server
 private:
 	int port_;
 	std::string	password_;
+	int socket_fd;
 public:
 	Server();
 	Server(int port, std::string &password);
