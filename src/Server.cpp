@@ -52,6 +52,24 @@ void Server::create_soket()
 	std::cout << "socket create ok" << std::endl;
 }
 
+void Server::allow()
+{
+	std::cout << "accept ok" << std::endl;
+	int client_fd = -1;
+		do {
+			client_fd = accept(this->socket_fd, NULL, NULL);
+			if (client_fd < 0)
+			{
+				std::cout << "accept ok" << std::endl;
+				continue;
+			}
+				
+			else {
+				std::cout << "New incoming connection - " << client_fd << std::endl;
+				this->create_poll(client_fd);
+			}
+		} while (client_fd == -1);
+}
 
 void Server::create_poll(int socket_fd)
 {
@@ -67,24 +85,29 @@ void Server::start()
 {
 	// this->signal_init();
 	this->create_soket();
+	this->create_poll(socket_fd);
 	std::cout << "server start" << std::endl;
 
 	while (1)
 	{
-		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
+		std::cout << "server while " << std::endl;
+		if (poll(&(*_pfds.begin()), _pfds.size() ,TIMEOUT)== -1)
 		{
 			std::cout << "POLL ERROR" << std::endl;
 			exit(1);
 		}
-		for (int i = 0; i < _pfds.size(); i++)
+		std::cout << "for " << std::endl;
+		for (size_t i = 0; i < _pfds.size(); i++)
 		{
+			std::cout << "server in" << std::endl;
 			if (_pfds[i].revents == 0)
 				continue;
-			if (_pfds[i].events == POLL_IN)
+			if (_pfds[i].revents == POLLIN)
 			{
 				if (_pfds[i].fd == socket_fd)
 				{
-					
+					std::cout << "accept ok" << std::endl;
+					this->allow();
 				}
 			}
 		}

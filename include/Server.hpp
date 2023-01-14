@@ -23,6 +23,7 @@ private:
 	int _port;
 	std::string	_password;
 	int socket_fd;
+	int _connect;
 	std::vector<struct pollfd>		_pfds;;
 	void create_poll(int socket_fd);
 
@@ -32,6 +33,7 @@ public:
 	~Server();
 	void create_soket();
 	void start();
+	void allow();
 };
 
 // void signal_handler(int signal);
