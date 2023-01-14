@@ -52,15 +52,41 @@ void Server::create_soket()
 	std::cout << "socket create ok" << std::endl;
 }
 
+
+void Server::create_poll(int socket_fd)
+{
+	struct pollfd pollfd;
+	pollfd.fd = socket_fd;
+	pollfd.events = POLLIN;
+	pollfd.revents = 0;
+	_pfds.push_back(pollfd);
+
+}
+
 void Server::start()
 {
-	this->signal_init();
+	// this->signal_init();
 	this->create_soket();
 	std::cout << "server start" << std::endl;
 
 	while (1)
 	{
-		if (poll(fds, nfds, ,TIMEOUT) == -1)
-			
+		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
+		{
+			std::cout << "POLL ERROR" << std::endl;
+			exit(1);
+		}
+		for (int i = 0; i < _pfds.size(); i++)
+		{
+			if (_pfds[i].revents == 0)
+				continue;
+			if (_pfds[i].events == POLL_IN)
+			{
+				if (_pfds[i].fd == socket_fd)
+				{
+					
+				}
+			}
+		}
 	}
 }
