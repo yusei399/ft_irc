@@ -94,7 +94,7 @@ void Server::start()
 	while (1)
 	{
 		std::cout << "server while " << std::endl;
-		if (poll(&(*_pfds.begin()), _pfds.size() ,TIMEOUT)== -1)
+		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
 		{
 			std::cout << "POLL ERROR" << std::endl;
 			exit(1);
@@ -116,3 +116,4 @@ void Server::start()
 		}
 	}
 }
+

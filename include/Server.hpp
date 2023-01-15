@@ -32,6 +32,7 @@ public:
 	Server(int port, std::string &password);
 	~Server();
 	void create_soket();
+	void client_setup();
 	void start();
 	void allow();
 };
