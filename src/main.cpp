@@ -12,7 +12,7 @@ int main(int argc, char **argv){
 	}
 	else
 	{
-		std::cout << "Error " << std::endl;
+		std::cout << "Error ARGUMENT" << std::endl;
 		return 1;
 	}
 }
