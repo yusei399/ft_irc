@@ -10,21 +10,21 @@ void Server::create_soket()
 	struct sockaddr_in reader_addr;
 	
 	// ソケット作成、アドレスドメイン、ソケットタイプ、プロトコル
-	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (socket_fd < 0)
+	_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (_socket_fd < 0)
 	{
 		std::cout << "ERROR socket" << std::strerror(errno);
 		exit(1);
 	}
 
 	//ソケットオプションの有効　　有効にしたい場合は０以外を設定、失敗した場合は-1が返ってくる
-	if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable)) == -1)
+	if (setsockopt(_socket_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable)) == -1)
 	{
 		std::cout << "ERROR socket option" << std::endl;
 		exit(1);
 	}
 	//ファイルディスクリプタをノンブロッキングモードで使用する
-	if (fcntl(socket_fd, F_SETFL, O_NONBLOCK) == -1)
+	if (fcntl(_socket_fd, F_SETFL, O_NONBLOCK) == -1)
 	{
 		std::cout << "ERROR Fcntl" << std::endl;
 		exit(1);
@@ -37,14 +37,14 @@ void Server::create_soket()
 	reader_addr.sin_port = htonl(_port);
 
 	//ソケットにアドレスを結びつける
-	if (bind(socket_fd, (struct sockaddr *)&reader_addr, sizeof(reader_addr)) < 0)
+	if (bind(_socket_fd, (struct sockaddr *)&reader_addr, sizeof(reader_addr)) < 0)
 	{
 		std::cout << "ERROR socket address" << std::endl;
 		exit(1);
 	}
 
 	//コネクト要求をいくつまで待つかを設定
-	if (listen(socket_fd, SOMAXCONN) == -1)
+	if (listen(_socket_fd, SOMAXCONN) == -1)
 	{
 		std::cout << "ERROR " << std::endl;
 		exit(1);
@@ -52,14 +52,13 @@ void Server::create_soket()
 	std::cout << "socket create ok" << std::endl;
 }
 
-
 //接続
 void Server::allow()
 {
 	std::cout << "accept ok" << std::endl;
 	int connect_fd = -1;
 		do {
-			connect_fd = accept(this->socket_fd, NULL, NULL);
+			connect_fd = accept(this->_socket_fd, NULL, NULL);
 			if (connect_fd < 0)
 			{
 				std::cout << "accept ok" << std::endl;
@@ -82,14 +81,21 @@ void Server::create_poll(int socket_fd)
 	pollfd.events = POLLIN;
 	pollfd.revents = 0;
 	_pfds.push_back(pollfd);
-
 }
+
+void Server::connect_client(int socketfd)
+{
+	const std::string nick = "unknown" + std::to_string(_socket_fd);
+	Client client(socket_fd, nick);
+	_connect[socket_fd] = 
+}
+
 
 void Server::start()
 {
 	// this->signal_init();
 	this->create_soket();
-	this->create_poll(socket_fd);
+	this->create_poll(_socket_fd);
 	std::cout << "server start" << std::endl;
 
 	while (1)

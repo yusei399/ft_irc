@@ -1,5 +1,6 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP 
+
 #include <iostream> 
 #include <sys/socket.h> 
 #include <sys/types.h>
@@ -16,13 +17,14 @@
 #define TIMEOUT 3 * 60 * 1000
 
 
+#include "Client.hpp"
 
 class Server
 {
 private:
 	int _port;
 	std::string	_password;
-	int socket_fd;
+	int _socket_fd;
 	int _connect;
 	std::vector<struct pollfd>		_pfds;;
 	void create_poll(int socket_fd);
@@ -32,10 +34,9 @@ public:
 	Server(int port, std::string &password);
 	~Server();
 	void create_soket();
-	void client_setup();
+	void connect_client(int socketfd);
 	void start();
 	void allow();
-	int connect();
 };
 
 // void signal_handler(int signal);
