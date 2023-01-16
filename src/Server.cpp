@@ -68,6 +68,7 @@ void Server::allow()
 			else {
 				std::cout << "connection - " << connect_fd << std::endl;
 				this->create_poll(connect_fd);
+				connect_client(connect_fd);
 			}
 		} while (connect_fd == -1);
 }
@@ -119,6 +120,7 @@ void Server::start()
 					std::cout << "accept ok" << std::endl;
 					this->allow();
 				}
+			}
 		}
 	}
 }
