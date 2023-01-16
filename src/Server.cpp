@@ -85,9 +85,9 @@ void Server::create_poll(int socket_fd)
 
 void Server::connect_client(int socketfd)
 {
-	const std::string nick = "unknown" + std::to_string(_socket_fd);
-	Client client(socket_fd, nick);
-	_connect[socket_fd] = 
+	const std::string nick = "unknown" + std::to_string(socketfd);
+	Client client(socketfd, nick);
+	_connect[socketfd] = client;
 }
 
 
@@ -114,12 +114,11 @@ void Server::start()
 				continue;
 			if (_pfds[i].revents == POLLIN)
 			{
-				if (_pfds[i].fd == socket_fd)
+				if (_pfds[i].fd == _socket_fd)
 				{
 					std::cout << "accept ok" << std::endl;
 					this->allow();
 				}
-			}
 		}
 	}
 }

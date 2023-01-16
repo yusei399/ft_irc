@@ -13,6 +13,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <map>
 
 #define TIMEOUT 3 * 60 * 1000
 
@@ -25,7 +26,7 @@ private:
 	int _port;
 	std::string	_password;
 	int _socket_fd;
-	int _connect;
+	std::map<int, Client> _connect;
 	std::vector<struct pollfd>		_pfds;;
 	void create_poll(int socket_fd);
 
