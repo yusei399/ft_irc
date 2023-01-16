@@ -52,7 +52,7 @@ void Server::create_soket()
 	std::cout << "socket create ok" << std::endl;
 }
 
-void Server::connect()
+int Server::connect()
 {
 	return _connect;
 }
