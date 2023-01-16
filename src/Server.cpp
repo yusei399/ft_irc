@@ -52,6 +52,17 @@ void Server::create_soket()
 	std::cout << "socket create ok" << std::endl;
 }
 
+void Server::connect()
+{
+	struct sockaddr_storage	remote_addr;
+	socklen_t	addr_len = sizeof remote_addr;;
+	if (_connect = accept(this->socket_fd, (struct sockaddr *)&remote_addr, &addr_len) == -1)
+	{
+		std::cout << "accept error" << std::endl;
+		exit(1);
+	}
+}
+
 //接続
 void Server::allow()
 {

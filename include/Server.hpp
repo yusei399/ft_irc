@@ -35,6 +35,7 @@ public:
 	void client_setup();
 	void start();
 	void allow();
+	void connect();
 };
 
 // void signal_handler(int signal);
