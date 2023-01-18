@@ -34,7 +34,8 @@ void Server::create_soket()
 	bzero((char *) &reader_addr, sizeof(reader_addr));
 	reader_addr.sin_family = AF_INET;
 	reader_addr.sin_addr.s_addr = INADDR_ANY;
-	reader_addr.sin_port = htonl(_port);
+	reader_addr.sin_port = htons(_port);
+	std::cout << "port = " << _port << std::endl;
 
 	//ソケットにアドレスを結びつける
 	if (bind(_socket_fd, (struct sockaddr *)&reader_addr, sizeof(reader_addr)) < 0)
@@ -42,14 +43,13 @@ void Server::create_soket()
 		std::cout << "ERROR socket address" << std::endl;
 		exit(1);
 	}
-
 	//コネクト要求をいくつまで待つかを設定
 	if (listen(_socket_fd, SOMAXCONN) == -1)
 	{
 		std::cout << "ERROR " << std::endl;
 		exit(1);
 	}
-	std::cout << "socket create ok" << std::endl;
+	std::cout << "socket create ok, fd = " << _socket_fd << std::endl;
 }
 
 //接続
@@ -58,13 +58,13 @@ void Server::allow()
 	std::cout << "accept ok" << std::endl;
 	int connect_fd = -1;
 		do {
+			std::cout << "test" << std::endl;
 			connect_fd = accept(this->_socket_fd, NULL, NULL);
 			if (connect_fd < 0)
 			{
-				std::cout << "accept ok" << std::endl;
+				std::cout << "accept error" << std::endl;
 				continue;
 			}
-				
 			else {
 				std::cout << "connection - " << connect_fd << std::endl;
 				this->create_poll(connect_fd);
@@ -88,6 +88,7 @@ void Server::connect_client(int socketfd)
 {
 	const std::string nick = "unknown" + std::to_string(socketfd);
 	Client client(socketfd, nick);
+	std::cout << "test" << std::endl;
 	_connect[socketfd] = client;
 }
 
@@ -102,6 +103,8 @@ void Server::start()
 	while (1)
 	{
 		std::cout << "server while " << std::endl;
+		std::cout << "pfds size = " << _pfds.size() << std::endl;
+		std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
 		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
 		{
 			std::cout << "POLL ERROR" << std::endl;
@@ -124,4 +127,3 @@ void Server::start()
 		}
 	}
 }
-
