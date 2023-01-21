@@ -92,6 +92,10 @@ void Server::connect_client(int socketfd)
 	_connect[socketfd] = client;
 }
 
+void Server::chat_in()
+{
+	
+}
 
 void Server::start()
 {

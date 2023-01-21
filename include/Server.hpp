@@ -36,6 +36,7 @@ public:
 	~Server();
 	void create_soket();
 	void connect_client(int socketfd);
+	void chat_in();
 	void start();
 	void allow();
 };
