@@ -92,9 +92,12 @@ void Server::connect_client(int socketfd)
 	_connect[socketfd] = client;
 }
 
-void Server::chat_in()
+void Server::chat_in(int fd)
 {
-	
+	char buff[MSG_LEN];
+	int	 byte;
+
+	std::memset(buff, 0, sizeof buff);
 }
 
 void Server::start()

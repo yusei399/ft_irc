@@ -17,7 +17,7 @@
 
 #define TIMEOUT 3 * 60 * 1000
 
-
+# define MSG_LEN 1024
 #include "Client.hpp"
 class Client;
 class Server
@@ -36,7 +36,7 @@ public:
 	~Server();
 	void create_soket();
 	void connect_client(int socketfd);
-	void chat_in();
+	void chat_in(int fd);
 	void start();
 	void allow();
 };
