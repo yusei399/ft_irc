@@ -91,12 +91,8 @@ int Server::search(const std::string &str, const std::string &target)
 		size_t j = 0;
 		if (str[i] == target[0])
 		{
-			std::cout << "str[i] && target[0]" << std::endl;
 			while (str[i] && target[j] && str[i] == target[j])
-			{
-				i++;
-				j++;
-			}
+				i++, j++;
 			if (j == target.size())
 				return i - (target.size() - 1);
 		}
