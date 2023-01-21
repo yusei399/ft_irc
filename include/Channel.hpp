@@ -4,16 +4,10 @@
 class Channel
 {
 private:
-	
+
 public:
 	Channel(/* args */);
 	~Channel();
 };
 
-Channel::Channel(/* args */)
-{
-}
-
-Channel::~Channel()
-{
-}
+#endif

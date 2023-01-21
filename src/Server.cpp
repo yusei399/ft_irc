@@ -115,6 +115,11 @@ void Server::chat_in(int fd)
 	}
 
 	Client &client = _connect[fd];
+	std::cout << "-------------Client Message----------------" << std::endl;
+	std::cout << "client fd:" << fd << std::endl;
+	std::cout << "client message:" << buff << std::endl;
+	std::cout << "---------------------------------------------" << std::endl;
+
 	
 }
 
