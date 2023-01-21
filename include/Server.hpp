@@ -1,7 +1,8 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP 
 
-#include <iostream> 
+#include <iostream>
+#include <algorithm>
 #include <sys/socket.h> 
 #include <sys/types.h>
 #include <arpa/inet.h>
@@ -39,6 +40,7 @@ public:
 	void chat_in(int fd);
 	void start();
 	void allow();
+	int  search(const std::string &str, const std::string &target);
 };
 
 // void signal_handler(int signal);

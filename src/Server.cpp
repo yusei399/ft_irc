@@ -84,6 +84,13 @@ void Server::create_poll(int socket_fd)
 	_pfds.push_back(pollfd);
 }
 
+int Server::search(const std::string &str, const std::string &target)
+{
+	size_t i = 0;
+	size_t j = 0;
+	
+}
+
 void Server::connect_client(int socketfd)
 {
 	const std::string nick = "unknown" + std::to_string(socketfd);
@@ -112,6 +119,13 @@ void Server::chat_in(int fd)
 		}
 		// else if (byte == 0)
 		// quitの処理後で追記する
+
+		size_t i = 0;
+		// while ()
+		// {
+		// 	/* code */
+		// }
+		
 	}
 
 	Client &client = _connect[fd];
@@ -120,7 +134,6 @@ void Server::chat_in(int fd)
 	std::cout << "client message:" << buff << std::endl;
 	std::cout << "---------------------------------------------" << std::endl;
 
-	
 }
 
 void Server::start()
