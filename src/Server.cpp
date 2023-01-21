@@ -98,6 +98,21 @@ void Server::chat_in(int fd)
 	int	 byte;
 
 	std::memset(buff, 0, sizeof buff);
+	if ((byte = recv(_socket_fd, buff, sizeof buff, 0)) <= 0 || (byte > MSG_LEN))
+	{
+		if (byte < 0)
+		{
+			std::cout << "recv error" << std::endl;
+			exit(1);
+		}
+		else if (byte > MSG_LEN)
+		{
+			std::cout << "message error" << std::endl;
+			exit(1);
+		}
+		// else if (byte == 0)
+		// quitの処理後で追記する
+	}
 }
 
 void Server::start()
