@@ -113,6 +113,9 @@ void Server::chat_in(int fd)
 		// else if (byte == 0)
 		// quitの処理後で追記する
 	}
+
+	Client &client = _connect[fd];
+	
 }
 
 void Server::start()
