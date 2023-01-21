@@ -86,9 +86,18 @@ void Server::create_poll(int socket_fd)
 
 int Server::search(const std::string &str, const std::string &target)
 {
-	size_t i = 0;
 	size_t j = 0;
-	
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		if (str[i] == target[0])
+		{
+			while (str[i] && target[j] && str[i] == target[j])
+				j++;
+			if (j == target.size())
+				return i - (target.size() - 1);
+		}
+	}
+	return -1;
 }
 
 void Server::connect_client(int socketfd)
