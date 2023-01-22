@@ -24,7 +24,6 @@ void Server::create_soket()
 	reader_addr.sin_family = AF_INET;
 	reader_addr.sin_addr.s_addr = INADDR_ANY;
 	reader_addr.sin_port = htons(_port);
-	std::cout << "port = " << _port << std::endl;
 	//ソケットにアドレスを結びつける
 	if (bind(_socket_fd, (struct sockaddr *)&reader_addr, sizeof(reader_addr)) < 0)
 		throw std::exception();
@@ -117,6 +116,7 @@ void Server::chat_in(int fd)
 			std::string command;
 			while (&buff[i] != "\r" && &buff[i] != "\n")
 				i++, len++;
+			command.append(&buff[i - len], len + 2);
 		}
 	}
 }
