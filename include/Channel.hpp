@@ -3,11 +3,11 @@
 
 class Channel
 {
-private:
+	private:
 
-public:
-	Channel(/* args */);
-	~Channel();
+	public:
+		Channel();
+		~Channel();
 };
 
 #endif

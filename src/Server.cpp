@@ -12,43 +12,25 @@ void Server::create_soket()
 	// ソケット作成、アドレスドメイン、ソケットタイプ、プロトコル
 	_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket_fd < 0)
-	{
-		std::cout << "ERROR socket" << std::strerror(errno);
-		exit(1);
-	}
-
+		throw std::exception();
 	//ソケットオプションの有効　　有効にしたい場合は０以外を設定、失敗した場合は-1が返ってくる
 	if (setsockopt(_socket_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable)) == -1)
-	{
-		std::cout << "ERROR socket option" << std::endl;
-		exit(1);
-	}
+		throw std::exception();
 	//ファイルディスクリプタをノンブロッキングモードで使用する
 	if (fcntl(_socket_fd, F_SETFL, O_NONBLOCK) == -1)
-	{
-		std::cout << "ERROR Fcntl" << std::endl;
-		exit(1);
-	}
-
+		throw std::exception();
 	//通信、ポートアドレスの設定
 	bzero((char *) &reader_addr, sizeof(reader_addr));
 	reader_addr.sin_family = AF_INET;
 	reader_addr.sin_addr.s_addr = INADDR_ANY;
 	reader_addr.sin_port = htons(_port);
 	std::cout << "port = " << _port << std::endl;
-
 	//ソケットにアドレスを結びつける
 	if (bind(_socket_fd, (struct sockaddr *)&reader_addr, sizeof(reader_addr)) < 0)
-	{
-		std::cout << "ERROR socket address" << std::endl;
-		exit(1);
-	}
+		throw std::exception();
 	//コネクト要求をいくつまで待つかを設定
 	if (listen(_socket_fd, SOMAXCONN) == -1)
-	{
-		std::cout << "ERROR " << std::endl;
-		exit(1);
-	}
+		throw std::exception();
 	std::cout << "socket create ok, fd = " << _socket_fd << std::endl;
 }
 
@@ -58,7 +40,6 @@ void Server::allow()
 	std::cout << "accept ok" << std::endl;
 	int connect_fd = -1;
 		do {
-			std::cout << "test" << std::endl;
 			connect_fd = accept(this->_socket_fd, NULL, NULL);
 			if (connect_fd < 0)
 			{
@@ -117,32 +98,27 @@ void Server::chat_in(int fd)
 	if ((byte = recv(_socket_fd, buff, sizeof buff, 0)) <= 0 || (byte > MSG_LEN))
 	{
 		if (byte < 0)
-		{
-			std::cout << "recv error" << std::endl;
-			exit(1);
-		}
+			throw std::exception();
 		else if (byte > MSG_LEN)
-		{
-			std::cout << "message error" << std::endl;
-			exit(1);
-		}
+			throw std::exception();
 		// else if (byte == 0)
 		// quitの処理後で追記する
 
+		Client &client = _connect[fd];
+		std::cout << "-------------Client Message----------------" << std::endl;
+		std::cout << "client fd:" << fd << std::endl;
+		std::cout << "client message:" << buff << std::endl;
+		std::cout << "---------------------------------------------" << std::endl;
+
 		size_t i = 0;
-		// while ()
-		// {
-		// 	/* code */
-		// }
-		
+		while (search(&buff[i], "\r\n") != -1)
+		{
+			size_t len = 0;
+			std::string command;
+			while (&buff[i] != "\r" && &buff[i] != "\n")
+				i++, len++;
+		}
 	}
-
-	Client &client = _connect[fd];
-	std::cout << "-------------Client Message----------------" << std::endl;
-	std::cout << "client fd:" << fd << std::endl;
-	std::cout << "client message:" << buff << std::endl;
-	std::cout << "---------------------------------------------" << std::endl;
-
 }
 
 void Server::start()
@@ -158,14 +134,9 @@ void Server::start()
 		std::cout << "pfds size = " << _pfds.size() << std::endl;
 		std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
 		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
-		{
-			std::cout << "POLL ERROR" << std::endl;
-			exit(1);
-		}
-		std::cout << "for " << std::endl;
+			throw std::exception();
 		for (size_t i = 0; i < _pfds.size(); i++)
 		{
-			std::cout << "server in" << std::endl;
 			if (_pfds[i].revents == 0)
 				continue;
 			if (_pfds[i].revents == POLLIN)
