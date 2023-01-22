@@ -41,10 +41,7 @@ void Server::allow()
 		do {
 			connect_fd = accept(this->_socket_fd, NULL, NULL);
 			if (connect_fd < 0)
-			{
-				std::cout << "accept error" << std::endl;
-				continue;
-			}
+				throw std::exception();
 			else {
 				std::cout << "connection - " << connect_fd << std::endl;
 				this->create_poll(connect_fd);
