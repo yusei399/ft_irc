@@ -81,7 +81,6 @@ void Server::connect_client(int socketfd)
 {
 	const std::string nick = "unknown" + std::to_string(socketfd);
 	Client client(socketfd, nick);
-	std::cout << "test" << std::endl;
 	_connect[socketfd] = client;
 }
 
@@ -99,7 +98,6 @@ void Server::chat_in(int fd)
 			throw std::exception();
 		// else if (byte == 0)
 		// quitの処理後で追記する
-
 		Client &client = _connect[fd];
 		std::cout << "-------------Client Message----------------" << std::endl;
 		std::cout << "client fd:" << fd << std::endl;
@@ -114,6 +112,7 @@ void Server::chat_in(int fd)
 			while (&buff[i] != "\r" && &buff[i] != "\n")
 				i++, len++;
 			command.append(&buff[i - len], len + 2);
+			client.parse(command);
 		}
 	}
 }
@@ -123,11 +122,9 @@ void Server::start()
 	// this->signal_init();
 	this->create_soket();
 	this->create_poll(_socket_fd);
-	std::cout << "server start" << std::endl;
 
 	while (1)
 	{
-		std::cout << "server while " << std::endl;
 		std::cout << "pfds size = " << _pfds.size() << std::endl;
 		std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
 		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)

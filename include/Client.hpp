@@ -12,6 +12,7 @@ public:
 	Client(/* args */);
 	Client(int fd, const std::string &nc);
 	~Client();
+	void parse(std::string command);
 };
 
 #endif
