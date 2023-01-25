@@ -6,9 +6,10 @@ Client::Client(int fd, const std::string &nc) : _fd(fd), _nick(nc){}
 
 Client::~Client(){}
 
-void Client::command_parser(std::string command)
+void Client::command_parser(std::string &command)
 {
-	for (int i = 0; i < command.size(); i++)
+	size_t i = 0;
+	while (command[i] == ':')
 	{
 		
 	}
