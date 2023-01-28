@@ -109,7 +109,7 @@ void Server::chat_in(int fd)
 		{
 			size_t len = 0;
 			std::string command;
-			while (&buff[i] != "\r" && &buff[i] != "\n")
+			while (buff[i] != '\r' && buff[i] != '\n')
 				i++, len++;
 			command.append(&buff[i - len], len + 2);
 			client.command_parser(command);
@@ -139,6 +139,10 @@ void Server::start()
 				{
 					std::cout << "accept ok" << std::endl;
 					this->allow();
+				}
+				else
+				{
+					this->chat_in(_socket_fd);
 				}
 			}
 		}

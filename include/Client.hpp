@@ -14,7 +14,8 @@ public:
 	Client(/* args */);
 	Client(int fd, const std::string &nc);
 	~Client();
-	void command_parser(std::string &);
+	void command_parser(std::string &command);
+	void preprocessing(const std::string &message, int &i);
 };
 
 #endif
