@@ -9,16 +9,18 @@ Client::~Client(){}
 void Client::command_parser(std::string &command)
 {
 	int  i = 0;
-	size_t j = 1;
+	int  cnt = 1;
 	if (command[i] == ':')
 		this->preprocessing(command, i);
-	while (command[j] == ' ' && command[i] != '\r' && command[i] != '\n')
+	for (int i = 0; i < command.size(); i++)
 	{
-		_command.append(command[j], j);
-		j++;
+		cnt = i;
+		if (command[i] == ' ' && command[i] != '\r' && command[i] != '\n')
+			break;
+		_command.append(command[i], i);
 	}
-	while (command[j] == ' ')
-		j++;
+	while (command[cnt] == ' ')
+		cnt++;
 }
 
 void Client::preprocessing(const std::string &message, int &i)
@@ -26,11 +28,9 @@ void Client::preprocessing(const std::string &message, int &i)
 	int cnt = 0;
 	for (i = 1; i < message.size(); i++)
 	{
+		cnt = i;
 		if (message[i] == ' ')
-		{
-			cnt = i;
 			break ;
-		}
 		_command_parse.append(message[i], 1);
 	}
 	while (message[cnt] == ' ')
