@@ -21,6 +21,7 @@ void Client::command_parser(std::string &command)
 	}
 	while (command[cnt] == ' ')
 		cnt++;
+	this->processingparams(&command[cnt], cnt);
 }
 
 void Client::preprocessing(const std::string &message, int &i)
@@ -35,4 +36,15 @@ void Client::preprocessing(const std::string &message, int &i)
 	}
 	while (message[cnt] == ' ')
 		cnt++;
+}
+
+void Client::processingparams(const std::string &message, int &cnt)
+{
+	for (; cnt < message.size(); cnt++)
+	{
+		std::string tmp;
+		if (message[cnt] == ' ' && message[cnt] != '\r' && message[cnt] != '\n')
+			break ;
+		
+	}
 }
