@@ -14,14 +14,14 @@ void Client::command_parser(std::string &command)
 	{
 		while (command[i] != ' ')
 		{
-			command_parser.append(command[i], i);
+			_command_parse.append(&command[i]);
 			i++;
 		}
-		while (command[i++] == ' ')
+		while (command[i++] == ' '){}
 	}
-	while (command[j] == ' ' && command[i] != '\r' command[i] != '\n')
+	while (command[j] == ' ' && command[i] != '\r' && command[i] != '\n')
 	{
-		command_.append(command[j], j);
+		_command.append(command[j], j);
 		j++;
 	}
 	while (command[j] == ' ')

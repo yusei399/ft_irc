@@ -8,13 +8,13 @@ class Client
 private:
 	int _fd;
 	std::string _nick;
-	std::string command_parser;
-	std::string command_;
+	std::string _command_parse;
+	std::string _command;
 public:
 	Client(/* args */);
 	Client(int fd, const std::string &nc);
 	~Client();
-	void command_parser(std::string command);
+	void command_parser(std::string &);
 };
 
 #endif

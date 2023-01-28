@@ -1,5 +1,5 @@
 #include "../include/Server.hpp"
-
+#include "../include/Client.hpp"
 Server::Server () {}
 Server::Server(int port, std::string &password) : _port(port), _password(password) {}
 Server::~Server(){}
@@ -112,7 +112,7 @@ void Server::chat_in(int fd)
 			while (&buff[i] != "\r" && &buff[i] != "\n")
 				i++, len++;
 			command.append(&buff[i - len], len + 2);
-			client.parse(command);
+			client.command_parser(command);
 		}
 	}
 }
