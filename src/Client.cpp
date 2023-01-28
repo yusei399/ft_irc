@@ -45,6 +45,20 @@ void Client::processingparams(const std::string &message, int &cnt)
 		std::string tmp;
 		if (message[cnt] == ' ' && message[cnt] != '\r' && message[cnt] != '\n')
 			break ;
-		
+		if (message[cnt] == ':')
+		{
+			cnt++;
+			for (; cnt < message.size(); cnt++)
+			{
+				if (message[cnt] != '\r' && message[cnt] != '\n')
+					tmp.append(message[cnt], 1);
+			}
+		}
+		for (; cnt < message.size(); cnt++)
+		{
+			if (message[cnt] == ' ' &&  message[cnt] != '\r' && message[cnt] != '\n')
+				tmp.append(message[cnt], 1);
+		}
+		_params.push_back(tmp);
 	}
 }

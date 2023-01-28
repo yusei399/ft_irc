@@ -10,6 +10,7 @@ private:
 	std::string _nick;
 	std::string _command_parse;
 	std::string _command;
+	std::vector<std::string> _params;
 public:
 	Client(/* args */);
 	Client(int fd, const std::string &nc);
