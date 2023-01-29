@@ -98,6 +98,9 @@ void Server::chat_in(int fd)
 			throw std::exception();
 		// else if (byte == 0)
 		// quitの処理後で追記する
+	}
+	else
+	{
 		Client &client = _connect[fd];
 		std::cout << "-------------Client Message----------------" << std::endl;
 		std::cout << "client fd:" << fd << std::endl;
