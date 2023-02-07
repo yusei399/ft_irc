@@ -1,5 +1,7 @@
 #include "../include/Server.hpp"
 #include "../include/Client.hpp"
+#include <signal.h>
+
 Server::Server () {}
 Server::Server(int port, std::string &password) : _port(port), _password(password) {}
 Server::~Server(){}
@@ -61,6 +63,12 @@ void Server::create_poll(int socket_fd)
 	_pfds.push_back(pollfd);
 }
 
+
+std::map<int, Client>& Server::get_user()
+{
+	return (this->_user);
+}
+
 int Server::search(const std::string &str, const std::string &target)
 {
 	for (size_t i = 0; i < str.size(); i++)
@@ -119,7 +127,6 @@ void Server::chat_in(int fd)
 
 void Server::start()
 {
-	// this->signal_init();
 	this->create_soket();
 	this->create_poll(_socket_fd);
 

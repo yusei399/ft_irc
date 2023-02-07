@@ -11,7 +11,6 @@ private:
 public:
 	User();
 	~User();
-
 	void user_setup();
 };
 
