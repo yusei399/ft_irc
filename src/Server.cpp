@@ -97,12 +97,15 @@ void Server::connect_client(int socketfd)
 
 void Server::chat_in(int fd)
 {
-	char buff[MSG_LEN];
-	int	 byte;
-	std::cout << "test" << std::endl;
+	char buff[MSG_LEN] = {0};
+	ssize_t	 byte;
+	std::cout << "fd : " << fd << std::endl;
+	std::cout << "buff :" << buff << std::endl;
+	std::cout << "sizeof buff : " << sizeof(buff) << std::endl;
+	// std::cout << "test" << std::endl;
 
-	std::memset(buff, 0, sizeof(buff));
-	if ((byte = recv(_socket_fd, buff, sizeof(buff), 0)) <= 0 || (byte > MSG_LEN))
+	// std::memset(buff, 0, sizeof(buff));
+	if ((byte = recv(fd, buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
 	{
 		if (byte < 0)
 		{
@@ -113,11 +116,12 @@ void Server::chat_in(int fd)
 			throw std::exception();
 		// else if (byte == 0)
 		// quitの処理後で追記する
-		Client &client = _connect[fd];
-		std::cout << "-------------Client Message----------------" << std::endl;
-		std::cout << "client fd:" << fd << std::endl;
-		std::cout << "client message:" << buff << std::endl;
-		std::cout << "---------------------------------------------" << std::endl;
+	}
+	Client &client = _connect[fd];
+	std::cout << "-------------Client Message----------------" << std::endl;
+	std::cout << "client fd:" << fd << std::endl;
+	std::cout << "client message:" << buff << std::endl;
+	std::cout << "---------------------------------------------" << std::endl;
 
 		size_t i = 0;
 		while (search(&buff[i], "\r\n") != -1)
@@ -129,7 +133,6 @@ void Server::chat_in(int fd)
 			command.append(&buff[i - len], len + 2);
 			client.command_parser(command);
 		}
-	}
 }
 
 void Server::start()
@@ -157,7 +160,8 @@ void Server::start()
 				}
 				else
 				{
-					this->chat_in(_socket_fd);
+					std::cout << "chat in" << std::endl;
+					this->chat_in(_pfds[i].fd);
 				}
 			}
 		}
