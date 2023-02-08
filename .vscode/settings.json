@@ -75,6 +75,10 @@
 		"memory_resource": "cpp",
 		"utility": "cpp",
 		"stop_token": "cpp",
-		"cinttypes": "cpp"
+		"cinttypes": "cpp",
+		"__tree": "cpp",
+		"map": "cpp",
+		"set": "cpp",
+		"unordered_set": "cpp"
 	}
 }
