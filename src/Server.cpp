@@ -98,6 +98,7 @@ void Server::chat_in(int fd)
 	int	 byte;
 
 	std::memset(buff, 0, sizeof buff);
+	std::cout << "test" << std::endl;
 	if ((byte = recv(_socket_fd, buff, sizeof buff, 0)) <= 0 || (byte > MSG_LEN))
 	{
 		if (byte < 0)

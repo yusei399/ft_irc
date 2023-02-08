@@ -10,18 +10,23 @@ void signal_handler(int signal)
 Server *server;
 int main(int argc, char **argv){
 	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
+	signal(SIGPIPE, SIG_IGN);
+	try
+	{
+		if (argc == 3)
+		{
+			int port = atoi(argv[1]);
+			std::string password(argv[2]);
+			Server Irc(port, password);
+			server = &Irc;
+			Irc.start();
+		}
+		/* code */
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 	
-	if (argc == 3)
-	{
-		int port = atoi(argv[1]);
-		std::string password(argv[2]);
-		Server Irc(port, password);
-		server = &Irc;
-		Irc.start();
-	}
-	else
-	{
-		std::cout << "Error " << std::endl;
-		return 1;
-	}
 }
