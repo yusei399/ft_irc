@@ -43,7 +43,10 @@ void Server::allow()
 		do {
 			connect_fd = accept(this->_socket_fd, NULL, NULL);
 			if (connect_fd < 0)
+			{
+				std::cout << "connect_fd" << connect_fd << std::endl;
 				throw std::exception();
+			}
 			else {
 				std::cout << "connection - " << connect_fd << std::endl;
 				this->create_poll(connect_fd);
@@ -96,13 +99,16 @@ void Server::chat_in(int fd)
 {
 	char buff[MSG_LEN];
 	int	 byte;
-
-	std::memset(buff, 0, sizeof buff);
 	std::cout << "test" << std::endl;
-	if ((byte = recv(_socket_fd, buff, sizeof buff, 0)) <= 0 || (byte > MSG_LEN))
+
+	std::memset(buff, 0, sizeof(buff));
+	if ((byte = recv(_socket_fd, buff, sizeof(buff), 0)) <= 0 || (byte > MSG_LEN))
 	{
 		if (byte < 0)
+		{
+			std::cout << "byte : " << byte << std::endl;
 			throw std::exception();
+		}
 		else if (byte > MSG_LEN)
 			throw std::exception();
 		// else if (byte == 0)

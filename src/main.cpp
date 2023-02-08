@@ -22,7 +22,6 @@ int main(int argc, char **argv){
 			server = &Irc;
 			Irc.start();
 		}
-		/* code */
 	}
 	catch(const std::exception& e)
 	{
