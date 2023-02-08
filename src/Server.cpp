@@ -132,8 +132,9 @@ void Server::start()
 
 	while (1)
 	{
-		std::cout << "pfds size = " << _pfds.size() << std::endl;
-		std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
+		std::cout << "server start" << std::endl;
+		// std::cout << "pfds size = " << _pfds.size() << std::endl;
+		// std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
 		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
 			throw std::exception();
 		for (size_t i = 0; i < _pfds.size(); i++)

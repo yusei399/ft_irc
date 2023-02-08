@@ -1,16 +1,16 @@
 #include "../include/Server.hpp"
+#include <signal.h>
 
 
 void signal_handler(int signal)
 {
-	
+	std::cout << "test" << std::endl;
 }
 
 Server *server;
 int main(int argc, char **argv){
-
-	signal(SIGUSR1, signal_handler);
-	signal(SIGUSR2, signal_handler);
+	signal(SIGINT, signal_handler);
+	
 	if (argc == 3)
 	{
 		int port = atoi(argv[1]);
