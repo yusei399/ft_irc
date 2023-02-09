@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
   }
  */
   // サーバーの終了処理
-  cleanupServer();
+  // cleanupServer();
   return 0;
 }
 

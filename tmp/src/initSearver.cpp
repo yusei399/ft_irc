@@ -1,5 +1,18 @@
 #include "../inc/ft_irc.hpp"
 
+Ircserv::Ircserv(){}
+Ircserv::Ircserv(const Ircserv &cp)
+{
+	*this = cp;
+}
+Ircserv::~Ircserv(){}
+Ircserv &Ircserv::operator=(const Ircserv &rh)
+{
+	if (this == &rh)
+		return (*this);
+	return (*this);
+}
+
 int Ircserv::initSearv(int port, const std::string &password) {
 	int result = 0;
 
