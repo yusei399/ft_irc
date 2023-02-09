@@ -97,14 +97,14 @@ void Server::connect_client(int socketfd)
 
 void Server::chat_in(int fd)
 {
-	char buff[MSG_LEN] = {0};
+	char buff[MSG_LEN];
 	ssize_t	 byte;
 	std::cout << "fd : " << fd << std::endl;
 	std::cout << "buff :" << buff << std::endl;
 	std::cout << "sizeof buff : " << sizeof(buff) << std::endl;
 	// std::cout << "test" << std::endl;
 
-	// std::memset(buff, 0, sizeof(buff));
+	std::memset(buff, 0, sizeof(buff));
 	if ((byte = recv(fd, buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
 	{
 		if (byte < 0)
