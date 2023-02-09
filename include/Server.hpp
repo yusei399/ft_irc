@@ -28,8 +28,9 @@ private:
 	std::string	_password;
 	int _socket_fd;
 	std::map<int, Client> _connect;
-	std::vector<struct pollfd>		_pfds;;
+	std::vector<struct pollfd>		_pfds;
 	void create_poll(int socket_fd);
+	std::map<int, Client> _user;
 
 public:
 	Server();
@@ -40,9 +41,10 @@ public:
 	void chat_in(int fd);
 	void start();
 	void allow();
+	std::map<int, Client>& get_user();
 	int  search(const std::string &str, const std::string &target);
 };
 
-// void signal_handler(int signal);
+void signal_handler(int signal);
 
 #endif

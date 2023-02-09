@@ -11,6 +11,7 @@ private:
 	std::string _command_parse;
 	std::string _command;
 	std::vector<std::string> _params;
+
 public:
 	Client(/* args */);
 	Client(int fd, const std::string &nc);
@@ -18,6 +19,7 @@ public:
 	void command_parser(std::string &command);
 	void preprocessing(const std::string &message, int &i);
 	void processingparams(const std::string &message, int &i);
+
 };
 
 #endif

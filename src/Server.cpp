@@ -1,5 +1,7 @@
 #include "../include/Server.hpp"
 #include "../include/Client.hpp"
+#include <signal.h>
+
 Server::Server () {}
 Server::Server(int port, std::string &password) : _port(port), _password(password) {}
 Server::~Server(){}
@@ -41,7 +43,10 @@ void Server::allow()
 		do {
 			connect_fd = accept(this->_socket_fd, NULL, NULL);
 			if (connect_fd < 0)
+			{
+				std::cout << "connect_fd" << connect_fd << std::endl;
 				throw std::exception();
+			}
 			else {
 				std::cout << "connection - " << connect_fd << std::endl;
 				this->create_poll(connect_fd);
@@ -59,6 +64,12 @@ void Server::create_poll(int socket_fd)
 	pollfd.events = POLLIN;
 	pollfd.revents = 0;
 	_pfds.push_back(pollfd);
+}
+
+
+std::map<int, Client>& Server::get_user()
+{
+	return (this->_user);
 }
 
 int Server::search(const std::string &str, const std::string &target)
@@ -87,13 +98,20 @@ void Server::connect_client(int socketfd)
 void Server::chat_in(int fd)
 {
 	char buff[MSG_LEN];
-	int	 byte;
+	ssize_t	 byte;
+	std::cout << "fd : " << fd << std::endl;
+	std::cout << "buff :" << buff << std::endl;
+	std::cout << "sizeof buff : " << sizeof(buff) << std::endl;
+	// std::cout << "test" << std::endl;
 
-	std::memset(buff, 0, sizeof buff);
-	if ((byte = recv(_socket_fd, buff, sizeof buff, 0)) <= 0 || (byte > MSG_LEN))
+	std::memset(buff, 0, sizeof(buff));
+	if ((byte = recv(fd, buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
 	{
 		if (byte < 0)
+		{
+			std::cout << "byte : " << byte << std::endl;
 			throw std::exception();
+		}
 		else if (byte > MSG_LEN)
 			throw std::exception();
 		// else if (byte == 0)
@@ -122,14 +140,14 @@ void Server::chat_in(int fd)
 
 void Server::start()
 {
-	// this->signal_init();
 	this->create_soket();
 	this->create_poll(_socket_fd);
 
 	while (1)
 	{
-		std::cout << "pfds size = " << _pfds.size() << std::endl;
-		std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
+		std::cout << "server start" << std::endl;
+		// std::cout << "pfds size = " << _pfds.size() << std::endl;
+		// std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
 		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
 			throw std::exception();
 		for (size_t i = 0; i < _pfds.size(); i++)
@@ -145,7 +163,8 @@ void Server::start()
 				}
 				else
 				{
-					this->chat_in(_socket_fd);
+					std::cout << "chat in" << std::endl;
+					this->chat_in(_pfds[i].fd);
 				}
 			}
 		}
