@@ -5,7 +5,8 @@ int Ircserv::initSearv(int port, const std::string &password) {
 
 	// socketの作成
 	int sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock < 0) {
+	if (sock < 0)
+	{
 		perror("socket");
 		result = -1;
 		return result;
@@ -19,14 +20,16 @@ int Ircserv::initSearv(int port, const std::string &password) {
 	addr.sin_port = htons(port);
 
 	// bindを使って、ソケットにアドレス情報を関連付け
-	if (bind(sock, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
+	if (bind(sock, (struct sockaddr *) &addr, sizeof(addr)) < 0)
+	{
 		perror("bind");
 		result = -1;
 		return result;
 	}
 
 	// listenを使って、接続の要求を受け付けるように設定
-	if (listen(sock, 5) < 0) {
+	if (listen(sock, 5) < 0)
+	{
 		perror("listen");
 		result = -1;
 		return result;
