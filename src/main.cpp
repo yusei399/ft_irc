@@ -22,10 +22,13 @@ int main(int argc, char **argv){
 			server = &Irc;
 			Irc.start();
 		}
+		else
+		{
+			std::cerr << "arg error" << std::endl;
+		}
 	}
 	catch(const std::exception& e)
 	{
-		std::cout << "arg error" <<  std::endl;
 		std::cerr << e.what() << '\n';
 	}
 	
