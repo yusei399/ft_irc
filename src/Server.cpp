@@ -128,13 +128,17 @@ void Server::chat_in(int fd)
 		size_t i = 0;
 		while (search(&buff[i], "\r\n") != -1)
 		{
+			std::cout << "in search" << std::endl;
 			size_t len = 0;
 			std::string command;
 			while (buff[i] != '\r' && buff[i] != '\n')
-				i++, len++;
+				i++, len++; std::cout << i << len << std::endl;
 			command.append(&buff[i - len], len + 2);
 			client.command_parser(command);
+			std::cout << "command finish" << std::endl;
+			i += 2;
 		}
+		std::cout << "message finish" << std::endl;
 	}
 }
 

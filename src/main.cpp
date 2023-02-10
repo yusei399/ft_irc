@@ -4,7 +4,8 @@
 
 void signal_handler(int signal)
 {
-	std::cout << "test" << std::endl;
+	std::cout << " exit " << std::endl;
+	exit(signal);
 }
 
 Server *server;

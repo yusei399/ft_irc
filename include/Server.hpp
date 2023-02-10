@@ -31,7 +31,6 @@ private:
 	std::vector<struct pollfd>		_pfds;
 	void create_poll(int socket_fd);
 	std::map<int, Client> _user;
-
 public:
 	Server();
 	Server(int port, std::string &password);
