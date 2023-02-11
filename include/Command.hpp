@@ -1,7 +1,7 @@
 # ifndef COMMAND_H
-# define COMMNAD_H
+# define COMMAND_H
 #include "Server.hpp"
 
-void PASS(Client &client, std::string const &passwprd);
+void pass(Client &client, std::string const &passwprd);
 
 #endif
