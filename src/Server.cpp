@@ -10,7 +10,6 @@ void Server::create_soket()
 {
 	int enable = 1;
 	struct sockaddr_in reader_addr;
-	
 	// ソケット作成、アドレスドメイン、ソケットタイプ、プロトコル
 	_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket_fd < 0)
@@ -32,7 +31,6 @@ void Server::create_soket()
 	//コネクト要求をいくつまで待つかを設定
 	if (listen(_socket_fd, SOMAXCONN) == -1)
 		throw std::exception();
-	std::cout << "socket create ok, fd = " << _socket_fd << std::endl;
 }
 
 //接続
@@ -102,7 +100,6 @@ void Server::chat_in(int fd)
 	std::cout << "fd : " << fd << std::endl;
 	std::cout << "buff :" << buff << std::endl;
 	std::cout << "sizeof buff : " << sizeof(buff) << std::endl;
-	// std::cout << "test" << std::endl;
 
 	std::memset(buff, 0, sizeof(buff));
 	if ((byte = recv(fd, buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
