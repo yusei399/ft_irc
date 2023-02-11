@@ -149,9 +149,6 @@ void Server::start()
 
 	while (1)
 	{
-		// std::cout << "server start" << std::endl;
-		// std::cout << "pfds size = " << _pfds.size() << std::endl;
-		// std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
 		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
 			throw std::exception();
 		for (size_t i = 0; i < _pfds.size(); i++)
@@ -159,9 +156,7 @@ void Server::start()
 			if (_pfds[i].revents == 0)
 				continue;
 			if (_pfds[i].revents == POLLIN)
-			{
 				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(_pfds[i].fd);
-			}
 		}
 	}
 }
