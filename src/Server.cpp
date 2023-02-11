@@ -132,6 +132,7 @@ void Server::chat_in(int fd)
 				len++;
 			command.append(&buff[i - len], len + 2);
 			client.command_parser(command);
+			this->do_buildin(fd);
 			std::cout << "command finish" << std::endl;
 			i += 2;
 		}
