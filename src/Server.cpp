@@ -149,7 +149,7 @@ void Server::start()
 
 	while (1)
 	{
-		std::cout << "server start" << std::endl;
+		// std::cout << "server start" << std::endl;
 		// std::cout << "pfds size = " << _pfds.size() << std::endl;
 		// std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
 		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
@@ -162,15 +162,56 @@ void Server::start()
 			{
 				if (_pfds[i].fd == _socket_fd)
 				{
-					std::cout << "accept ok" << std::endl;
+					// std::cout << "accept ok" << std::endl;
 					this->allow();
 				}
 				else
 				{
-					std::cout << "chat in" << std::endl;
+					// std::cout << "chat in" << std::endl;
 					this->chat_in(_pfds[i].fd);
 				}
 			}
 		}
+	}
+}
+
+void Server::do_buildin(int fd)
+{
+	enum Command { CAP, PASS, NICK, USER, JOIN, TOPIC, PING, NAMES, MODE, PRIVMSG, NOTICE, QUIT, KICK, INVITE, PART};
+
+	Command commands;
+
+	switch (commands)
+	{
+		case CAP:
+			break;
+		case PASS:
+			break;
+		case USER:
+			break;
+		case JOIN:
+			break;
+		case TOPIC:
+			break;
+		case PING:
+			break;
+		case NAMES:
+			break;
+		case MODE:
+			break;
+		case PRIVMSG:
+			break;
+		case NOTICE:
+			break;
+		case QUIT:
+			break;
+		case KICK:
+			break;
+		case INVITE:
+			break;
+		case PART:
+			break;
+		default:
+			break;
 	}
 }

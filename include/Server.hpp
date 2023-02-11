@@ -42,7 +42,9 @@ public:
 	void allow();
 	std::map<int, Client>& get_user();
 	int  search(const std::string &str, const std::string &target);
+	void do_buildin(int fd);
 };
+enum Command { CAP, PASS, NICK, USER, JOIN, TOPIC, PING, NAMES, MODE, PRIVMSG, NOTICE, QUIT, KICK, INVITE, PART};
 
 void signal_handler(int signal);
 

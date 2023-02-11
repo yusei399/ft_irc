@@ -60,3 +60,9 @@ void Client::processingparams(const std::string &message, int &cnt)
 		_params.push_back(tmp);
 	}
 }
+
+
+int Client::get_client_fd()
+{
+	return (_fd);
+}
