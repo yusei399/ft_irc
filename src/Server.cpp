@@ -160,16 +160,7 @@ void Server::start()
 				continue;
 			if (_pfds[i].revents == POLLIN)
 			{
-				if (_pfds[i].fd == _socket_fd)
-				{
-					// std::cout << "accept ok" << std::endl;
-					this->allow();
-				}
-				else
-				{
-					// std::cout << "chat in" << std::endl;
-					this->chat_in(_pfds[i].fd);
-				}
+				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(_pfds[i].fd);
 			}
 		}
 	}
