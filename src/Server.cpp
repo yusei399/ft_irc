@@ -177,39 +177,51 @@ void Server::start()
 
 void Server::do_buildin(int fd)
 {
-	enum Command { CAP, PASS, NICK, USER, JOIN, TOPIC, PING, NAMES, MODE, PRIVMSG, NOTICE, QUIT, KICK, INVITE, PART};
-
 	Command commands;
 
 	switch (commands)
 	{
 		case CAP:
+			std::cout << "user" << std::endl;
 			break;
 		case PASS:
+			std::cout << "pass" << std::endl;
 			break;
 		case USER:
+			std::cout << "user" << std::endl;
 			break;
 		case JOIN:
+			std::cout << "join" << std::endl;
 			break;
 		case TOPIC:
+			std::cout << "topic" << std::endl;
 			break;
 		case PING:
+			std::cout << "ping" << std::endl;
 			break;
 		case NAMES:
+			std::cout << "names" << std::endl;
 			break;
 		case MODE:
+			std::cout << "mode" << std::endl;
 			break;
 		case PRIVMSG:
+			std::cout << "privmsg" << std::endl;
 			break;
 		case NOTICE:
+			std::cout << "notice" << std::endl;
 			break;
 		case QUIT:
+			std::cout << "quit" << std::endl;
 			break;
 		case KICK:
+			std::cout << "kick" << std::endl;
 			break;
 		case INVITE:
+			std::cout << "invite" << std::endl;
 			break;
 		case PART:
+			std::cout << "part" << std::endl;
 			break;
 		default:
 			break;
