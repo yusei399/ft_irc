@@ -19,8 +19,7 @@ void Client::command_parser(std::string &command)
 			break;
 		_command.append(command[i], i);
 	}
-	while (command[cnt] == ' ')
-		cnt++;
+	for (; command[cnt] == ' '; cnt++){}
 	this->processingparams(&command[cnt], cnt);
 }
 
@@ -34,8 +33,7 @@ void Client::preprocessing(const std::string &message, int &i)
 			break ;
 		_command_parse.append(message[i], 1);
 	}
-	while (message[cnt] == ' ')
-		cnt++;
+	for (; message[cnt] == ' '; cnt++){}
 }
 
 void Client::processingparams(const std::string &message, int &cnt)
@@ -61,4 +59,10 @@ void Client::processingparams(const std::string &message, int &cnt)
 		}
 		_params.push_back(tmp);
 	}
+}
+
+
+int Client::get_client_fd()
+{
+	return (_fd);
 }

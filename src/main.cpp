@@ -4,7 +4,8 @@
 
 void signal_handler(int signal)
 {
-	std::cout << "test" << std::endl;
+	std::cout << " exit " << std::endl;
+	exit(signal);
 }
 
 Server *server;
@@ -21,6 +22,10 @@ int main(int argc, char **argv){
 			Server Irc(port, password);
 			server = &Irc;
 			Irc.start();
+		}
+		else
+		{
+			std::cerr << "arg error" << std::endl;
 		}
 	}
 	catch(const std::exception& e)

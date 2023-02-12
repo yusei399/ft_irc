@@ -19,7 +19,7 @@ public:
 	void command_parser(std::string &command);
 	void preprocessing(const std::string &message, int &i);
 	void processingparams(const std::string &message, int &i);
-
+	int get_client_fd();
 };
 
 #endif

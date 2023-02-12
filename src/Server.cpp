@@ -10,7 +10,6 @@ void Server::create_soket()
 {
 	int enable = 1;
 	struct sockaddr_in reader_addr;
-	
 	// ソケット作成、アドレスドメイン、ソケットタイプ、プロトコル
 	_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket_fd < 0)
@@ -32,7 +31,6 @@ void Server::create_soket()
 	//コネクト要求をいくつまで待つかを設定
 	if (listen(_socket_fd, SOMAXCONN) == -1)
 		throw std::exception();
-	std::cout << "socket create ok, fd = " << _socket_fd << std::endl;
 }
 
 //接続
@@ -102,7 +100,6 @@ void Server::chat_in(int fd)
 	std::cout << "fd : " << fd << std::endl;
 	std::cout << "buff :" << buff << std::endl;
 	std::cout << "sizeof buff : " << sizeof(buff) << std::endl;
-	// std::cout << "test" << std::endl;
 
 	std::memset(buff, 0, sizeof(buff));
 	if ((byte = recv(fd, buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
@@ -117,22 +114,30 @@ void Server::chat_in(int fd)
 		// else if (byte == 0)
 		// quitの処理後で追記する
 	}
-	Client &client = _connect[fd];
-	std::cout << "-------------Client Message----------------" << std::endl;
-	std::cout << "client fd:" << fd << std::endl;
-	std::cout << "client message:" << buff << std::endl;
-	std::cout << "---------------------------------------------" << std::endl;
+	else
+	{
+		Client &client = _connect[fd];
+		std::cout << "-------------Client Message----------------" << std::endl;
+		std::cout << "client fd:" << fd << std::endl;
+		std::cout << "client message:" << buff << std::endl;
+		std::cout << "---------------------------------------------" << std::endl;
 
 		size_t i = 0;
 		while (search(&buff[i], "\r\n") != -1)
 		{
+			std::cout << "in search" << std::endl;
 			size_t len = 0;
 			std::string command;
-			while (buff[i] != '\r' && buff[i] != '\n')
-				i++, len++;
+			for (; buff[i] != '\r' && buff[i] != '\n'; i++)
+				len++;
 			command.append(&buff[i - len], len + 2);
 			client.command_parser(command);
+			this->do_buildin(fd);
+			std::cout << "command finish" << std::endl;
+			i += 2;
 		}
+		std::cout << "message finish" << std::endl;
+	}
 }
 
 void Server::start()
@@ -142,9 +147,6 @@ void Server::start()
 
 	while (1)
 	{
-		std::cout << "server start" << std::endl;
-		// std::cout << "pfds size = " << _pfds.size() << std::endl;
-		// std::cout << "pfds.begin() = " << _pfds.data()->fd << std::endl;
 		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
 			throw std::exception();
 		for (size_t i = 0; i < _pfds.size(); i++)
@@ -152,18 +154,60 @@ void Server::start()
 			if (_pfds[i].revents == 0)
 				continue;
 			if (_pfds[i].revents == POLLIN)
-			{
-				if (_pfds[i].fd == _socket_fd)
-				{
-					std::cout << "accept ok" << std::endl;
-					this->allow();
-				}
-				else
-				{
-					std::cout << "chat in" << std::endl;
-					this->chat_in(_pfds[i].fd);
-				}
-			}
+				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(_pfds[i].fd);
 		}
+	}
+}
+
+void Server::do_buildin(int fd)
+{
+	Command commands;
+
+	switch (commands)
+	{
+		case CAP:
+			std::cout << "user" << std::endl;
+			break;
+		case PASS:
+			std::cout << "pass" << std::endl;
+			break;
+		case USER:
+			std::cout << "user" << std::endl;
+			break;
+		case JOIN:
+			std::cout << "join" << std::endl;
+			break;
+		case TOPIC:
+			std::cout << "topic" << std::endl;
+			break;
+		case PING:
+			std::cout << "ping" << std::endl;
+			break;
+		case NAMES:
+			std::cout << "names" << std::endl;
+			break;
+		case MODE:
+			std::cout << "mode" << std::endl;
+			break;
+		case PRIVMSG:
+			std::cout << "privmsg" << std::endl;
+			break;
+		case NOTICE:
+			std::cout << "notice" << std::endl;
+			break;
+		case QUIT:
+			std::cout << "quit" << std::endl;
+			break;
+		case KICK:
+			std::cout << "kick" << std::endl;
+			break;
+		case INVITE:
+			std::cout << "invite" << std::endl;
+			break;
+		case PART:
+			std::cout << "part" << std::endl;
+			break;
+		default:
+			break;
 	}
 }
