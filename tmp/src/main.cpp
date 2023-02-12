@@ -1,13 +1,13 @@
 #include "../inc/ft_irc.hpp"
-/* 
-is_number(const std::string& input)
+
+int isnum(const std::string& input)
 {
         for (unsigned long i = 0; i < input.length(); i++) {
                 if (!isdigit(input[i])) {
-                        return false;
+                        return 1;
                 }
         }
-        return true;
+        return 0;
 }
 
 int check_num(std::string port, std::string password)
@@ -15,14 +15,14 @@ int check_num(std::string port, std::string password)
 	if (isnum(port), isnum(password))
 		return (1);
 	return (0);
-} */
+}
 
 int main(int argc, char *argv[]) {
 	int port;
 	std::string password;
 	Ircserv ircserv;
 
-	if (argc != 3 /* || check_num(argv[1], arg[2]) */)
+	if (argc != 3 || check_num(argv[1], argv[2]))
 	{
 		std::cerr << "Usage: ircserv <port> <password>" << std::endl;
 		return 1;
