@@ -71,3 +71,8 @@ std::string Client::get_nick()
 {
 	return (_nick);
 }
+
+void	send_message(const std::string &message, int fd, int flag)
+{
+	send(fd, message.c_str(), message.size(), flag);
+}
