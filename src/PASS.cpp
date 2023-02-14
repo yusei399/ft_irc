@@ -14,6 +14,7 @@ void pass(Client &client, std::string const &password)
 
 	if (pass == password)
 	{
+		client.set_permission(true);
 		send_message("001 " + nick + " :Welcome to the Internet Relay Network " + nick, fd, 0);
 	}
 	else
