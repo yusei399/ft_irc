@@ -22,7 +22,7 @@ public:
 	int get_client_fd();
 	std::string get_nick();
 	const std::vector<std::string> &get_params() const {return _params;}
-	void send_message(const std::string &message, int fd, int flag);
 };
 
+void send_message(const std::string &message, int fd, int flag);
 #endif
