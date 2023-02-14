@@ -66,3 +66,8 @@ int Client::get_client_fd()
 {
 	return (_fd);
 }
+
+std::string Client::get_nick()
+{
+	return (_nick);
+}
