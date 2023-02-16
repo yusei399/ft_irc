@@ -3,5 +3,6 @@
 # include "../../include/Command.hpp"
 # include "../../include/Server.hpp"
 
-void mode()
+void mode(std::string)
 {}
+
