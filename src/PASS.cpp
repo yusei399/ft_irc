@@ -19,4 +19,7 @@ void pass(Client &client, std::string const &password)
 	}
 	else
 		send_message("464 " + nick + " :Password incorrect", fd, 0);
+	
+	if (client.get_params().size() > 1)
+		send_message("461 " + nick + " :Too many parameters", fd, 0);
 }
