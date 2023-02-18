@@ -20,3 +20,4 @@ void pass(Client &client, std::string const &password)
 	else
 		send_message("464 " + nick + " :Password incorrect", fd, 0);
 }
+
