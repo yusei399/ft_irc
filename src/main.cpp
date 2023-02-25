@@ -24,8 +24,12 @@ int main(int argc, char **argv){
 			Irc.start();
 		}
 		else
+		{
 			std::cerr << "arg error" << std::endl;
+		}
 	}
 	catch(const std::exception& e)
+	{
 		std::cerr << e.what() << '\n';
+	}
 }
