@@ -38,7 +38,8 @@ void cap(Client &client)
 	}
 	else if (subcommand == "END")
 	{
-		send_message("CAP " + nick + " END", fd, 0);
+		//クライアントのnickを取得 -> そのnickを使ってメッセージを送信 、user, nick, passのときと同じように表示できるようにする
+		send_message("CAP " + nick + " END", fd, 0)で
 	}
 	else
 	{
