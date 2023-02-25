@@ -1,7 +1,7 @@
 #include "../include/Command.hpp"
 #include "../include/Client.hpp"
 
-void pass(Client &client, std::string const &password)
+void nick(Client &client)
 {
 	int const &fd = client.get_client_fd();
 
@@ -10,15 +10,15 @@ void pass(Client &client, std::string const &password)
 	if (client.get_params().size() == 1)
 		send_message("461 " + nick + " :Not enough parameters", fd, 0);
 	
-	std::string const &pass = client.get_params()[0];
+	std::string const &new_nick = client.get_params()[0];
 
-	if (pass == password)
+	if (new_nick.size() > 9)
+		send_message("432 " + nick + " :Erroneus nickname", fd, 0);
+	else
 	{
-		client.set_permission(true);
+		client.set_nick(new_nick);
 		send_message("001 " + nick + " :Welcome to the Internet Relay Network " + nick, fd, 0);
 	}
-	else
-		send_message("464 " + nick + " :Password incorrect", fd, 0);
 	
 	if (client.get_params().size() > 1)
 		send_message("461 " + nick + " :Too many parameters", fd, 0);

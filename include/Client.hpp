@@ -19,11 +19,12 @@ public:
 	~Client();
 	void command_parser(std::string &command);
 	void preprocessing(const std::string &message, int &i);
+	void set_permission(bool permission) {_permission = permission;}
 	void processingparams(const std::string &message, int &i);
 	int get_client_fd();
 	std::string get_nick();
 	const std::vector<std::string> &get_params() const {return _params;}
-	void set_permission(bool permission) {_permission = permission;}
+	void set_nick(const std::string &nick) {_nick = nick;}
 };
 
 void send_message(const std::string &message, int fd, int flag);
