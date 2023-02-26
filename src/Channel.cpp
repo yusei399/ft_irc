@@ -1,64 +1,77 @@
 #include "../include/Channel.hpp"
 
-Channel::Channel(){}
-Channel::~Channel(){}
+Channel::Channel() {}
+Channel::~Channel() {}
 
 // チャンネルを表す構造体
-struct Channel {
-  std::string name; // チャンネル名
-  std::vector<std::string> users; // チャンネルに参加しているユーザーのリスト
-  // その他、チャンネルの設定やメッセージの履歴などを保存するための変数を定義することもできる
+struct Channel
+{
+	std::string name; // チャンネル名
+	std::vector<std::string> users; // チャンネルに参加しているユーザーのリスト
+	// その他、チャンネルの設定やメッセージの履歴などを保存するための変数を定義することもできる
 };
 
 // IRCサーバーのクラス
-class IRCServer {
+class IRCServer
+{
 private:
-  std::vector<Channel> channels; // IRCサーバーが持つチャンネルのリスト
+	std::vector<Channel> channels; // IRCサーバーが持つチャンネルのリスト
 
 public:
-  // チャンネルを作成する関数
-  void createChannel(std::string channelName) {
-    Channel newChannel;
-    newChannel.name = channelName;
-    channels.push_back(newChannel);
-  }
+	// チャンネルを作成する関数
+	void createChannel(std::string channelName)
+	{
+		Channel newChannel;
+		newChannel.name = channelName;
+		channels.push_back(newChannel);
+	}
 
-  // チャンネルに参加する関数
-  void joinChannel(std::string channelName, std::string username) {
-    // チャンネルが存在しなければ新しく作成する
-    auto it = std::find_if(channels.begin(), channels.end(), [&](Channel& channel){ return channel.name == channelName; });
-    if (it == channels.end()) {
-      createChannel(channelName);
-      it = channels.end() - 1;
-    }
-    // ユーザーをチャンネルに追加する
-    it->users.push_back(username);
-  }
+	// チャンネルに参加する関数
+	void joinChannel(std::string channelName, std::string username)
+		{
+		// チャンネルが存在しなければ新しく作成する
+		auto it =
+				std::find_if(channels.begin(), channels.end(), [&](Channel &channel)
+				{
+					return channel.name == channelName;
+				});
+		if (it == channels.end()) {
+			createChannel(channelName);
+			it = channels.end() - 1;
+		}
+		// ユーザーをチャンネルに追加する
+		it->users.push_back(username);
+	}
 
-  // チャンネルから離脱する関数
-  void leaveChannel(std::string channelName, std::string username) {
-    // チャンネルが存在するかどうかを確認する
-    auto it = std::find_if(channels.begin(), channels.end(), [&](Channel& channel){ return channel.name == channelName; });
-    if (it != channels.end()) {
-      // ユーザーをチャンネルから削除する
-      auto user_it = std::find(it->users.begin(), it->users.end(), username);
-      if (user_it != it->users.end()) {
-        it->users.erase(user_it);
-      }
-    }
-  }
+	// チャンネルから離脱する関数
+	void leaveChannel(std::string channelName, std::string username) {
+		// チャンネルが存在するかどうかを確認する
+		auto it =
+				std::find_if(channels.begin(), channels.end(), [&](Channel &channel) {
+					return channel.name == channelName;
+				});
+		if (it != channels.end()) {
+			// ユーザーをチャンネルから削除する
+			auto user_it = std::find(it->users.begin(), it->users.end(), username);
+			if (user_it != it->users.end()) {
+				it->users.erase(user_it);
+			}
+		}
+	}
 
-  // チャンネルにメッセージを送信する関数
-  void sendMessage(std::string channelName, std::string message) {
-    // チャンネルが存在するかどうかを確認する
-    auto it = std::find_if(channels.begin(), channels.end(), [&](Channel& channel){ return channel.name == channelName; });
-    if (it != channels.end()) {
-      // メッセージをチャンネルに送信する
-      // ここで、メッセージを履歴に追加するなどの処理を行うこともできる
-      for (auto user : it->users) {
-        // ユーザーにメッセージを送信する処理を実装する
-      }
-    }
-  }
+	// チャンネルにメッセージを送信する関数
+	void sendMessage(std::string channelName, std::string message) {
+		// チャンネルが存在するかどうかを確認する
+		auto it =
+				std::find_if(channels.begin(), channels.end(), [&](Channel &channel) {
+					return channel.name == channelName;
+				});
+		if (it != channels.end()) {
+			// メッセージをチャンネルに送信する
+			// ここで、メッセージを履歴に追加するなどの処理を行うこともできる
+			for (auto user : it->users) {
+				// ユーザーにメッセージを送信する処理を実装する
+			}
+		}
+	}
 };
-
