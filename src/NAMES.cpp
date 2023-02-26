@@ -1,7 +1,7 @@
 #include "../include/Command.hpp"
 #include "../include/Client.hpp"
 
-void names(Client &client)
+void names(Client &client)//channel未実装
 {
 	int const &fd = client.get_client_fd();
 	std::string const &nick = client.get_nick();
