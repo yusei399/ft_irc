@@ -52,8 +52,7 @@ void Channel::leaveChannel(std::string channelName, std::string username) {
 void Channel::sendMessage(std::string channelName, std::string message)
 {
 	// チャンネルが存在するかどうかを確認する
-	auto it =
-			std::find_if(channels.begin(), channels.end(), [&](Channel &channel) {
+	auto it = std::find_if(channels.begin(), channels.end(), [&](Channel &channel) {
 				return channel.name == channelName;
 			});
 	if (it != channels.end())
