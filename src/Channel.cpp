@@ -65,10 +65,10 @@ void Channel::sendMessage(std::string channelName, std::string username, std::st
     }
 }
 
-int main() {
+/* int main() {
     Channel channel;
     channel.joinChannel("general", "Alice");
     channel.joinChannel("general", "Bob");
     channel.sendMessage("general", "Alice", "Hello, Bob!");
     return 0;
-}
+} */
