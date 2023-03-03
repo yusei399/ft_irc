@@ -13,7 +13,6 @@ private:
     std::string name; // チャンネル名
     std::vector<std::string> users;
     // チャンネルに参加しているユーザーのリスト
-    // その他、チャンネルの設定やメッセージの履歴などを保存するための変数を定義することもできる
 
 public:
     Channel();
