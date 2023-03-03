@@ -3,6 +3,11 @@
 Channel::Channel() {}
 Channel::~Channel() {}
 
+void Channel::createChannel(std::string channelName) {
+    Channel newChannel;
+    newChannel.name = channelName;
+    channels.push_back(newChannel);
+}
 
 // チャンネルに参加する関数
 void Channel::joinChannel(std::string channelName, std::string username)

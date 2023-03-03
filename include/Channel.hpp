@@ -22,7 +22,6 @@ public:
     void joinChannel(std::string channelName, std::string username);
     void leaveChannel(std::string channelName, std::string username);
     void sendMessage(std::string channelName, std::string username, std::string message);
-;
 };
 #endif
 
