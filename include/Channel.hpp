@@ -9,18 +9,18 @@
 class Channel
 {
 private:
-    std::vector<Channel> channels; // IRCサーバーが持つチャンネルのリスト
-    std::string name; // チャンネル名
-    std::vector<std::string> users; // チャンネルに参加しているユーザーのリスト 
+	std::vector<Channel> channels; // IRCサーバーが持つチャンネルのリスト
+	std::string name; // チャンネル名
+	std::vector<std::string> users; // チャンネルに参加しているユーザーのリスト 
 
 public:
-    Channel();
-    ~Channel();
+	Channel();
+	~Channel();
 	
-    void createChannel(std::string channelName);
-    void joinChannel(std::string channelName, std::string username);
-    void leaveChannel(std::string channelName, std::string username);
-    void sendMessage(std::string channelName, std::string username, std::string message);
+	void createChannel(std::string channelName);
+	void joinChannel(std::string channelName, std::string username);
+	void leaveChannel(std::string channelName, std::string username);
+	void sendMessage(std::string channelName, std::string username, std::string message);
 };
 
 #endif
