@@ -92,8 +92,3 @@ void Channel::sendMessage(std::string channelName, std::string username, std::st
 	channel.sendMessage("general", "Alice", "Hello, Bob!");
 	return 0;
 } */
-
-/* 
- * fd を持っておく
- * userの持ち方を変える
- */
