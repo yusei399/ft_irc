@@ -35,7 +35,7 @@ void Channel::leaveChannel(std::string channelName, int client_fd) {
     std::vector<Channel>::iterator it;
     for (it = channels.begin(); it != channels.end(); ++it) {
         if (it->name == channelName) {
-            // ユーザーをチャンネルから削除する
+             // ユーザーをチャンネルから削除する
             it->users.erase(client_fd);
             break;
         }
@@ -71,4 +71,3 @@ void Channel::sendMessage(std::string channelName, int client_fd, std::string me
         std::cout << "[Server] Channel " << channelName << " not found" << std::endl;
     }
 }
-

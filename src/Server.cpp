@@ -163,12 +163,15 @@ void Server::start()
 void Server::do_buildin(int fd)
 {
 	Client &connect_client = _connect[fd];
+	const std::string &command = connect_client.get_cmd();
+	const std::vector<std::string> &param = connect_client.get_params();
 	Command commands;
+
 
 	switch (commands)
 	{
 		case CAP:
-			std::cout << "user" << std::endl;
+			std::cout << "cap" << std::endl;
 			break;
 		case PASS:
 			pass(connect_client, _password);
