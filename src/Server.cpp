@@ -1,5 +1,6 @@
 #include "../include/Server.hpp"
 #include "../include/Client.hpp"
+#include "../include/Command.hpp"
 #include <signal.h>
 
 Server::Server () {}
@@ -161,6 +162,7 @@ void Server::start()
 
 void Server::do_buildin(int fd)
 {
+	Client &connect_client = _connect[fd];
 	Command commands;
 
 	switch (commands)
@@ -169,11 +171,9 @@ void Server::do_buildin(int fd)
 			std::cout << "user" << std::endl;
 			break;
 		case PASS:
-			std::cout << "pass" << std::endl;
-			break;
+			pass(connect_client, _password);
 		case USER:
-			std::cout << "user" << std::endl;
-			break;
+			user(connect_client);
 		case JOIN:
 			std::cout << "join" << std::endl;
 			break;
