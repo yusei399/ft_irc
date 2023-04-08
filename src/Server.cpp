@@ -39,11 +39,12 @@ void Server::allow()
 {
 	std::cout << "accept ok" << std::endl;
 	int connect_fd = -1;
+	//一度は実行したいのでdo while
 		do {
 			connect_fd = accept(this->_socket_fd, NULL, NULL);
 			if (connect_fd < 0)
 			{
-				std::cout << "connect_fd" << connect_fd << std::endl;
+				std::cout << "connect_fd : " << connect_fd << std::endl;
 				throw std::exception();
 			}
 			else {
