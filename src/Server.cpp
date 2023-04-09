@@ -1,5 +1,6 @@
 #include "../include/Server.hpp"
 #include "../include/Client.hpp"
+#include "../include/Command.hpp"
 #include <signal.h>
 
 Server::Server () {}
@@ -38,11 +39,12 @@ void Server::allow()
 {
 	std::cout << "accept ok" << std::endl;
 	int connect_fd = -1;
+	//一度は実行したいのでdo while
 		do {
 			connect_fd = accept(this->_socket_fd, NULL, NULL);
 			if (connect_fd < 0)
 			{
-				std::cout << "connect_fd" << connect_fd << std::endl;
+				std::cout << "connect_fd : " << connect_fd << std::endl;
 				throw std::exception();
 			}
 			else {
@@ -161,19 +163,21 @@ void Server::start()
 
 void Server::do_buildin(int fd)
 {
+	Client &connect_client = _connect[fd];
+	const std::string &command = connect_client.get_cmd();
+	const std::vector<std::string> &param = connect_client.get_params();
 	Command commands;
+
 
 	switch (commands)
 	{
 		case CAP:
-			std::cout << "user" << std::endl;
+			std::cout << "cap" << std::endl;
 			break;
 		case PASS:
-			std::cout << "pass" << std::endl;
-			break;
+			pass(connect_client, _password);
 		case USER:
-			std::cout << "user" << std::endl;
-			break;
+			user(connect_client);
 		case JOIN:
 			std::cout << "join" << std::endl;
 			break;
