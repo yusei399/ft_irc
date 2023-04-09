@@ -166,52 +166,37 @@ void Server::do_buildin(int fd)
 	Client &connect_client = _connect[fd];
 	const std::string &command = connect_client.get_cmd();
 	const std::vector<std::string> &param = connect_client.get_params();
-	Command commands;
 
 
-	switch (commands)
-	{
-		case CAP:
-			std::cout << "cap" << std::endl;
-			break;
-		case PASS:
-			pass(connect_client, _password);
-		case USER:
-			user(connect_client);
-		case JOIN:
-			std::cout << "join" << std::endl;
-			break;
-		case TOPIC:
-			std::cout << "topic" << std::endl;
-			break;
-		case PING:
-			std::cout << "ping" << std::endl;
-			break;
-		case NAMES:
-			std::cout << "names" << std::endl;
-			break;
-		case MODE:
-			std::cout << "mode" << std::endl;
-			break;
-		case PRIVMSG:
-			std::cout << "privmsg" << std::endl;
-			break;
-		case NOTICE:
-			std::cout << "notice" << std::endl;
-			break;
-		case QUIT:
-			std::cout << "quit" << std::endl;
-			break;
-		case KICK:
-			std::cout << "kick" << std::endl;
-			break;
-		case INVITE:
-			std::cout << "invite" << std::endl;
-			break;
-		case PART:
-			std::cout << "part" << std::endl;
-			break;
-		default:
-			break;
+	if (command == "CAP")
+		std ::cout << "CAP" << std::endl;
+	else if (command == "PASS")
+		pass(connect_client, _password);
+	else if (command == "NICK")
+		std ::cout << "NICK" << std::endl;
+	else if (command == "USER")
+		user(connect_client);
+	else if (command == "JOIN")
+		std ::cout << "JOIN" << std::endl;
+	else if (command == "TOPIC")
+		std ::cout << "TOPIC" << std::endl;
+	else if (command == "PING")
+		std ::cout << "PING" << std::endl;
+	else if (command == "NAMES")
+		std ::cout << "NAMES" << std::endl;
+	else if (command == "MODE")
+		std ::cout << "MODE" << std::endl;
+	else if (command == "PRIVMSG")
+		std	::cout << "PRIVMSG" << std::endl;
+	else if (command == "NOTICE")
+		std ::cout << "NOTICE" << std::endl;
+	else if (command == "QUIT")
+		std ::cout << "QUIT" << std::endl;
+	else if (command == "KICK")
+		std ::cout << "KICK" << std::endl;
+	else if (command == "INVITE")
+		std ::cout << "INVITE" << std::endl;
+	else if (command == "PART")
+		std ::cout << "PART" << std::endl;
 	}
 }
