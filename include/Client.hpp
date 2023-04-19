@@ -24,11 +24,10 @@ public:
 	void preprocessing(const std::string &message, int &i);
 	void set_permission(bool permission) {_permission = permission;}
 	void processingparams(const std::string &message, int &i);
-	const std::string &get_cmd() const {return _command;}
-	const std::vector<std::string> &get_params() const {return _params;}
+	const std::string &get_cmd() const ;
 	int get_client_fd();
 	std::string get_nick();
-	const std::vector<std::string> &get_params() const {return _params;}
+	const std::vector<std::string> &get_params() const ;
 	void set_nick(const std::string &nick) {_nick = nick;}
 	void set_user(const std::string &user) {_user = user;}
 	void set_real_name(const std::string &real_name) {_real_name = real_name;}
