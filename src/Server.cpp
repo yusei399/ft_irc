@@ -198,5 +198,5 @@ void Server::do_buildin(int fd)
 		std ::cout << "INVITE" << std::endl;
 	else if (command == "PART")
 		std ::cout << "PART" << std::endl;
-	}
+	
 }
