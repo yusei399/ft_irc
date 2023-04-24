@@ -76,3 +76,13 @@ void	send_message(const std::string &message, int fd, int flag)
 {
 	send(fd, message.c_str(), message.size(), flag);
 }
+
+const std::string &Client::get_cmd() const
+{
+	return (_command);
+}
+
+const std::vector<std::string> &Client::get_params() const
+{
+	return (_params);
+}
