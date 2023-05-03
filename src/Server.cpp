@@ -133,21 +133,6 @@ void Server::chat_in(int fd)
 			cmds[i].debug();
 			do_buildin(fd, cmds[i]);
 		}
-/*		size_t i = 0;
-		while (search(&buff[i], "\r\n") != -1)
-		{
-			std::cout << "in search" << std::endl;
-			size_t len = 0;
-			std::string command;
-			for (; buff[i] != '\r' && buff[i] != '\n'; i++)
-				len++;
-			command.append(&buff[i - len], len + 2);
-			client.command_parser(command);
-			this->do_buildin(fd);
-			std::cout << "command finish" << std::endl;
-			i += 2;
-		}
-		*/
 		std::cout << "message finish" << std::endl;
 	}
 }
@@ -176,7 +161,6 @@ void Server::do_buildin(int fd, const Command &cmd)
 	Client &connect_client = _connect[fd];
 	CmdType cmdType = cmd._cmdType;
 
-
 	switch (cmdType)
 	{
 		case CAP:
@@ -184,8 +168,13 @@ void Server::do_buildin(int fd, const Command &cmd)
 			break;
 		case PASS:
 			pass(connect_client, _password);
+			break;
+		case NICK:
+			nick(connect_client, cmd);
+			break;
 		case USER:
 			user(connect_client);
+			break;
 		case JOIN:
 			std::cout << "join" << std::endl;
 			break;
@@ -218,6 +207,10 @@ void Server::do_buildin(int fd, const Command &cmd)
 			break;
 		case PART:
 			std::cout << "part" << std::endl;
+			break;
+		//ok
+		case UNKNOWN:
+			connect_client.send_err_msg(421, cmd._cmd_name + " :Unknown command");
 			break;
 		default:
 			break;

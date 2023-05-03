@@ -3,37 +3,37 @@
 void Command::_set_cmd_type()
 {
     if (_cmd_name.compare("CAP") == 0)
-        _cmdType = CmdType::CAP;
+        _cmdType = CAP;
     else if (_cmd_name.compare("PASS") == 0)
-        _cmdType = CmdType::PASS;
+        _cmdType = PASS;
     else if (_cmd_name.compare("NICK") == 0)
-        _cmdType = CmdType::NICK;
+        _cmdType = NICK;
     else if (_cmd_name.compare("USER") == 0)
-        _cmdType = CmdType::USER;
+        _cmdType = USER;
     else if (_cmd_name.compare("JOIN") == 0)
-        _cmdType = CmdType::JOIN;
+        _cmdType = JOIN;
     else if (_cmd_name.compare("TOPIC") == 0)
-        _cmdType = CmdType::TOPIC;
+        _cmdType = TOPIC;
     else if (_cmd_name.compare("PING") == 0)
-        _cmdType = CmdType::PING;
+        _cmdType = PING;
     else if (_cmd_name.compare("NAMES") == 0)
-        _cmdType = CmdType::NAMES;
+        _cmdType = NAMES;
     else if (_cmd_name.compare("MODE") == 0)
-        _cmdType = CmdType::MODE;
+        _cmdType = MODE;
     else if (_cmd_name.compare("PRIVMSG") == 0)
-        _cmdType = CmdType::PRIVMSG;
+        _cmdType = PRIVMSG;
     else if (_cmd_name.compare("NOTICE") == 0)
-        _cmdType = CmdType::NOTICE;
+        _cmdType = NOTICE;
     else if (_cmd_name.compare("QUIT") == 0)
-        _cmdType = CmdType::QUIT;
+        _cmdType = QUIT;
     else if (_cmd_name.compare("KICK") == 0)
-        _cmdType = CmdType::KICK;
+        _cmdType = KICK;
     else if (_cmd_name.compare("INVITE") == 0)
-        _cmdType = CmdType::INVITE;
+        _cmdType = INVITE;
     else if (_cmd_name.compare("PART") == 0)
-        _cmdType = CmdType::PART;
+        _cmdType = PART;
     else
-        _cmdType = CmdType::UNKNOWN;
+        _cmdType = UNKNOWN;
 }
 
 //trailingはスペースを含むことができ、二つ目以降の:は通常の文字列として使われる

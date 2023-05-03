@@ -31,6 +31,7 @@ public:
 	void set_user(const std::string &user) {_user = user;}
 	void set_real_name(const std::string &real_name) {_real_name = real_name;}
 	void set_hostname(const std::string &hostname) {_hostname = hostname;}
+	void send_err_msg(int err_code, const std::string &message);
 };
 
 void send_message(const std::string &message, int fd, int flag);

@@ -77,3 +77,8 @@ void	send_message(const std::string &message, int fd, int flag)
 {
 	send(fd, message.c_str(), message.size(), flag);
 }
+
+void	Client::send_err_msg(int err_code, const std::string &message)
+{
+	send_message(std::to_string(err_code)+ " " + message, get_client_fd(), 0);
+}
