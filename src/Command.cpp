@@ -1,5 +1,41 @@
 #include "../include/Command.hpp"
 
+void Command::_set_cmd_type()
+{
+    if (_cmd_name.compare("CAP") == 0)
+        _cmdType = CmdType::CAP;
+    else if (_cmd_name.compare("PASS") == 0)
+        _cmdType = CmdType::PASS;
+    else if (_cmd_name.compare("NICK") == 0)
+        _cmdType = CmdType::NICK;
+    else if (_cmd_name.compare("USER") == 0)
+        _cmdType = CmdType::USER;
+    else if (_cmd_name.compare("JOIN") == 0)
+        _cmdType = CmdType::JOIN;
+    else if (_cmd_name.compare("TOPIC") == 0)
+        _cmdType = CmdType::TOPIC;
+    else if (_cmd_name.compare("PING") == 0)
+        _cmdType = CmdType::PING;
+    else if (_cmd_name.compare("NAMES") == 0)
+        _cmdType = CmdType::NAMES;
+    else if (_cmd_name.compare("MODE") == 0)
+        _cmdType = CmdType::MODE;
+    else if (_cmd_name.compare("PRIVMSG") == 0)
+        _cmdType = CmdType::PRIVMSG;
+    else if (_cmd_name.compare("NOTICE") == 0)
+        _cmdType = CmdType::NOTICE;
+    else if (_cmd_name.compare("QUIT") == 0)
+        _cmdType = CmdType::QUIT;
+    else if (_cmd_name.compare("KICK") == 0)
+        _cmdType = CmdType::KICK;
+    else if (_cmd_name.compare("INVITE") == 0)
+        _cmdType = CmdType::INVITE;
+    else if (_cmd_name.compare("PART") == 0)
+        _cmdType = CmdType::PART;
+    else
+        _cmdType = CmdType::UNKNOWN;
+}
+
 //trailingはスペースを含むことができ、二つ目以降の:は通常の文字列として使われる
 Command::Command(const std::string& cmd)
 {
@@ -16,6 +52,7 @@ Command::Command(const std::string& cmd)
     {
         _trailing = cmd.substr(trailing_begin + 1);
     }
+    _set_cmd_type();
 }
 
 std::vector<Command> parse_commands(const std::string &commands_msg)

@@ -3,6 +3,10 @@
 
 void user(Client &client)
 {
+	(void)client;
+}
+/*
+{
 	int const &fd = client.get_client_fd();
 
 	std::string const &nick = client.get_nick();
@@ -25,3 +29,4 @@ void user(Client &client)
 	if (client.get_params().size() > 4)
 		send_message("461 " + nick + " :Too many parameters", fd, 0);
 }
+*/

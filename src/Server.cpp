@@ -124,7 +124,16 @@ void Server::chat_in(int fd)
 		std::cout << "client message:" << buff << std::endl;
 		std::cout << "---------------------------------------------" << std::endl;
 
-		size_t i = 0;
+		std::vector<Command> cmds = parse_commands(std::string(buff));
+		for(size_t i = 0; i < cmds.size(); i++)
+		{
+			std::cout << std::endl;
+			std::cout << "cmds["<<i<<"]"<<std::endl;
+			std::cout << "---------------------" << std::endl;
+			cmds[i].debug();
+			do_buildin(fd, cmds[i]);
+		}
+/*		size_t i = 0;
 		while (search(&buff[i], "\r\n") != -1)
 		{
 			std::cout << "in search" << std::endl;
@@ -138,6 +147,7 @@ void Server::chat_in(int fd)
 			std::cout << "command finish" << std::endl;
 			i += 2;
 		}
+		*/
 		std::cout << "message finish" << std::endl;
 	}
 }
@@ -161,20 +171,13 @@ void Server::start()
 	}
 }
 
-void Server::do_buildin(int fd)
-{
-	(void)fd;
-}
-
-/*
+void Server::do_buildin(int fd, const Command &cmd)
 {
 	Client &connect_client = _connect[fd];
-	const std::string &command = connect_client.get_cmd();
-	const std::vector<std::string> &param = connect_client.get_params();
-	Command commands;
+	CmdType cmdType = cmd._cmdType;
 
 
-	switch (commands)
+	switch (cmdType)
 	{
 		case CAP:
 			std::cout << "cap" << std::endl;
@@ -220,4 +223,3 @@ void Server::do_buildin(int fd)
 			break;
 	}
 }
-*/

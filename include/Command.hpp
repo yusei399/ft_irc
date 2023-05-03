@@ -17,14 +17,21 @@
 #include <stdexcept>
 #include "StringExtend.hpp"
 
+enum CmdType { CAP, PASS, NICK, USER, JOIN, TOPIC, PING, NAMES, MODE, PRIVMSG, NOTICE, QUIT, KICK, INVITE, PART, UNKNOWN};
+
 //COMMAND [PARAMETER1] [PARAMETER2] ... [:TRAILING]
 //trailingはスペースを含む
+//コマンドの前に/をつけるかどうかによって意味が変わる場合があるらしいが、/はつけない方針でいく
 class Command{
+    void _set_cmd_type();
 public:
     std::string _cmd_name;
+    CmdType _cmdType;
     std::vector<std::string> _params;
     std::string _trailing;  
     Command(const std::string& cmd);
     void debug();
 };
+std::vector<Command> parse_commands(const std::string &commands_msg);
+
 #endif
