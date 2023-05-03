@@ -1,7 +1,11 @@
-#include "../include/Command.hpp"
+#include "../include/CommandList.hpp"
 #include "../include/Client.hpp"
 
 void nick(Client &client)
+{
+	(void)client;
+}
+/*
 {
 	int const &fd = client.get_client_fd();
 
@@ -23,3 +27,4 @@ void nick(Client &client)
 	if (client.get_params().size() > 1)
 		send_message("461 " + nick + " :Too many parameters", fd, 0);
 }
+*/

@@ -1,0 +1,13 @@
+# ifndef COMMAND_LIST_H
+# define COMMAND_LIST_H
+#include "Server.hpp"
+
+void pass(Client &client, std::string const &passwprd);
+void nick(Client &client);
+void user(Client &client);
+void cap(Client &client);
+void quit(Client &client);
+void names(Client &client); // channel未実装
+void PONG(Client &client, std::vector<std::string> &server_name);
+
+#endif

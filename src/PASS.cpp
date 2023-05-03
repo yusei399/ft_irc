@@ -1,7 +1,12 @@
-#include "../include/Command.hpp"
+#include "../include/CommandList.hpp"
 #include "../include/Client.hpp"
 
 void pass(Client &client, std::string const &password)
+{
+	(void)client;
+	(void)password;
+}
+/*
 {
 	int const &fd = client.get_client_fd();
 
@@ -22,4 +27,4 @@ void pass(Client &client, std::string const &password)
 	
 	if (client.get_params().size() > 1)
 		send_message("461 " + nick + " :Too many parameters", fd, 0);
-}
+}*/

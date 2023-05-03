@@ -1,6 +1,6 @@
 #include "../include/Server.hpp"
 #include "../include/Client.hpp"
-#include "../include/Command.hpp"
+#include "../include/CommandList.hpp"
 #include <signal.h>
 
 Server::Server () {}
@@ -163,6 +163,11 @@ void Server::start()
 
 void Server::do_buildin(int fd)
 {
+	(void)fd;
+}
+
+/*
+{
 	Client &connect_client = _connect[fd];
 	const std::string &command = connect_client.get_cmd();
 	const std::vector<std::string> &param = connect_client.get_params();
@@ -215,3 +220,4 @@ void Server::do_buildin(int fd)
 			break;
 	}
 }
+*/

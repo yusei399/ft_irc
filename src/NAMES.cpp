@@ -1,7 +1,11 @@
-#include "../include/Command.hpp"
+#include "../include/CommandList.hpp"
 #include "../include/Client.hpp"
 
 void names(Client &client)//channel未実装
+{
+	(void)client;
+}
+/*
 {
 	int const &fd = client.get_client_fd();
 	std::string const &nick = client.get_nick();
@@ -20,4 +24,4 @@ void names(Client &client)//channel未実装
 		send_message(message, fd, 0);
 		send_message("366 " + nick + " " + channel + " :End of /NAMES list", fd, 0);
 	}
-}
+}*/
