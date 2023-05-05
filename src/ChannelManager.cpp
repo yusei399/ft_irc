@@ -3,23 +3,10 @@
 ChannelManager::ChannelManager() {}
 
 
-//n
-void 	ChannelManager::createChannel(std::string channelName, const Client& client)
-{
-	if (exist_channel(channelName))
-		return;
-    channels.push_back(Channel(channelName, client));
-}
-
 //見つからなかったらchannels.end()を返す
 channel_it ChannelManager::find_channel(std::string channelName)
 {
-    for (channel_it it = channels.begin(); it != channels.end(); ++it) {
-        if (it->get_channel_name() == channelName) {
-            return it;
-        }
-    }
-	return channels.end();
+	return channels.find(Channel(channelName));
 }
 
 bool ChannelManager::exist_channel(std::string channelName)
@@ -28,31 +15,28 @@ bool ChannelManager::exist_channel(std::string channelName)
 }
 
 // チャンネルが存在しなければ新しく作成する
-void ChannelManager::joinChannel(std::string channelName, const Client &client)
+void ChannelManager::join(std::string channelName, const Client &client)
 {
     if (exist_channel(channelName))
 	{
-
+		const_cast<Channel&> (*find_channel(channelName)).join(client);
 	}
 	else
 	{
-		createChannel(channelName, client);
-
+	    channels.insert(Channel(channelName, client));
 	}
-	
-	std::vector<Channel>::iterator it;
-    bool found = false;
-    for (it = channels.begin(); it != channels.end(); ++it) {
-        if (it->name == channelName) {
-            found = true;
-            break;
-        }
-    }
-    if (!found) {
-        createChannel(channelName);
-        it = channels.end();
-        --it;
-    }
-    // ユーザーをチャンネルに追加する
-    it->users.insert(std::pair<int, Client>(client_fd, client));
+}
+
+//チャンネルから離脱する
+//存在しないチャンネルが指定された場合 403エラー
+void ChannelManager::try_part(std::string channelName, const Client& client)
+{
+	if (exist_channel(channelName))
+	{
+		const_cast<Channel&> (*find_channel(channelName)).try_part(client);
+	}
+	else
+	{
+        send_errmsg(client, 403, channelName + " :No such channel");
+	}
 }

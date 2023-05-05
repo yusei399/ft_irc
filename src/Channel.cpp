@@ -1,10 +1,15 @@
 #include "../include/Channel.hpp"
 
 //n
+Channel::Channel(const std::string &name)
+{
+    this->name = name;
+}
+
 Channel::Channel(const std::string &name, const Client& client)
 {
     this->name = name;
-    users.insert(client);
+    members.insert(client);
     operators.insert(client);
 }
 
@@ -12,12 +17,12 @@ Channel::Channel(const std::string &name, const Client& client)
 // チャンネルから離脱する
 // チャンネルに属していない場合442エラー
 void Channel::try_part(const Client& client) {
-    if (!is_user)
+    if (!is_member(client))
     {
-        send_errmsg(client, 442, get_channel_name()+ " :You're not on that channel");
+        send_errmsg(client, 442, get_channel_name() + " :You're not on that channel");
         return;
     }
-    users.erase(client);
+    members.erase(client);
     if (is_operator(client))
     {
         operators.erase(client);
@@ -26,19 +31,23 @@ void Channel::try_part(const Client& client) {
 
 void Channel::join(const Client& client)
 {
-    //すでに所属している場合
+    //todo 自分がすでに属しているチャンネルにjoinを行った場合の処理がこれでいいか
+    //本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
+    if (is_member(client))
+        return;
+    members.insert(client);
 }
 
 //n
 //ユーザーがチャンネルに属していない場合エラーメッセージ
 void Channel::try_send_message(const Client& client, std::string message) const{
-    if (!is_user(client))
+    if (!is_member(client))
     {
         send_errmsg(client, 442,  get_channel_name()+ " :You're not on that channel");
     }
     else
     {
-        for (client_it user = users.begin(); user != users.end(); ++user) {
+        for (client_it user = members.begin(); user != members.end(); ++user) {
             if (*user == client)continue;
             send_msg(client, "< ["+get_channel_name()+"] " + user->get_nick()+": "+message);
         }
@@ -46,9 +55,9 @@ void Channel::try_send_message(const Client& client, std::string message) const{
 }
 
 //n
-bool Channel::is_user(const Client& client) const
+bool Channel::is_member(const Client& client) const
 {
-    return users.find(client) != users.end();
+    return members.find(client) != members.end();
 }
 
 //n
@@ -64,7 +73,7 @@ std::string Channel::get_channel_name() const
 
 const std::set<Client>& Channel::get_users() const
 {
-    return users;
+    return members;
 }
 
 const std::set<Client>& Channel::get_operators() const
