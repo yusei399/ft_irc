@@ -23,10 +23,11 @@ void Channel::joinChannel(std::string channelName, int client_fd, const Client &
     }
     if (!found) {
         createChannel(channelName);
-        it = channels.end() - 1;
+        it = channels.end();
+        --it;
     }
     // ユーザーをチャンネルに追加する
-    it->users[client_fd] = client;
+    it->users.insert(std::pair<int, Client>(client_fd, client));
 }
 
 // チャンネルから離脱する関数
@@ -54,13 +55,13 @@ void Channel::sendMessage(std::string channelName, int client_fd, std::string me
     }
 
     if (found) {
-        auto user_it = it->users.find(client_fd);
+        std::map<int, Client>::iterator user_it = it->users.find(client_fd);
         if (user_it != it->users.end()) {
             std::cout << "[" << it->name << "] " << user_it->second.get_nick() << ": " << message
                     << std::endl;
-            for (auto &user : it->users) {
-                if (user.first != client_fd) {
-                    std::cout << "[Server] sending message to " << user.second.get_nick() << std::endl;
+            for (std::map<int, Client>::iterator user = it->users.begin(); user != it->users.end(); ++user) {
+                if (user->first != client_fd) {
+                    std::cout << "[Server] sending message to " << user->second.get_nick() << std::endl;
                     // send message to user
                 }
             }
