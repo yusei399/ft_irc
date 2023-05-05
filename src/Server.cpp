@@ -72,22 +72,6 @@ std::map<int, Client>& Server::get_user()
 	return (this->_user);
 }
 
-int Server::search(const std::string &str, const std::string &target)
-{
-	for (size_t i = 0; i < str.size(); i++)
-	{
-		size_t j = 0;
-		if (str[i] == target[0])
-		{
-			while (str[i] && target[j] && str[i] == target[j])
-				i++, j++;
-			if (j == target.size())
-				return i - (target.size() - 1);
-		}
-	}
-	return -1;
-}
-
 void Server::connect_client(int socketfd)
 {
 	const std::string nick = "unknown" + std::to_string(socketfd);
@@ -95,14 +79,14 @@ void Server::connect_client(int socketfd)
 	_connect[socketfd] = client;
 }
 
-void Server::chat_in(int fd)
+static std::string recieve_msg(int fd)
 {
 	char buff[MSG_LEN];
 	ssize_t	 byte;
-	std::cout << "fd : " << fd << std::endl;
+	/*std::cout << "fd : " << fd << std::endl;
 	std::cout << "buff :" << buff << std::endl;
 	std::cout << "sizeof buff : " << sizeof(buff) << std::endl;
-
+	*/
 	std::memset(buff, 0, sizeof(buff));
 	if ((byte = recv(fd, buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
 	{
@@ -115,26 +99,31 @@ void Server::chat_in(int fd)
 			throw std::exception();
 		// else if (byte == 0)
 		// quitの処理後で追記する
+		//todo ?
+		else
+		{
+			throw std::exception();
+		}
 	}
-	else
-	{
-		Client &client = _connect[fd];
-		std::cout << "-------------Client Message----------------" << std::endl;
+	return std::string(buff);
+}
+
+void Server::chat_in(int fd)
+{
+	std::string msg = recieve_msg(fd);
+/*		std::cout << "-------------Client Message----------------" << std::endl;
 		std::cout << "client fd:" << fd << std::endl;
 		std::cout << "client message:" << buff << std::endl;
 		std::cout << "---------------------------------------------" << std::endl;
-
-		std::vector<Command> cmds = parse_commands(std::string(buff));
-		for(size_t i = 0; i < cmds.size(); i++)
-		{
-			std::cout << std::endl;
-			std::cout << "cmds["<<i<<"]"<<std::endl;
-			std::cout << "---------------------" << std::endl;
-			cmds[i].debug();
-			do_buildin(fd, cmds[i]);
-		}
-		std::cout << "message finish" << std::endl;
+*/
+	std::vector<Command> cmds = parse_commands(msg);
+	for(size_t i = 0; i < cmds.size(); i++)
+	{
+		std::cout << "\ncmds["<<i<<"]\n---------------------" << std::endl;
+		cmds[i].debug();
+		do_cmd(fd, cmds[i]);
 	}
+	//std::cout << "message finish" << std::endl;
 }
 
 void Server::start()
@@ -156,7 +145,7 @@ void Server::start()
 	}
 }
 
-void Server::do_buildin(int fd, const Command &cmd)
+void Server::do_cmd(int fd, const Command &cmd)
 {
 	Client &connect_client = _connect[fd];
 	CmdType cmdType = cmd._cmdType;

@@ -13,7 +13,7 @@ channel_it ChannelManager::find_it(std::string channelName) const
 	return channels.end();
 }
 
-//存在しない時に呼ぶとエラーが起きる
+//存在しないチャンネルをfindするとエラーが起きる
 Channel& ChannelManager::find_must_exist(std::string channelName) const
 {
 	channel_it ch = find_it(channelName);

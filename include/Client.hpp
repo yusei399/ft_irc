@@ -27,7 +27,7 @@ public:
 	Client(int fd, const std::string &nc);
 	~Client();
 //	void command_parser(std::string &command);
-	void preprocessing(const std::string &message, int &i);
+//	void preprocessing(const std::string &message, int &i);
 //	void set_permission(bool permission) {_permission = permission;}
 //	void processingparams(const std::string &message, int &i);
 //	const std::string &get_cmd() const {return _command;}

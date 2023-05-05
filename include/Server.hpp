@@ -22,6 +22,8 @@
 
 # define MSG_LEN 1024
 #include "Client.hpp"
+#include "ClientStore.hpp"
+
 class Client;
 class Server
 {
@@ -33,6 +35,7 @@ private:
 	std::vector<struct pollfd>		_pfds;
 	void create_poll(int socket_fd);
 	std::map<int, Client> _user;
+	//ConnectionClient _connect;
 public:
 	Server();
 	Server(int port, std::string &password);
@@ -43,8 +46,7 @@ public:
 	void start();
 	void allow();
 	std::map<int, Client>& get_user();
-	int  search(const std::string &str, const std::string &target);
-	void do_buildin(int fd, const Command &cmd);
+	void do_cmd(int fd, const Command &cmd);
 };
 void signal_handler(int signal);
 

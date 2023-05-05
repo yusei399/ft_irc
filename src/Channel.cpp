@@ -25,15 +25,14 @@ void Channel::try_part(const Client& client) {
 
 void Channel::join(const Client& client)
 {
-    //todo 自分がすでに属しているチャンネルにjoinを行った場合の処理がこれでいいか
-    //本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
+    //すでに属しているチャンネルにjoinを行った場合,本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
     if (is_member(client))
         return;
     members.insert(client);
 }
 
 //n
-//ユーザーがチャンネルに属していない場合エラーメッセージ
+//ユーザーがチャンネルに属していない場合442エラー
 void Channel::try_send_message(const Client& client, std::string message) const{
     if (!is_member(client))
     {
