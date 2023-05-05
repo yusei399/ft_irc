@@ -2,35 +2,35 @@
 
 void Command::_set_cmd_type()
 {
-    if (_cmd_name.compare("CAP") == 0)
+    if (_cmd_name == "CAP")
         _cmdType = CAP;
-    else if (_cmd_name.compare("PASS") == 0)
+    else if (_cmd_name == "PASS")
         _cmdType = PASS;
-    else if (_cmd_name.compare("NICK") == 0)
+    else if (_cmd_name == "NICK")
         _cmdType = NICK;
-    else if (_cmd_name.compare("USER") == 0)
+    else if (_cmd_name == "USER")
         _cmdType = USER;
-    else if (_cmd_name.compare("JOIN") == 0)
+    else if (_cmd_name == "JOIN")
         _cmdType = JOIN;
-    else if (_cmd_name.compare("TOPIC") == 0)
+    else if (_cmd_name == "TOPIC")
         _cmdType = TOPIC;
-    else if (_cmd_name.compare("PING") == 0)
+    else if (_cmd_name == "PING")
         _cmdType = PING;
-    else if (_cmd_name.compare("NAMES") == 0)
+    else if (_cmd_name == "NAMES")
         _cmdType = NAMES;
-    else if (_cmd_name.compare("MODE") == 0)
+    else if (_cmd_name == "MODE")
         _cmdType = MODE;
-    else if (_cmd_name.compare("PRIVMSG") == 0)
+    else if (_cmd_name == "PRIVMSG")
         _cmdType = PRIVMSG;
-    else if (_cmd_name.compare("NOTICE") == 0)
+    else if (_cmd_name == "NOTICE")
         _cmdType = NOTICE;
-    else if (_cmd_name.compare("QUIT") == 0)
+    else if (_cmd_name == "QUIT")
         _cmdType = QUIT;
-    else if (_cmd_name.compare("KICK") == 0)
+    else if (_cmd_name == "KICK")
         _cmdType = KICK;
-    else if (_cmd_name.compare("INVITE") == 0)
+    else if (_cmd_name == "INVITE")
         _cmdType = INVITE;
-    else if (_cmd_name.compare("PART") == 0)
+    else if (_cmd_name == "PART")
         _cmdType = PART;
     else
         _cmdType = UNKNOWN;

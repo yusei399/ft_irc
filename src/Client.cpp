@@ -63,22 +63,66 @@ void Client::processingparams(const std::string &message, int &cnt)
 }
 */
 
-int Client::get_client_fd()
+int Client::get_fd() const
 {
 	return (_fd);
 }
 
-std::string Client::get_nick()
+std::string Client::get_nick() const
 {
 	return (_nick);
 }
 
-void	send_message(const std::string &message, int fd, int flag)
+std::string Client::get_real_name() const
+{
+	return _real_name;
+}
+
+std::string Client::get_host_name() const
+{
+	return _hostname;
+}
+
+
+/*void	send_message(const std::string &message, int fd, int flag)
 {
 	send(fd, message.c_str(), message.size(), flag);
 }
 
-void	Client::send_err_msg(int err_code, const std::string &message)
+
+void	Client::send_err_msg(int err_code) const
 {
-	send_message(std::to_string(err_code)+ " " + message, get_client_fd(), 0);
+	send_message(std::to_string(err_code)+" "+get_nick()+ " " + get_err_msg(err_code), get_fd(), 0);
+}*/
+
+
+/*void	Client::send_err_msg(int err_code, const std::string &message) const
+{
+	send_message(std::to_string(err_code)+" "+get_nick()+ " " + message, get_fd(), 0);
+}*/
+
+//Setのキーに使うために必要
+bool Client::operator<(const Client& rhs) const
+{
+	return get_fd() < rhs.get_fd();
+}
+
+//n
+bool Client::operator==(const Client& rhs) const
+{
+	return get_fd() == rhs.get_fd() && get_real_name() == rhs.get_real_name();
+}
+
+//n
+bool Client::operator!=(const Client& rhs) const
+{
+	return !operator==(rhs);
+}
+
+std::ostream& operator<<(std::ostream& os, const Client& client)
+{
+	os<<"nick_name : " <<client.get_nick()<<std::endl;
+	os<<"real_name : " <<client.get_real_name()<<std::endl;
+	os<<"host_name : " <<client.get_host_name()<<std::endl;
+	os<<"fd : " << client.get_fd()<<std::endl;
 }

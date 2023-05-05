@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <map>
 #include "Command.hpp"
+#include "Message.hpp"
 
 #define TIMEOUT 3 * 60 * 1000
 

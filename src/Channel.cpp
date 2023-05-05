@@ -1,74 +1,88 @@
 #include "../include/Channel.hpp"
 
-Channel::Channel() {}
-Channel::~Channel() {}
-Channel::Channel(const std::map<int, Client> &initial_users) : users(initial_users) {} 
-
-void Channel::createChannel(std::string channelName) {
-    Channel newChannel;
-    newChannel.name = channelName;
-    channels.push_back(newChannel);
+//n
+Channel::Channel(const std::string &name, const Client& client)
+{
+    this->name = name;
+    users.insert(client);
+    operators.insert(client);
 }
 
-// チャンネルに参加する関数
-void Channel::joinChannel(std::string channelName, int client_fd, const Client &client) {
-    // チャンネルが存在しなければ新しく作成する
-    std::vector<Channel>::iterator it;
-    bool found = false;
-    for (it = channels.begin(); it != channels.end(); ++it) {
-        if (it->name == channelName) {
-            found = true;
-            break;
-        }
+//n
+// チャンネルから離脱する
+// チャンネルに属していない場合442エラー
+void Channel::try_part(const Client& client) {
+    if (!is_user)
+    {
+        send_errmsg(client, 442, get_channel_name()+ " :You're not on that channel");
+        return;
     }
-    if (!found) {
-        createChannel(channelName);
-        it = channels.end();
-        --it;
-    }
-    // ユーザーをチャンネルに追加する
-    it->users.insert(std::pair<int, Client>(client_fd, client));
-}
-
-// チャンネルから離脱する関数
-void Channel::leaveChannel(std::string channelName, int client_fd) {
-    // チャンネルが存在するかどうかを確認する
-    std::vector<Channel>::iterator it;
-    for (it = channels.begin(); it != channels.end(); ++it) {
-        if (it->name == channelName) {
-             // ユーザーをチャンネルから削除する
-            it->users.erase(client_fd);
-            break;
-        }
+    users.erase(client);
+    if (is_operator(client))
+    {
+        operators.erase(client);
     }
 }
 
-// チャンネルにメッセージを送信する関数
-void Channel::sendMessage(std::string channelName, int client_fd, std::string message) {
-    std::vector<Channel>::iterator it;
-    bool found = false;
-    for (it = channels.begin(); it != channels.end(); ++it) {
-        if (it->name == channelName) {
-            found = true;
-            break;
-        }
-    }
+void Channel::join(const Client& client)
+{
+    //すでに所属している場合
+}
 
-    if (found) {
-        std::map<int, Client>::iterator user_it = it->users.find(client_fd);
-        if (user_it != it->users.end()) {
-            std::cout << "[" << it->name << "] " << user_it->second.get_nick() << ": " << message
-                    << std::endl;
-            for (std::map<int, Client>::iterator user = it->users.begin(); user != it->users.end(); ++user) {
-                if (user->first != client_fd) {
-                    std::cout << "[Server] sending message to " << user->second.get_nick() << std::endl;
-                    // send message to user
-                }
-            }
-        } else {
-            std::cout << "[Server] User with fd " << client_fd << " not found in channel " << channelName << std::endl;
-        }
-    } else {
-        std::cout << "[Server] Channel " << channelName << " not found" << std::endl;
+//n
+//ユーザーがチャンネルに属していない場合エラーメッセージ
+void Channel::try_send_message(const Client& client, std::string message) const{
+    if (!is_user(client))
+    {
+        send_errmsg(client, 442,  get_channel_name()+ " :You're not on that channel");
     }
+    else
+    {
+        for (client_it user = users.begin(); user != users.end(); ++user) {
+            if (*user == client)continue;
+            send_msg(client, "< ["+get_channel_name()+"] " + user->get_nick()+": "+message);
+        }
+    }
+}
+
+//n
+bool Channel::is_user(const Client& client) const
+{
+    return users.find(client) != users.end();
+}
+
+//n
+bool Channel::is_operator(const Client& client) const
+{
+    return operators.find(client) != operators.end();
+}
+
+std::string Channel::get_channel_name() const
+{
+    return name;
+}
+
+const std::set<Client>& Channel::get_users() const
+{
+    return users;
+}
+
+const std::set<Client>& Channel::get_operators() const
+{
+    return operators;
+}
+
+//setのキーに使うために必要
+bool Channel::operator<(const Channel& rhs) const
+{
+    return this->name < rhs.get_channel_name();
+}
+
+//n
+std::ostream& operator<<(std::ostream& os, const Channel& channel)
+{
+    os<<"channel_name : "<<channel.get_channel_name()<<std::endl;
+    os<<"users        : "<<channel.get_users()<<std::endl;
+    os<<"operators    : "<<channel.get_operators()<<std::endl;
+
 }

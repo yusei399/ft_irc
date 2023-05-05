@@ -210,7 +210,7 @@ void Server::do_buildin(int fd, const Command &cmd)
 			break;
 		//ok
 		case UNKNOWN:
-			connect_client.send_err_msg(421, cmd._cmd_name + " :Unknown command");
+			send_errmsg(connect_client, 421, cmd._cmd_name + " :Unknown command");
 			break;
 		default:
 			break;

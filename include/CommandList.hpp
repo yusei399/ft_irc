@@ -1,6 +1,7 @@
 # ifndef COMMAND_LIST_H
 # define COMMAND_LIST_H
 #include "Server.hpp"
+#include "Message.hpp"
 
 void pass(Client &client, std::string const &passwprd);
 void nick(Client &client, const Command& cmd);
