@@ -1,7 +1,14 @@
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-#include "Server.hpp"
+#include <iostream>
+#include <algorithm>
+#include <unistd.h> 
+#include <string> 
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
 
 class Client
 {
@@ -34,9 +41,9 @@ public:
 	void set_real_name(const std::string &real_name) {_real_name = real_name;}
 	void set_hostname(const std::string &hostname) {_hostname = hostname;}
 //	void send_err_msg(int err_code, const std::string &message) const;
-	bool Client::operator<(const Client& rhs) const;
-	bool Client::operator==(const Client& rhs) const;
-	bool Client::operator!=(const Client& rhs) const;
+	bool operator<(const Client& rhs) const;
+	bool operator==(const Client& rhs) const;
+	bool operator!=(const Client& rhs) const;
 };
 
 //デバッグ用

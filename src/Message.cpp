@@ -1,4 +1,4 @@
-#include "Message.hpp"
+#include "../include/Message.hpp"
 
 void send_msg(const Client &reciever, const std::string &message)
 {

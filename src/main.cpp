@@ -1,5 +1,6 @@
 #include "../include/Server.hpp"
 #include <signal.h>
+#include "../include/StringExtend.hpp"
 
 
 void signal_handler(int signal)
@@ -9,6 +10,7 @@ void signal_handler(int signal)
 }
 
 Server *server;
+
 int main(int argc, char **argv){
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);

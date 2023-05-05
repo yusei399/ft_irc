@@ -61,6 +61,7 @@ std::vector<Command> parse_commands(const std::string &commands_msg)
     std::vector<Command> cmds;
     for(size_t i = 0; i < cmd_lines.size(); i++)
     {
+        std::cout << "<"<<cmd_lines[i]<<">" << std::endl;
         Command cmd(cmd_lines[i]);
         cmds.push_back(cmd);
     }
@@ -72,7 +73,7 @@ void Command::debug()
     std::cout<<"cmd_name : " << _cmd_name<<std::endl;
     std::cout<<"params : ";
     for(size_t i = 0; i < _params.size(); i++)
-    {
+    {   
         std::cout<<"<"<< _params[i]<<">, ";
     }
     std::cout<<std::endl;

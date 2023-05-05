@@ -1,6 +1,5 @@
 #include "../include/ChannelManager.hpp"
 
-ChannelManager::ChannelManager() {}
 
 //n
 channel_it ChannelManager::find_it(std::string channelName) const

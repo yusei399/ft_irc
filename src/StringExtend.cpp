@@ -12,12 +12,14 @@ std::vector<std::string> split(const std::string& s, const std::vector<std::stri
         for(size_t j = 0; j < t.size(); j++)
         {
             size_t r = s.find(t[j], word_l);
+            std::cout <<"<wordl : "<<word_l<< ", r : "<<r <<">, t[j] :<"<<t[j] << ">"<< std::endl;
             if (r != std::string::npos && word_r > r)
             {
                 word_r = r;
                 delim_len = t[j].size();
             }
         }
+//        std::cout << "wordl : " << word_l <<", wordr "<<word_r << std::endl;
         if (word_l < word_r)
             splited.push_back(s.substr(word_l, word_r - word_l));
         word_l = word_r + delim_len;
@@ -28,8 +30,8 @@ std::vector<std::string> split(const std::string& s, const std::vector<std::stri
 std::vector<std::string> split_lines(const std::string& s)
 {
     std::vector<std::string> delims;
-    delims.push_back("¥r¥n");
-    delims.push_back("¥n");
+    delims.push_back(std::string("\r\n"));
+    delims.push_back(std::string("\n"));
     return split(s, delims);
 }
 

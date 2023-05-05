@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include <map>
+#include <sys/socket.h>
 #include "Client.hpp"
 
 void send_msg(const Client &reciever, const std::string &message);

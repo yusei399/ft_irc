@@ -6,7 +6,7 @@
 template<class T>
 std::ostream& operator<<(std::ostream& os, const std::set<T>& set)
 {
-	for(std::set<T>::iterator it = set.begin(); it != set.end(); it++)
+	for(typename std::set<T>::iterator it = set.begin(); it != set.end(); it++)
 	{
 		os<< *it <<", ";
 	}

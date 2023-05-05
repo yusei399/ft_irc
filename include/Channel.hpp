@@ -22,7 +22,6 @@ private:
     std::set<Client> members;// チャンネルに参加しているユーザーのリスト 
     std::set<Client> operators;//オペレーター権限を持ったユーザーのリスト
 
-    bool operator<(const Channel& rhs) const;
 public:
     Channel(const std::string &name);
     Channel(const std::string &name, const Client& client);
