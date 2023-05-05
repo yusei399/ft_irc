@@ -2,24 +2,45 @@
 
 ChannelManager::ChannelManager() {}
 
-
-//見つからなかったらchannels.end()を返す
-channel_it ChannelManager::find_channel(std::string channelName)
+//n
+channel_it ChannelManager::find_it(std::string channelName) const
 {
-	return channels.find(Channel(channelName));
+	for(channel_it it = channels.begin(); it != channels.end(); it++)
+	{
+		if (it->get_channel_name() == channelName)
+		{
+			return it;
+		}
+	}
+	return channels.end();
 }
 
-bool ChannelManager::exist_channel(std::string channelName)
+
+//n
+//存在しない時に呼ぶとエラーが起きる
+Channel& ChannelManager::find_must_exist(std::string channelName) const
 {
-	return find_channel(channelName) != channels.end();
+	channel_it ch = find_it(channelName);
+	if (ch == channels.end())
+	{
+		throw std::logic_error("must not use ChanndlManager::find_must_exist(channelName) when not exist");
+	}
+	return const_cast<Channel&>(*ch);
 }
 
+//n
+bool ChannelManager::exist(std::string channelName) const
+{
+	return find_it(channelName) != channels.end();
+}
+
+//n
 // チャンネルが存在しなければ新しく作成する
 void ChannelManager::join(std::string channelName, const Client &client)
 {
-    if (exist_channel(channelName))
+    if (exist(channelName))
 	{
-		const_cast<Channel&> (*find_channel(channelName)).join(client);
+		find_must_exist(channelName).join(client);
 	}
 	else
 	{
@@ -27,13 +48,27 @@ void ChannelManager::join(std::string channelName, const Client &client)
 	}
 }
 
+//n
 //チャンネルから離脱する
 //存在しないチャンネルが指定された場合 403エラー
 void ChannelManager::try_part(std::string channelName, const Client& client)
 {
-	if (exist_channel(channelName))
+	if (exist(channelName))
 	{
-		const_cast<Channel&> (*find_channel(channelName)).try_part(client);
+		find_must_exist(channelName).try_part(client);
+	}
+	else
+	{
+        send_errmsg(client, 403, channelName + " :No such channel");
+	}
+}
+
+//n
+void ChannelManager::try_send_msg(std::string channelName, const Client& client, std::string message) const
+{
+	if (exist(channelName))
+	{
+		find_must_exist(channelName).try_send_message(client, message);
 	}
 	else
 	{

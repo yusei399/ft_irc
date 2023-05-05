@@ -6,6 +6,7 @@ Channel::Channel(const std::string &name)
     this->name = name;
 }
 
+//n
 Channel::Channel(const std::string &name, const Client& client)
 {
     this->name = name;
@@ -29,6 +30,7 @@ void Channel::try_part(const Client& client) {
     }
 }
 
+//n
 void Channel::join(const Client& client)
 {
     //todo 自分がすでに属しているチャンネルにjoinを行った場合の処理がこれでいいか

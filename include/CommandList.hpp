@@ -10,5 +10,6 @@ void cap(Client &client);
 void quit(Client &client);
 void names(Client &client); // channel未実装
 void PONG(Client &client, std::vector<std::string> &server_name);
+void privmsg(Client &connect_client, Command &cmd);
 
 #endif

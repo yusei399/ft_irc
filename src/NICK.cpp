@@ -6,6 +6,7 @@ ERR_NONICKNAMEGIVEN             ERR_ERRONEUSNICKNAME
            ERR_NICKNAMEINUSE               ERR_NICKCOLLISION
            ERR_UNAVAILRESOURCE             ERR_RESTRICTED
 */
+//todo使ってはいけない文字が含まれる場合
 void nick(Client &client, const Command& cmd)
 {
 	if (cmd._params.size() == 0)
