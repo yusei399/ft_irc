@@ -1,12 +1,6 @@
 #include "../include/Channel.hpp"
 
-//n
-Channel::Channel(const std::string &name)
-{
-    this->name = name;
-}
 
-//n
 Channel::Channel(const std::string &name, const Client& client)
 {
     this->name = name;
@@ -14,7 +8,6 @@ Channel::Channel(const std::string &name, const Client& client)
     operators.insert(client);
 }
 
-//n
 // チャンネルから離脱する
 // チャンネルに属していない場合442エラー
 void Channel::try_part(const Client& client) {
@@ -30,7 +23,6 @@ void Channel::try_part(const Client& client) {
     }
 }
 
-//n
 void Channel::join(const Client& client)
 {
     //todo 自分がすでに属しているチャンネルにjoinを行った場合の処理がこれでいいか
@@ -56,13 +48,11 @@ void Channel::try_send_message(const Client& client, std::string message) const{
     }
 }
 
-//n
 bool Channel::is_member(const Client& client) const
 {
     return members.find(client) != members.end();
 }
 
-//n
 bool Channel::is_operator(const Client& client) const
 {
     return operators.find(client) != operators.end();
@@ -73,7 +63,7 @@ std::string Channel::get_channel_name() const
     return name;
 }
 
-const std::set<Client>& Channel::get_users() const
+const std::set<Client>& Channel::get_members() const
 {
     return members;
 }
@@ -89,11 +79,11 @@ bool Channel::operator<(const Channel& rhs) const
     return this->name < rhs.get_channel_name();
 }
 
-//n
+
 std::ostream& operator<<(std::ostream& os, const Channel& channel)
 {
     os<<"channel_name : "<<channel.get_channel_name()<<std::endl;
-    os<<"users        : "<<channel.get_users()<<std::endl;
-    os<<"operators    : "<<channel.get_operators()<<std::endl;
-
+    os<<"users        : \n"<<channel.get_members()<<std::endl<<std::endl;;
+    os<<"operators    : \n"<<channel.get_operators()<<std::endl<<std::endl;;
+    return os;
 }

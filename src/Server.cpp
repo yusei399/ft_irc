@@ -191,7 +191,7 @@ void Server::do_buildin(int fd, const Command &cmd)
 			std::cout << "mode" << std::endl;
 			break;
 		case PRIVMSG:
-			//privmsg(connect_client, cmd);
+			privmsg(connect_client, cmd);
 			std::cout << "privmsg" << std::endl;
 			break;
 		case NOTICE:

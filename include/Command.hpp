@@ -25,7 +25,7 @@ enum CmdType { CAP, PASS, NICK, USER, JOIN, TOPIC, PING, NAMES, MODE, PRIVMSG, N
 class Command{
     void _set_cmd_type();
 public:
-    std::string _cmd_name;
+    std::string _cmd_name;//存在しない値を持つことがある
     CmdType _cmdType;
     std::vector<std::string> _params;
     std::string _trailing;  

@@ -1,7 +1,6 @@
 #include "../include/ChannelManager.hpp"
 
 
-//n
 channel_it ChannelManager::find_it(std::string channelName) const
 {
 	for(channel_it it = channels.begin(); it != channels.end(); it++)
@@ -14,8 +13,6 @@ channel_it ChannelManager::find_it(std::string channelName) const
 	return channels.end();
 }
 
-
-//n
 //存在しない時に呼ぶとエラーが起きる
 Channel& ChannelManager::find_must_exist(std::string channelName) const
 {
@@ -27,13 +24,13 @@ Channel& ChannelManager::find_must_exist(std::string channelName) const
 	return const_cast<Channel&>(*ch);
 }
 
-//n
+
 bool ChannelManager::exist(std::string channelName) const
 {
 	return find_it(channelName) != channels.end();
 }
 
-//n
+
 // チャンネルが存在しなければ新しく作成する
 void ChannelManager::join(std::string channelName, const Client &client)
 {
@@ -47,7 +44,7 @@ void ChannelManager::join(std::string channelName, const Client &client)
 	}
 }
 
-//n
+
 //チャンネルから離脱する
 //存在しないチャンネルが指定された場合 403エラー
 void ChannelManager::try_part(std::string channelName, const Client& client)
@@ -62,7 +59,7 @@ void ChannelManager::try_part(std::string channelName, const Client& client)
 	}
 }
 
-//n
+
 void ChannelManager::try_send_msg(std::string channelName, const Client& client, std::string message) const
 {
 	if (exist(channelName))

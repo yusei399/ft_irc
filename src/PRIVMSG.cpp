@@ -6,7 +6,7 @@ static bool valid_arg_cnt(Client &connect_client, Command &cmd)
 	if (cmd._params.size() != 1)
 }*/
 
-void privmsg(Client &connect_client, Command &cmd)
+void privmsg(Client &connect_client, const Command &cmd)
 {
 	//if (!valid_arg_cnt(connect_client, cmd)) return;
 	(void)connect_client;
