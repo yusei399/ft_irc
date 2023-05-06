@@ -1,4 +1,4 @@
-#include "../include/ChannelManager.hpp"
+#include "ChannelManager.hpp"
 
 
 channel_it ChannelManager::find_it(std::string channelName) const
@@ -13,8 +13,10 @@ channel_it ChannelManager::find_it(std::string channelName) const
 	return channels.end();
 }
 
-//存在しないチャンネルをfindするとエラーが起きる
-Channel& ChannelManager::find_must_exist(std::string channelName) const
+
+
+///	存在しないチャンネルをgetしようとするとエラーが起きる
+Channel& ChannelManager::get_channel(std::string channelName) const
 {
 	channel_it ch = find_it(channelName);
 	if (ch == channels.end())
@@ -25,33 +27,32 @@ Channel& ChannelManager::find_must_exist(std::string channelName) const
 }
 
 
-bool ChannelManager::exist(std::string channelName) const
+bool ChannelManager::exist_channel(std::string channelName) const
 {
 	return find_it(channelName) != channels.end();
 }
 
 
 // チャンネルが存在しなければ新しく作成する
-void ChannelManager::join(std::string channelName, const Client &client)
-{
-    if (exist(channelName))
-	{
-		find_must_exist(channelName).join(client);
-	}
-	else
-	{
-	    channels.insert(Channel(channelName, client));
-	}
-}
-
+// void ChannelManager::join_past(std::string channelName, const Client &client)
+// {
+//     if (exist(channelName))
+// 	{
+// 		find_must_exist(channelName).join(client);
+// 	}
+// 	else
+// 	{
+// 	    channels.insert(Channel(channelName, client));
+// 	}
+// }
 
 //チャンネルから離脱する
 //存在しないチャンネルが指定された場合 403エラー
 void ChannelManager::try_part(std::string channelName, const Client& client)
 {
-	if (exist(channelName))
+	if (exist_channel(channelName))
 	{
-		find_must_exist(channelName).try_part(client);
+		get_channel(channelName).try_part(client);
 	}
 	else
 	{
@@ -62,9 +63,9 @@ void ChannelManager::try_part(std::string channelName, const Client& client)
 
 void ChannelManager::try_send_msg(std::string channelName, const Client& client, std::string message) const
 {
-	if (exist(channelName))
+	if (exist_channel(channelName))
 	{
-		find_must_exist(channelName).try_send_message(client, message);
+		get_channel(channelName).try_send_message(client, message);
 	}
 	else
 	{

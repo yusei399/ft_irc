@@ -52,3 +52,7 @@ void channel_test()
 
 }
 */
+//全体の構造に関わるので
+//nickネーム
+
+//privmsgを使えるようにする

@@ -37,7 +37,7 @@ void Command::_set_cmd_type()
 }
 
 //trailingはスペースを含むことができ、二つ目以降の:は通常の文字列として使われる
-Command::Command(const std::string& cmd)
+Command::Command(const std::string& cmd) : _original_string(cmd)
 {
     size_t trailing_begin = cmd.find(":");
     if (trailing_begin == std::string::npos)
@@ -71,6 +71,11 @@ void Command::debug()
     std::cout<<std::endl;
     std::cout<<"trailing : " << _trailing<<std::endl;
     
+}
+
+std::string Command::get_original_str() const
+{
+    return _original_string;
 }
 
 /*

@@ -67,10 +67,10 @@ void Server::create_poll(int socket_fd)
 }
 
 
-std::map<int, Client>& Server::get_user()
+/*std::map<int, Client>& Server::get_user()
 {
 	return (this->_user);
-}
+}*/
 
 void Server::connect_client(int socketfd)
 {
@@ -110,18 +110,18 @@ static std::string recieve_msg(int fd)
 
 void Server::chat_in(int fd)
 {
-	std::string msg = recieve_msg(fd);
 /*		std::cout << "-------------Client Message----------------" << std::endl;
 		std::cout << "client fd:" << fd << std::endl;
 		std::cout << "client message:" << buff << std::endl;
 		std::cout << "---------------------------------------------" << std::endl;
 */
-	std::vector<Command> cmds = parse_commands(msg);
+	std::vector<Command> cmds = parse_commands(recieve_msg(fd));
 	for(size_t i = 0; i < cmds.size(); i++)
 	{
 		std::cout << "\ncmds["<<i<<"]\n---------------------" << std::endl;
 		cmds[i].debug();
-		do_cmd(fd, cmds[i]);
+		std::cout << "---------------------\n" << std::endl;
+		build_in(fd, cmds[i]);
 	}
 	//std::cout << "message finish" << std::endl;
 }
@@ -145,9 +145,9 @@ void Server::start()
 	}
 }
 
-void Server::do_cmd(int fd, const Command &cmd)
+void Server::build_in(int fd, const Command &cmd)
 {
-	Client &connect_client = _connect[fd];
+	Client &client = _connect[fd];
 	CmdType cmdType = cmd._cmdType;
 
 	switch (cmdType)
@@ -156,16 +156,16 @@ void Server::do_cmd(int fd, const Command &cmd)
 			std::cout << "cap" << std::endl;
 			break;
 		case PASS:
-			pass(connect_client, _password);
+			pass(client, _password);
 			break;
 		case NICK:
-			nick(connect_client, cmd);
+			nick(client, cmd);
 			break;
 		case USER:
-			user(connect_client);
+			user(client);
 			break;
 		case JOIN:
-			std::cout << "join" << std::endl;
+			channelManager.join(client, cmd);
 			break;
 		case TOPIC:
 			std::cout << "topic" << std::endl;
@@ -180,7 +180,7 @@ void Server::do_cmd(int fd, const Command &cmd)
 			std::cout << "mode" << std::endl;
 			break;
 		case PRIVMSG:
-			privmsg(connect_client, cmd);
+			privmsg(client, cmd);
 			std::cout << "privmsg" << std::endl;
 			break;
 		case NOTICE:
@@ -200,7 +200,7 @@ void Server::do_cmd(int fd, const Command &cmd)
 			break;
 		//ok
 		case UNKNOWN:
-			send_errmsg(connect_client, 421, cmd._cmd_name + " :Unknown command");
+			send_errmsg(client, 421, cmd._cmd_name + " :Unknown command");
 			break;
 		default:
 			break;

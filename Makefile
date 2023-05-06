@@ -12,7 +12,7 @@ OBJS = $(subst $(SRCDIR), ./$(OBJDIR), $(SRCS:%.cpp=%.o))
 
 DEPS    =    $(SRCS:%.cpp=%.d)
 
-INC = inc
+INC = include
 
 RM = rm -rf
 

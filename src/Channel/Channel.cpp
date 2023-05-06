@@ -1,9 +1,9 @@
-#include "../include/Channel.hpp"
+#include "Channel.hpp"
 
 
-Channel::Channel(const std::string &name, const Client& client)
+Channel::Channel(const std::string &name, const Client& client, const std::string &pwd)
+    :name(name), password(pwd)
 {
-    this->name = name;
     members.insert(client);
     operators.insert(client);
 }
@@ -23,11 +23,17 @@ void Channel::try_part(const Client& client) {
     }
 }
 
-void Channel::join(const Client& client)
+//存在しないチャンネルに対してjoinを行った場合はこの関数ではなくコンストラクタで処理する
+void Channel::join(const Client& client, const std::string & pass)
 {
     //すでに属しているチャンネルにjoinを行った場合,本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
     if (is_member(client))
         return;
+    if (!correct_pass(pass))
+    {
+        send_errmsg(client, 475, get_channel_name()+ " :Cannot join channel (+k)");
+        return;
+    }
     members.insert(client);
 }
 
@@ -45,6 +51,13 @@ void Channel::try_send_message(const Client& client, std::string message) const{
             send_msg(client, "< ["+get_channel_name()+"] " + user->get_nick()+": "+message);
         }
     }
+}
+
+bool Channel::correct_pass(const std::string& pass) const
+{
+    if (this->password == "")
+        return true;
+    return (this->password == pass);
 }
 
 bool Channel::is_member(const Client& client) const
@@ -81,8 +94,11 @@ bool Channel::operator<(const Channel& rhs) const
 
 std::ostream& operator<<(std::ostream& os, const Channel& channel)
 {
+    os<<"--------------------"<<std::endl;
     os<<"channel_name : "<<channel.get_channel_name()<<std::endl;
+    os<<"pass         : "<<channel.get_password()<<std::endl;
     os<<"users        : \n"<<channel.get_members()<<std::endl<<std::endl;;
     os<<"operators    : \n"<<channel.get_operators()<<std::endl<<std::endl;;
+    os<<"--------------------\n"<<std::endl;
     return os;
 }

@@ -1,5 +1,6 @@
-#include "../include/CommandList.hpp"
-#include "../include/Client.hpp"
+#include "CommandList.hpp"
+#include "Client.hpp"
+#include "ChannelManager.hpp"
 
 void user(Client &client)
 {

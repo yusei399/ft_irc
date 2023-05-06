@@ -11,5 +11,6 @@
 #include <map>
 
 std::vector<std::string> split(const std::string& s, const std::vector<std::string>& t);
+std::vector<std::string> split(const std::string& s, const std::string& t);
 std::vector<std::string> split_lines(const std::string& s);
 #endif

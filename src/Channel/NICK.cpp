@@ -1,6 +1,6 @@
-#include "../include/CommandList.hpp"
-#include "../include/Client.hpp"
-
+#include "CommandList.hpp"
+#include "Client.hpp"
+#include "ChannelManager.hpp"
 /*
 ERR_NONICKNAMEGIVEN             ERR_ERRONEUSNICKNAME
            ERR_NICKNAMEINUSE               ERR_NICKCOLLISION
@@ -15,7 +15,7 @@ void nick(Client &client, const Command& cmd)
 		return ;
 	}
 	if (cmd._params.size() > 1)
-	{	
+	{
 		send_errmsg(client, 461, ":Too many parameters");
 		return;
 	}
