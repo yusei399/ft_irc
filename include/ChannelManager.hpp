@@ -13,9 +13,11 @@ public:
 	channel_it find_it(std::string channelName) const;
 	Channel& get_channel(std::string channelName) const;
 	bool exist_channel(std::string channelName) const;
-	void join(const Client &client, const Command& cmd);
-	void try_part(std::string channelName, const Client& client);
+	void join(Client &client, const Command& cmd);
+	void nick(Client &client, const Command& cmd);
+	void try_part(std::string channelName, Client& client);
 	//n
-	void try_send_msg(std::string channelName, const Client& client, std::string message) const;
+	void try_send_msg(std::string channelName, Client& client, std::string message) const;
+	
 };
 #endif

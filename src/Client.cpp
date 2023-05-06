@@ -2,7 +2,7 @@
 
 Client::Client(){}
 
-Client::Client(int fd, const std::string &nc) : _fd(fd), _nick(nc){}
+Client::Client(int fd, const std::string &nc) : _fd(fd){set_nick(nc);}
 
 Client::~Client(){}
 
@@ -11,9 +11,26 @@ int Client::get_fd() const
 	return (_fd);
 }
 
+
+//nicknameだけ静的メンバ変数にしている理由
+// nicknameをstd::string nick_nameなどのメンバ変数で持つと
+// Client a; Client b = a;
+// a.nickname = "hoge";
+// 等とした時にaとbでnicknameが違うという問題が起き、バグの温床になりそうだから
+static std::map<Client, std::string>& get_nickname_dict()
+{
+	static std::map<Client, std::string> nickname_dict;
+	return nickname_dict;
+}
+
 std::string Client::get_nick() const
 {
-	return (_nick);
+	return get_nickname_dict()[*this];
+}
+	
+void Client::set_nick(const std::string &nick)
+{
+	get_nickname_dict()[*this] = nick;
 }
 
 std::string Client::get_real_name() const

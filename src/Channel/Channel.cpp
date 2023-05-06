@@ -1,7 +1,7 @@
 #include "Channel.hpp"
 
 
-Channel::Channel(const std::string &name, const Client& client, const std::string &pwd)
+Channel::Channel(const std::string &name,const  Client& client, const std::string &pwd)
     :name(name), password(pwd)
 {
     members.insert(client);
@@ -10,7 +10,7 @@ Channel::Channel(const std::string &name, const Client& client, const std::strin
 
 // チャンネルから離脱する
 // チャンネルに属していない場合442エラー
-void Channel::try_part(const Client& client) {
+void Channel::try_part(Client& client) {
     if (!is_member(client))
     {
         send_errmsg(client, 442, get_channel_name() + " :You're not on that channel");
@@ -24,7 +24,7 @@ void Channel::try_part(const Client& client) {
 }
 
 //存在しないチャンネルに対してjoinを行った場合はこの関数ではなくコンストラクタで処理する
-void Channel::join(const Client& client, const std::string & pass)
+void Channel::join(Client& client, const std::string & pass)
 {
     //すでに属しているチャンネルにjoinを行った場合,本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
     if (is_member(client))
@@ -39,7 +39,7 @@ void Channel::join(const Client& client, const std::string & pass)
 
 //n
 //ユーザーがチャンネルに属していない場合442エラー
-void Channel::try_send_message(const Client& client, std::string message) const{
+void Channel::try_send_message(Client& client, std::string message) const{
     if (!is_member(client))
     {
         send_errmsg(client, 442,  get_channel_name()+ " :You're not on that channel");
@@ -48,24 +48,25 @@ void Channel::try_send_message(const Client& client, std::string message) const{
     {
         for (client_it user = members.begin(); user != members.end(); ++user) {
             if (*user == client)continue;
-            send_msg(client, "< ["+get_channel_name()+"] " + user->get_nick()+": "+message);
+            //todo1
+            //send_msg(client, "< ["+get_channel_name()+"] " + user->get_nick()+": "+message);
         }
     }
 }
 
-bool Channel::correct_pass(const std::string& pass) const
+bool Channel::correct_pass(const std::string& pass)
 {
     if (this->password == "")
         return true;
     return (this->password == pass);
 }
 
-bool Channel::is_member(const Client& client) const
+bool Channel::is_member(Client& client) const
 {
     return members.find(client) != members.end();
 }
 
-bool Channel::is_operator(const Client& client) const
+bool Channel::is_operator(Client& client) const
 {
     return operators.find(client) != operators.end();
 }

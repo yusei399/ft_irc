@@ -23,12 +23,12 @@ private:
 
 public:
     Channel(const std::string &name, const Client& client, const std::string &pwd);
-    void try_part(const Client& client);
-    void join(const Client& client, const std::string & pass);
-    void try_send_message(const Client& client, std::string message) const;
-    bool correct_pass(const std::string& pass) const;
-    bool is_member(const Client& client) const;
-    bool is_operator(const Client& client) const;
+    void try_part(Client& client);
+    void join(Client& client, const std::string & pass);
+    void try_send_message(Client& client, std::string message) const;
+    bool correct_pass(const std::string& pass);
+    bool is_member( Client& client) const;
+    bool is_operator( Client& client) const;
     std::string get_channel_name() const;
     std::string get_password() const{ return password;}
     const std::set<Client>& get_members() const;

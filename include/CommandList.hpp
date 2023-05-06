@@ -5,7 +5,6 @@
 
 void join(Client &client, const Command &cmd, ChannelManager &channelManager);
 void pass(Client &client, std::string const &passwprd);
-void nick(Client &client, const Command& cmd);
 void user(Client &client);
 void cap(Client &client);
 void quit(Client &client);

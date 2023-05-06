@@ -10,15 +10,18 @@
 #include <algorithm>
 #include <map>
 
+
+
+
 //todo 簡単だったらクライアントのホスト名の取得を実装する
 //todo nickネームなどの情報が全て揃ったらwelcomeみたいなメッセージ出す処理かく
 class Client
 {
 private:
 	int _fd;
-	std::string _nick;
 	std::string _real_name;
 	std::string _hostname;
+	
 public:
 	Client();
 	Client(int fd, const std::string &nc);
@@ -27,7 +30,7 @@ public:
 	std::string get_nick() const;
 	std::string get_real_name() const;
 	std::string get_host_name() const;
-	void set_nick(const std::string &nick) {_nick = nick;}
+	void set_nick(const std::string &nick);
 	void set_real_name(const std::string &real_name) {_real_name = real_name;}
 	void set_hostname(const std::string &hostname) {_hostname = hostname;}
 	

@@ -3,7 +3,7 @@
 #include "ChannelManager.hpp"
 
 
-static bool is_enough_params(const Client &client, const Command& cmd)
+static bool is_enough_params(Client &client, const Command& cmd)
 {
 	if (cmd._params.size() == 0 || cmd._params.size() > 2)
 	{
@@ -28,7 +28,7 @@ static std::vector<std::string> parse_ch_pass(const Command& cmd, const std::vec
 	return ch_pwds;
 }
 
-static bool is_valid_channel_name(const Client &client, const std::string & channel_name)
+static bool is_valid_channel_name(Client &client, const std::string & channel_name)
 {
 	if (channel_name == "" || channel_name[0] != '#' || channel_name == "#")
 	{
@@ -41,7 +41,7 @@ static bool is_valid_channel_name(const Client &client, const std::string & chan
 //JOIN #ch1[,#ch2] [pass_ch1,pass_ch2]
 //存在しないチャンネルを指定した場合無視する(本家通り)
 //複数のチャンネルを指定した際、その中で存在するチャンネルにはjoinできる
-void ChannelManager::join(const Client &client, const Command& cmd)
+void ChannelManager::join(Client &client, const Command& cmd)
 {
 	if (!is_enough_params(client, cmd)) return;
 	std::vector<std::string> ch_names = parse_ch_names(cmd);
@@ -54,7 +54,7 @@ void ChannelManager::join(const Client &client, const Command& cmd)
 			get_channel(ch_names[i]).join(client, ch_pass[i]);
 		else
 		    channels.insert(Channel(ch_names[i], client, ch_pass[i]));
-		//std::cout << get_channel(ch_names[i]) << std::endl;
+		std::cout << get_channel(ch_names[i]) << std::endl;
 	}
 }
 
