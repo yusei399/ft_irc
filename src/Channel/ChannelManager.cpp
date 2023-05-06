@@ -32,20 +32,6 @@ bool ChannelManager::exist_channel(std::string channelName) const
 	return find_it(channelName) != channels.end();
 }
 
-
-// チャンネルが存在しなければ新しく作成する
-// void ChannelManager::join_past(std::string channelName, Client &client)
-// {
-//     if (exist(channelName))
-// 	{
-// 		find_must_exist(channelName).join(client);
-// 	}
-// 	else
-// 	{
-// 	    channels.insert(Channel(channelName, client));
-// 	}
-// }
-
 //チャンネルから離脱する
 //存在しないチャンネルが指定された場合 403エラー
 void ChannelManager::try_part(std::string channelName, Client& client)

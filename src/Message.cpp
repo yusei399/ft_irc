@@ -1,6 +1,6 @@
 #include "../include/Message.hpp"
 
-void send_msg(Client &reciever, const std::string &message)
+void send_msg(const Client &reciever, const std::string &message)
 {
 	send(reciever.get_fd(), message.c_str(), message.size(), 0);
 }

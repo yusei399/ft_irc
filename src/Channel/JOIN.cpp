@@ -57,37 +57,3 @@ void ChannelManager::join(Client &client, const Command& cmd)
 		std::cout << get_channel(ch_names[i]) << std::endl;
 	}
 }
-
-//JOIN #ch1[,#ch2] [pass_ch1,pass_ch2]
-//存在しないチャンネルを指定した場合無視する(本家通り)
-//複数のチャンネルを指定した際、その中で存在するチャンネルにはjoinできる
-/*void join(Client &client, const Command &cmd, ChannelManager &channelManager)
-{
-	std::vector<std::string> channelNames = parse_channels(cmd);
-
-	if (!check_valid_cmd(client, cmd, channelManager))
-		return;
-	
-}*/
-/*
-{
-	int const &fd = client.get_client_fd();
-
-	std::string const &nick = client.get_nick();
-
-	if (client.get_params().size() == 1)
-		send_message("461 " + nick + " :Not enough parameters", fd, 0);
-	
-	std::string const &pass = client.get_params()[0];
-
-	if (pass == password)
-	{
-		client.set_permission(true);
-		send_message("001 " + nick + " :Welcome to the Internet Relay Network " + nick, fd, 0);
-	}
-	else
-		send_message("464 " + nick + " :Password incorrect", fd, 0);
-	
-	if (client.get_params().size() > 1)
-		send_message("461 " + nick + " :Too many parameters", fd, 0);
-}*/

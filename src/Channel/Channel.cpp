@@ -66,7 +66,7 @@ bool Channel::is_member(Client& client) const
     return members.find(client) != members.end();
 }
 
-bool Channel::is_operator(Client& client) const
+bool Channel::is_operator(const Client& client) const
 {
     return operators.find(client) != operators.end();
 }

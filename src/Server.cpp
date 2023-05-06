@@ -159,7 +159,7 @@ void Server::build_in(int fd, const Command &cmd)
 			pass(client, _password);
 			break;
 		case NICK:
-			channelManager.nick(client, cmd);
+			channelManager.nick(client, cmd, _connect);
 			break;
 		case USER:
 			user(client);

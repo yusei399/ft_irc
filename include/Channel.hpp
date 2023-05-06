@@ -28,7 +28,7 @@ public:
     void try_send_message(Client& client, std::string message) const;
     bool correct_pass(const std::string& pass);
     bool is_member( Client& client) const;
-    bool is_operator( Client& client) const;
+    bool is_operator(const Client& client) const;
     std::string get_channel_name() const;
     std::string get_password() const{ return password;}
     const std::set<Client>& get_members() const;
