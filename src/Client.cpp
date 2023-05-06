@@ -12,7 +12,7 @@ int Client::get_fd() const
 }
 
 
-//nicknameだけ静的メンバ変数にしている理由
+//nicknameだけ静的変数にしている理由
 // nicknameをstd::string nick_nameなどのメンバ変数で持つと
 // Client a; Client b = a;
 // a.nickname = "hoge";

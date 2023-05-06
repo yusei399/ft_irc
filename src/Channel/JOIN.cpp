@@ -54,6 +54,5 @@ void ChannelManager::join(Client &client, const Command& cmd)
 			get_channel(ch_names[i]).join(client, ch_pass[i]);
 		else
 		    channels.insert(Channel(ch_names[i], client, ch_pass[i]));
-		std::cout << get_channel(ch_names[i]) << std::endl;
 	}
 }

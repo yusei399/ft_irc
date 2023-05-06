@@ -159,7 +159,7 @@ void Server::build_in(int fd, const Command &cmd)
 			pass(client, _password);
 			break;
 		case NICK:
-			channelManager.nick(client, cmd, _connect);
+			channelManager.nick(client, cmd);
 			break;
 		case USER:
 			user(client);
@@ -174,7 +174,8 @@ void Server::build_in(int fd, const Command &cmd)
 			std::cout << "ping" << std::endl;
 			break;
 		case NAMES:
-			std::cout << "names" << std::endl;
+			std::cout << "called names" << std::endl;
+			channelManager.names(client, cmd, channelManager, _connect);
 			break;
 		case MODE:
 			std::cout << "mode" << std::endl;

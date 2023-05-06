@@ -4,6 +4,8 @@
 Channel::Channel(const std::string &name,const  Client& client, const std::string &pwd)
     :name(name), password(pwd)
 {
+    //todo
+    //新しくチャンネルを作った時のメッセージがあってもいい
     members.insert(client);
     operators.insert(client);
 }
@@ -35,6 +37,10 @@ void Channel::join(Client& client, const std::string & pass)
         return;
     }
     members.insert(client);
+    //todo
+    //参加時のメッセージを書く
+    //規格で決まってなさそうなので参加時のメッセージは適当で良いと思う
+    //サーバーの全員に知らせる？
 }
 
 //n

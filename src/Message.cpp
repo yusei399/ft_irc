@@ -2,7 +2,7 @@
 
 void send_msg(const Client &reciever, const std::string &message)
 {
-	send(reciever.get_fd(), message.c_str(), message.size(), 0);
+	send(reciever.get_fd(), (message +"\n").c_str(), message.size(), 0);
 }
 
 void send_errmsg(Client &reciever, int err_code, const std::string &message)

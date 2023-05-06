@@ -19,6 +19,7 @@ class Client
 {
 private:
 	int _fd;
+	//nicknameはstatic変数で持つ
 	std::string _real_name;
 	std::string _hostname;
 	
