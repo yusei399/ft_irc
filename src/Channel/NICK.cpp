@@ -26,6 +26,12 @@ void ChannelManager::nick(Client &client, const Command& cmd)
 		send_errmsg(client, 432, ":Erroneus nickname");
 		return;
 	}
+
+	if (client.exist_nickname(new_nick))
+	{
+		send_errmsg(client,433, new_nick + " :Nickname is already in use" );
+		return;
+	}
 	client.set_nick(new_nick);
 	send_msg(client, "001 :Welcome to the Internet Relay Network " + client.get_nick());
 }

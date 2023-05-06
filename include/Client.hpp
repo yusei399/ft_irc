@@ -33,6 +33,7 @@ public:
 	void set_nick(const std::string &nick);
 	void set_real_name(const std::string &real_name) {_real_name = real_name;}
 	void set_hostname(const std::string &hostname) {_hostname = hostname;}
+	bool exist_nickname(const std::string &nick);
 	
 	//set<client>を使う際に必要
 	bool operator<(const Client& rhs) const;

@@ -7,7 +7,7 @@ void send_msg(Client &reciever, const std::string &message)
 
 void send_errmsg(Client &reciever, int err_code, const std::string &message)
 {
-	send_msg(reciever, std::to_string(err_code)+" "+reciever.get_nick()+ " " + message);
+	send_msg(reciever, std::to_string(err_code)+" "+ message);
 }
 
 
