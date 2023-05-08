@@ -4,7 +4,7 @@
 channel_it ChannelManager::find_it(std::string channelName) const
 {
 	for(channel_it it = channels.begin(); it != channels.end(); it++)
-		if (it->get_channel_name() == channelName)
+		if (it->get_name() == channelName)
 			return it;
 	return channels.end();
 }

@@ -11,7 +11,7 @@ static std::vector<std::string> parse_channels(const Command&cmd)
 
 static void send_client_list(Channel ch, const Client &client)
 {
-	std::string msg = ch.get_channel_name() + " :";
+	std::string msg = ch.get_name() + " :";
 	for(std::set<Client>::iterator cl_it = ch.get_members().begin(); cl_it != ch.get_members().end(); cl_it++)
 	{
 		if (cl_it != ch.get_members().begin())
@@ -21,7 +21,7 @@ static void send_client_list(Channel ch, const Client &client)
 		msg += cl_it->get_nick();
 	}
 	send_msg(client,  msg);
-	send_msg(client, ch.get_channel_name()+ " :End of /NAMES list");
+	send_msg(client, ch.get_name()+ " :End of /NAMES list");
 }
 
 //NAMES       : 全てのクライアントを表示

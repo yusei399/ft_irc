@@ -28,10 +28,12 @@ public:
     void privmsg(Client& client, std::string message) const;
     bool correct_pass(const std::string& pass);
 	void quit(const Client &client,  const std::string &quit_msg);
+    //オペレーターコマンド
+    void kick(Client &operator_user, Client& kick_user, const std::string & kick_reason);
     
     bool is_member(const Client& client) const;
     bool is_operator(const Client& client) const;
-    std::string get_channel_name() const;
+    std::string get_name() const;
     std::string get_password() const{ return password;}
     const std::set<Client>& get_members() const;
     const std::set<Client>& get_operators() const;

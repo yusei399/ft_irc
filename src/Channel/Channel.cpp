@@ -15,7 +15,7 @@ Channel::Channel(const std::string &name,const  Client& client, const std::strin
 void Channel::try_part(Client& client) {
     if (!is_member(client))
     {
-        send_errmsg(client, 442, get_channel_name() + " :You're not on that channel");
+        send_errmsg(client, 442, get_name() + " :You're not on that channel");
         return;
     }
     members.erase(client);
@@ -33,7 +33,7 @@ void Channel::join(Client& client, const std::string & pass)
         return;
     if (!correct_pass(pass))
     {
-        send_errmsg(client, 475, get_channel_name()+ " :Cannot join channel (+k)");
+        send_errmsg(client, 475, get_name()+ " :Cannot join channel (+k)");
         return;
     }
     members.insert(client);
@@ -44,13 +44,13 @@ void Channel::join(Client& client, const std::string & pass)
 void Channel::privmsg(Client& sender, std::string message) const{
     if (!is_member(sender))
     {
-        send_errmsg(sender, 442,  get_channel_name()+ " :You're not on that channel");
+        send_errmsg(sender, 442,  get_name()+ " :You're not on that channel");
     }
     else
     {
         for (client_it reciever = members.begin(); reciever != members.end(); ++reciever) {
             if (*reciever == sender)continue;
-            send_msg(*reciever, ":" + sender.get_nick() +" PRIVMSG " + get_channel_name()+ " :"+message);
+            send_msg(*reciever, ":" + sender.get_nick() +" PRIVMSG " + get_name()+ " :"+message);
         }
     }
 }
@@ -80,7 +80,7 @@ bool Channel::is_operator(const Client& client) const
     return operators.find(client) != operators.end();
 }
 
-std::string Channel::get_channel_name() const
+std::string Channel::get_name() const
 {
     return name;
 }
@@ -98,14 +98,14 @@ const std::set<Client>& Channel::get_operators() const
 //setのキーに使うために必要
 bool Channel::operator<(const Channel& rhs) const
 {
-    return this->name < rhs.get_channel_name();
+    return this->name < rhs.get_name();
 }
 
 
 std::ostream& operator<<(std::ostream& os, const Channel& channel)
 {
     os<<"--------------------"<<std::endl;
-    os<<"channel_name : "<<channel.get_channel_name()<<std::endl;
+    os<<"channel_name : "<<channel.get_name()<<std::endl;
     os<<"pass         : "<<channel.get_password()<<std::endl;
     os<<"users        : \n"<<channel.get_members()<<std::endl<<std::endl;;
     os<<"operators    : \n"<<channel.get_operators()<<std::endl<<std::endl;;

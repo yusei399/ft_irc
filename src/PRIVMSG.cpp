@@ -41,13 +41,12 @@ void privmsg(Client& client, const Command &cmd, ClientManager& clientManager, C
 	if (!is_authenticated(client)) return;
 	if (!is_seted_nick_user(client)) return;
 	if (!is_valid_param(client, cmd)) return;
-	std::string msg = cmd._trailing;
 	std::vector<std::string> recievers = parse_recievers(cmd);
 	for (size_t i = 0; i < recievers.size(); i++)
 	{
 		if (is_channel(recievers[i]))
-			channelManager.privmsg_to_channel(client, recievers[i], msg);
+			channelManager.privmsg_to_channel(client, recievers[i], cmd._trailing);
 		else
-			clientManager.privmsg(client, recievers[i], msg);
+			clientManager.privmsg(client, recievers[i], cmd._trailing);
 	}
 }
