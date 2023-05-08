@@ -17,6 +17,10 @@ public:
 	std::map<int, Client> _connect;
 	void connect_client(int socketfd);
 	Client& get_client_by_fd(int fd);
+	std::map<int, Client>::iterator find_client_by_nick(const std::string & nick);
+	bool exist_client_by_nick(const std::string &nickname);
+	Client& get_client_by_nick(const std::string &nickname);
+	void privmsg(Client &sender, const std::string &reciever_name, const std::string& msg);
 };
 
 

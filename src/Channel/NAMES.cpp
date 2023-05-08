@@ -1,6 +1,7 @@
 #include "CommandList.hpp"
 #include "Client.hpp"
 #include "ChannelManager.hpp"
+#include "CheckRegister.hpp"
 
 static bool is_valid_cmd(Client &client, const Command&cmd)
 {

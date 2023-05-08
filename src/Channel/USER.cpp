@@ -1,6 +1,7 @@
 #include "CommandList.hpp"
 #include "Client.hpp"
 #include "ChannelManager.hpp"
+#include "CheckRegister.hpp"
 
 static bool check_enough_param(Client &client, const Command&cmd)
 {

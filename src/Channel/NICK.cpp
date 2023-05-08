@@ -1,6 +1,7 @@
 #include "CommandList.hpp"
 #include "Client.hpp"
 #include "ChannelManager.hpp"
+#include "CheckRegister.hpp"
 
 /*
 ERR_NONICKNAMEGIVEN             ERR_ERRONEUSNICKNAME
