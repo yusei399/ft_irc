@@ -32,23 +32,17 @@ private:
 	int _port;
 	std::string	_password;
 	int _socket_fd;
-	//std::map<int, Client> _connect;
 	std::vector<struct pollfd>		_pfds;
 	void create_poll(int socket_fd);
-	//std::map<int, Client> _user;
-	//ConnectionClient _connect;
-public:
+	public:
 	Server();
 	Server(int port, std::string &password);
 	~Server();
 	void create_soket();
 	void connect_client(int socketfd);
-	//todo
-	//void quit(const Client &client);
 	void chat_in(int fd);
 	void start();
 	void allow();
-	//std::map<int, Client>& get_user();
 	void build_in(int fd, const Command &cmd);
 };
 void signal_handler(int signal);

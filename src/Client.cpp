@@ -36,10 +36,7 @@ std::string Client::get_nick() const
 	
 void Client::set_nick(const std::string &nick)
 {
-	if (exist_nickname(nick))
-	{
-		return;
-	}
+	if (exist_nickname(nick)) return;
 	get_nickname_dict()[*this] = nick;
 	nickname_seted = true;
 }
@@ -48,10 +45,8 @@ bool Client::exist_nickname(const std::string &nick)
 {
 	std::map<Client, std::string> nicks =get_nickname_dict();
 	for(std::map<Client, std::string>::iterator it = nicks.begin(); it != nicks.end(); it++)
-	{
 		if (it->second == nick)
 			return true;
-	}
 	return false;
 }
 

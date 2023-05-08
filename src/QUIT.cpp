@@ -13,18 +13,18 @@ static bool is_enough_param(Client &client, const Command&cmd)
 	return true;
 }
 
-static void send_quit_msg(Client&client, const Command &cmd, ClientManager &clientManager)
+static void send_quit_msg(Client&sender, const Command &cmd, ClientManager &clientManager)
 {
-	for (std::map<int, Client>::iterator it = clientManager._connect.begin(); it != clientManager._connect.end(); it++)
+	std::vector<Client> recievers = clientManager.get_connect_clients();
+	for (size_t i = 0; i < recievers.size(); i++)
 	{
-		Client receiver = it->second;
-		if (receiver == client)
+		if (recievers[i] == sender)
 			continue;
-		std::string msg =client.get_nick()+" has quit";
+		std::string msg =sender.get_nick()+" has quit";
 		if (cmd._trailing == "") 
-			send_msg(receiver, msg);
+			send_msg(recievers[i], msg);
 		else
-			send_msg(receiver, msg + " (Quit: " + cmd._trailing + ")");
+			send_msg(recievers[i], msg + " (Quit: " + cmd._trailing + ")");
 	}
 }
 

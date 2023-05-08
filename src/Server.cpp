@@ -120,39 +120,6 @@ void Server::chat_in(int fd)
 	for(size_t i = 0; i < cmds.size(); i++)
 		build_in(fd, cmds[i]);
 }
-#include "CheckRegister.hpp"
-
-
-static bool is_valid_cmd(Client &client, const Command&cmd)
-{
-	if (cmd._params.size() > 1)
-	{
-		send_errmsg(client, 461, cmd.get_original_str() + " :Not enough parameters");
-		return false;
-	}
-	return true;
-}
-
-
-static void names_all_client(const Client &sender, ClientManager&clientManager)
-{
-	std::string msg;
-	for(std::map<int, Client> ::iterator cl_it = clientManager._connect.begin(); cl_it != clientManager._connect.end(); cl_it++)
-		msg += " " + cl_it->second.get_nick();
-	send_msg(sender,  msg);
-	send_msg(sender, " :End of /NAMES list");
-}
-
-static void names(Client &client, const Command& cmd,  ChannelManager &chm, ClientManager& clientManager)
-{
-	if (!is_authenticated(client)) return;
-	if (!is_seted_nick_user(client)) return;
-	if (!is_valid_cmd(client, cmd)) return;
-	if (cmd._params.size() == 0)
-		names_all_client(client, clientManager);
-	else
-		chm.names_channel(client, cmd, chm);
-}
 
 void Server::build_in(int fd, const Command &cmd)
 {

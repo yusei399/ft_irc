@@ -1,6 +1,6 @@
 #include "CheckRegister.hpp"
 
-//クライアントが認証されていない場合、その旨をかえす
+//パスワード認証が終わってない場合、PASS以外のコマンドは使えない
 bool is_authenticated(Client &client)
 {
 	if (!client.is_authenticated())
@@ -11,7 +11,7 @@ bool is_authenticated(Client &client)
 	return true;
 }
 
-//cap, pass, ping, quit以外で使う
+//NICKとUSERが設定されていない場合、他のコマンドは使えない
 bool is_seted_nick_user(Client &client)
 {
 	if (!client.user_seted || !client.nickname_seted)

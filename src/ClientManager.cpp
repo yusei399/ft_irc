@@ -16,10 +16,8 @@ Client& ClientManager::get_client_by_fd(int fd)
 std::map<int, Client>::iterator ClientManager::find_client_by_nick(const std::string & nick)
 {
 	for (std::map<int, Client>::iterator it = _connect.begin(); it != _connect.end(); it++)
-	{
 		if (it->second.get_nick() == nick)
 			return it;	
-	}
 	return _connect.end();
 }
 
@@ -33,6 +31,15 @@ Client& ClientManager::get_client_by_nick(const std::string &nickname)
 	assert (exist_client_by_nick(nickname));
 	return const_cast<Client&>(find_client_by_nick(nickname)->second);
 }
+
+const std::vector<Client> ClientManager::get_connect_clients()
+{
+	std::vector<Client> connect_clients;
+	for (std::map<int, Client>::iterator it = _connect.begin(); it != _connect.end(); it++)
+		connect_clients.push_back(it->second);
+	return connect_clients;
+}
+
 
 void ClientManager::erase_client(Client &client)
 {
