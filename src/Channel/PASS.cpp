@@ -1,8 +1,9 @@
 #include "CommandList.hpp"
 #include "Client.hpp"
 #include "ChannelManager.hpp"
+#include "CheckRegister.hpp"
 
-static bool check_valid_cmd(Client &client, const Command& cmd)
+static bool is_valid_cmd(Client &client, const Command& cmd)
 {
 	if (cmd._params.size() != 1)
 	{
@@ -12,7 +13,7 @@ static bool check_valid_cmd(Client &client, const Command& cmd)
 	return true;
 }
 
-static bool check_already_authenticate(Client &client)
+static bool is_already_authenticate(Client &client)
 {
 	if (client.is_authenticated())
 	{
@@ -22,10 +23,12 @@ static bool check_already_authenticate(Client &client)
 	return true;
 }
 
+// PASS <server_password> : サーバーのパスワード認証を行う。
+//							認証が行われていないとnick, user以外のコマンドが使えない
 void ChannelManager::pass(Client &client, const Command& cmd, const std::string &server_pass)
 {
-	if (!check_already_authenticate(client)) return;
-	if (!check_valid_cmd(client, cmd)) return;
+	if (!is_already_authenticate(client)) return;
+	if (!is_valid_cmd(client, cmd)) return;
 	const std::string &pass = cmd._params[0];
 	if (pass != server_pass)
 	{

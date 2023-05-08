@@ -37,19 +37,18 @@ static void reply_client_list(std::map<int, Client> connect_clients, const Clien
 {
 	std::string msg;
 	for(std::map<int, Client> ::iterator cl_it = connect_clients.begin(); cl_it != connect_clients.end(); cl_it++)
-	{
 		msg += " " + cl_it->second.get_nick();
-	}
 	send_msg(client,  msg);
 	send_msg(client, " :End of /NAMES list");
 }
 
-//指定されたチャンネルに属するクライアントを全て表示する
+//NAMES       : 全てのクライアントを表示
+//NAMES #a,#b : #a,#bチャンネルに所属するクライアントを表示
 //オペレーターは名前の先頭に@がつく
 void ChannelManager::names(Client &client, const Command& cmd,  ChannelManager &chm, std::map<int, Client> connect_clients)
 {
-	if (!check_authenticated(client)) return;
-	if (!check_seted_nick_user(client)) return;
+	if (!is_authenticated(client)) return;
+	if (!is_seted_nick_user(client)) return;
 	if (!is_valid_cmd(client, cmd)) return;
 	if (cmd._params.size() == 0)
 	{

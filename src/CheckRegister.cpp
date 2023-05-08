@@ -1,7 +1,7 @@
 #include "CheckRegister.hpp"
 
 //クライアントが認証されていない場合、その旨をかえす
-bool check_authenticated(Client &client)
+bool is_authenticated(Client &client)
 {
 	if (!client.is_authenticated())
 	{
@@ -12,7 +12,7 @@ bool check_authenticated(Client &client)
 }
 
 //cap, pass, ping, quit以外で使う
-bool check_seted_nick_user(Client &client)
+bool is_seted_nick_user(Client &client)
 {
 	if (!client.user_seted || !client.nickname_seted)
 	{

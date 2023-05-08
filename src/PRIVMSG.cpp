@@ -3,7 +3,7 @@
 #include "ChannelManager.hpp"
 #include "CheckRegister.hpp"
 
-static bool check_valid_param(const Client &client, const Command &cmd)
+static bool is_valid_param(const Client &client, const Command &cmd)
 {
 	bool is_ok = true;
 	if (cmd._params.size() == 0)
@@ -38,9 +38,9 @@ static bool is_channel(const std::string &reicieve)
 
 void privmsg(Client& client, const Command &cmd, ClientManager& clientManager, ChannelManager& channelManager)
 {
-	if (!check_authenticated(client)) return;
-	if (!check_seted_nick_user(client)) return;
-	if (!check_valid_param(client, cmd)) return;
+	if (!is_authenticated(client)) return;
+	if (!is_seted_nick_user(client)) return;
+	if (!is_valid_param(client, cmd)) return;
 	std::string msg = cmd._trailing;
 	std::vector<std::string> recievers = parse_recievers(cmd);
 	for (size_t i = 0; i < recievers.size(); i++)

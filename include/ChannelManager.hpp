@@ -6,11 +6,7 @@
 
 typedef std::set<Channel>::iterator channel_it;
 
-//todo
-//IRCクライアントがIRCサーバーに接続する際、
-//最初にNICKおよびUSERの2つのメッセージを送信して接続を登録する必要があります。
-//これらのメッセージが送信されるまで、JOINやPRIVMSG
-//NAMESなどの他のコマンドは使用できません。
+//Channel全体に対する操作を担う 
 class ChannelManager
 {
 	std::set<Channel> channels;
@@ -19,7 +15,7 @@ public:
 	Channel& get_channel(std::string channelName) const;
 	std::set<Channel> get_all_channels() const;
 	bool exist_channel(std::string channelName) const;
-	const std::set<Channel> get_belong_channels(const Client &client);
+	//const std::set<Channel> get_belong_channels(const Client &client);
 	void join(Client &client, const Command& cmd);
 	void nick(Client &client, const Command& cmd);
 	void names(Client &client, const Command& cmd, ChannelManager &chm, std::map<int, Client> connect_clients);

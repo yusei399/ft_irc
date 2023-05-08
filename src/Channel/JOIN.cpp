@@ -44,8 +44,8 @@ static bool is_valid_channel_name(Client &client, const std::string & channel_na
 //複数のチャンネルを指定した際、その中で存在するチャンネルにはjoinできる
 void ChannelManager::join(Client &client, const Command& cmd)
 {
-	if (!check_authenticated(client)) return;
-	if (!check_seted_nick_user(client)) return;
+	if (!is_authenticated(client)) return;
+	if (!is_seted_nick_user(client)) return;
 	if (!is_enough_params(client, cmd)) return;
 	std::vector<std::string> ch_names = parse_ch_names(cmd);
 	std::vector<std::string> ch_pass = parse_ch_pass(cmd, ch_names);

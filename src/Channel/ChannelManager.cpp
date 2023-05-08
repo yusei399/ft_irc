@@ -4,18 +4,11 @@
 channel_it ChannelManager::find_it(std::string channelName) const
 {
 	for(channel_it it = channels.begin(); it != channels.end(); it++)
-	{
 		if (it->get_channel_name() == channelName)
-		{
 			return it;
-		}
-	}
 	return channels.end();
 }
 
-
-
-///	存在しないチャンネルをgetしようとするとエラーが起きる
 Channel& ChannelManager::get_channel(std::string channelName) const
 {
 	channel_it ch = find_it(channelName);
@@ -23,7 +16,6 @@ Channel& ChannelManager::get_channel(std::string channelName) const
 		throw std::logic_error("must not use ChanndlManager::find_must_exist(channelName) when not exist");
 	return const_cast<Channel&>(*ch);
 }
-
 
 bool ChannelManager::exist_channel(std::string channelName) const
 {
@@ -39,16 +31,15 @@ void ChannelManager::privmsg_to_channel(Client &sender, const std::string &chann
 }
 
 //クライアントが属するチャンネルを全て返す
+/*
 const std::set<Channel> ChannelManager::get_belong_channels(const Client &client)
 {
 	std::set<Channel> belongs;
 	for(channel_it ch_it = channels.begin(); ch_it != channels.end(); ch_it++)
-	{
 		if (ch_it->is_member(client))
 			belongs.insert(*ch_it);
-	}
 	return belongs;
-}
+}*/
 
 //チャンネルから離脱する
 //存在しないチャンネルが指定された場合 403エラー

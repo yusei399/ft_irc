@@ -68,28 +68,10 @@ void Server::create_poll(int socket_fd)
 	_pfds.push_back(pollfd);
 }
 
-
-/*std::map<int, Client>& Server::get_user()
-{
-	return (this->_user);
-}*/
-
-/*
-void Server::connect_client(int socketfd)
-{
-	const std::string nick = "unknown" + std::to_string(socketfd);
-	Client client(socketfd, nick);
-	_connect[socketfd] = client;
-}*/
-
 static std::string recieve_msg(int fd)
 {
 	char buff[MSG_LEN];
 	ssize_t	 byte;
-	/*std::cout << "fd : " << fd << std::endl;
-	std::cout << "buff :" << buff << std::endl;
-	std::cout << "sizeof buff : " << sizeof(buff) << std::endl;
-	*/
 	std::memset(buff, 0, sizeof(buff));
 	if ((byte = recv(fd, buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
 	{
@@ -111,14 +93,6 @@ static std::string recieve_msg(int fd)
 	return std::string(buff);
 }
 
-//todo コマンドが複数に分割されている場合
-void Server::chat_in(int fd)
-{
-	std::vector<Command> cmds = parse_commands(recieve_msg(fd));
-	for(size_t i = 0; i < cmds.size(); i++)
-		build_in(fd, cmds[i]);
-}
-
 void Server::start()
 {
 	this->create_soket();
@@ -136,6 +110,15 @@ void Server::start()
 				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(_pfds[i].fd);
 		}
 	}
+}
+
+
+//todo コマンドが複数に分割されている場合
+void Server::chat_in(int fd)
+{
+	std::vector<Command> cmds = parse_commands(recieve_msg(fd));
+	for(size_t i = 0; i < cmds.size(); i++)
+		build_in(fd, cmds[i]);
 }
 
 void Server::build_in(int fd, const Command &cmd)
@@ -188,7 +171,6 @@ void Server::build_in(int fd, const Command &cmd)
 		case PART:
 			std::cout << "part" << std::endl;
 			break;
-		//ok
 		case UNKNOWN:
 			send_errmsg(client, 421, cmd._cmd_name + " :Unknown command");
 			break;
