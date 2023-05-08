@@ -25,7 +25,7 @@ public:
     Channel(const std::string &name, const Client& client, const std::string &pwd);
     void try_part(Client& client);
     void join(Client& client, const std::string & pass);
-    void try_send_message(Client& client, std::string message) const;
+    void privmsg(Client& client, std::string message) const;
     bool correct_pass(const std::string& pass);
     bool is_member( Client& client) const;
     bool is_operator(const Client& client) const;

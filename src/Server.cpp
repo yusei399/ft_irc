@@ -180,7 +180,7 @@ void Server::build_in(int fd, const Command &cmd)
 			std::cout << "mode" << std::endl;
 			break;
 		case PRIVMSG:
-			privmsg(client, cmd);
+			channelManager.privmsg(client, cmd, _connect);
 			std::cout << "privmsg" << std::endl;
 			break;
 		case NOTICE:

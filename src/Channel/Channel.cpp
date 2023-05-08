@@ -45,17 +45,16 @@ void Channel::join(Client& client, const std::string & pass)
 
 //n
 //ユーザーがチャンネルに属していない場合442エラー
-void Channel::try_send_message(Client& client, std::string message) const{
-    if (!is_member(client))
+void Channel::privmsg(Client& sender, std::string message) const{
+    if (!is_member(sender))
     {
-        send_errmsg(client, 442,  get_channel_name()+ " :You're not on that channel");
+        send_errmsg(sender, 442,  get_channel_name()+ " :You're not on that channel");
     }
     else
     {
-        for (client_it user = members.begin(); user != members.end(); ++user) {
-       //     if (*user == client)continue;
-            //todo1
-            //send_msg(client, "< ["+get_channel_name()+"] " + user->get_nick()+": "+message);
+        for (client_it reciever = members.begin(); reciever != members.end(); ++reciever) {
+            if (*reciever == sender)continue;
+            send_msg(*reciever, ":" + sender.get_nick() +" PRIVMSG " + get_channel_name()+ " :"+message);
         }
     }
 }

@@ -35,6 +35,5 @@ void ChannelManager::user(Client &client, const Command&cmd)
 	{
 		send_msg(client, "001 :Welcome to the Internet Relay Network " + client.get_nick());
 	}
-	std::cout << "set user" << std::endl;
 	client.user_seted = true;
 }

@@ -26,7 +26,9 @@ public:
 	void names(Client &client, const Command& cmd, ChannelManager &chm, std::map<int, Client> connect_clients);
 	void pass(Client &client, const Command& cmd, const std::string &server_pass);
 	void user(Client &client, const Command& cmd);
+	void privmsg(Client &client, const Command& cmd, std::map<int, Client> &connect_clients);
 	
+
 	void try_part(std::string channelName, Client& client);
 	//n
 	void try_send_msg(std::string channelName, Client& client, std::string message) const;

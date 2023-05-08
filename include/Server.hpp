@@ -23,7 +23,6 @@
 
 # define MSG_LEN 1024
 #include "Client.hpp"
-#include "ClientStore.hpp"
 
 class Client;
 class Server
@@ -45,6 +44,8 @@ public:
 	~Server();
 	void create_soket();
 	void connect_client(int socketfd);
+	//todo
+	void quit_client(const Client &client);
 	void chat_in(int fd);
 	void start();
 	void allow();

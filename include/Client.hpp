@@ -22,8 +22,8 @@
 class Client
 {
 private:
-	const size_t _id; //clientはこの値で識別される
-	const int _fd;
+	size_t _id; //clientはこの値で識別される
+	int _fd;
 	//nicknameはstatic変数で持つ
 	std::string _user_name;
 	std::string _real_name;

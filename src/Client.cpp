@@ -6,9 +6,9 @@ static size_t generate_id()
 	return cur_id++;
 }
 
-Client::Client() : authenticated(false), _id(generate_id()){}
+Client::Client() : authenticated(false), nickname_seted(false), user_seted(false), _id(generate_id()), _fd(-1){}
 
-Client::Client(int fd, const std::string &nc) : _fd(fd), authenticated(false), _id(generate_id()){}
+Client::Client(int fd, const std::string &nc) : _fd(fd), authenticated(false), nickname_seted(false), user_seted(false), _id(generate_id()){}
 
 Client::~Client(){}
 
@@ -41,7 +41,6 @@ void Client::set_nick(const std::string &nick)
 		return;
 	}
 	get_nickname_dict()[*this] = nick;
-	std::cout << "set nick" << std::endl;
 	nickname_seted = true;
 }
 

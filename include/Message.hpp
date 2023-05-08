@@ -13,6 +13,6 @@
 #include "Client.hpp"
 
 void send_msg(const Client &reciever, const std::string &message);
-void send_errmsg(Client &reciever, int err_code, const std::string &message);
+void send_errmsg(const Client &reciever, int err_code, const std::string &message);
 
 #endif // MESSAGE_HPP

@@ -72,7 +72,7 @@ void ChannelManager::try_send_msg(std::string channelName, Client& client, std::
 {
 	if (exist_channel(channelName))
 	{
-		get_channel(channelName).try_send_message(client, message);
+		get_channel(channelName).privmsg(client, message);
 	}
 	else
 	{
