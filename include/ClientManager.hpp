@@ -13,8 +13,8 @@
 
 class ClientManager
 {
-	std::map<int, Client> _connect_clients;
-private:
+public:
+	std::map<int, Client> _connect;
 	void connect_client(int socketfd);
 	Client& get_client_by_fd(int fd);
 };

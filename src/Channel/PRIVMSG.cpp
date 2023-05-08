@@ -71,6 +71,7 @@ static void privmsg_to_user(Client &sender, const std::string &reciever_name, co
 	send_errmsg(sender, 403, reciever_name + " :No such channel");
 }
 
+//todo userに送る場合もあるのにChannelManagerにあるのはおかしい
 void ChannelManager::privmsg(Client &client, const Command& cmd, std::map<int, Client> &connect_clients)
 {
 	if (!check_authenticated(client)) return;

@@ -18,22 +18,21 @@
 #include "Command.hpp"
 #include "Message.hpp"
 #include "ChannelManager.hpp"
-
+#include "ClientManager.hpp"
 #define TIMEOUT 3 * 60 * 1000
 
 # define MSG_LEN 1024
-#include "Client.hpp"
 
 class Client;
 class Server
 {
 private:
 	ChannelManager channelManager;
-
+	ClientManager clientManager;
 	int _port;
 	std::string	_password;
 	int _socket_fd;
-	std::map<int, Client> _connect;
+	//std::map<int, Client> _connect;
 	std::vector<struct pollfd>		_pfds;
 	void create_poll(int socket_fd);
 	//std::map<int, Client> _user;

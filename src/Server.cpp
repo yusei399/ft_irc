@@ -50,7 +50,7 @@ void Server::allow()
 			else {
 				std::cout << "connection - " << connect_fd << std::endl;
 				this->create_poll(connect_fd);
-				connect_client(connect_fd);
+				clientManager.connect_client(connect_fd);
 			}
 		} while (connect_fd == -1);
 }
@@ -72,12 +72,13 @@ void Server::create_poll(int socket_fd)
 	return (this->_user);
 }*/
 
+/*
 void Server::connect_client(int socketfd)
 {
 	const std::string nick = "unknown" + std::to_string(socketfd);
 	Client client(socketfd, nick);
 	_connect[socketfd] = client;
-}
+}*/
 
 static std::string recieve_msg(int fd)
 {
@@ -146,7 +147,7 @@ void Server::start()
 
 void Server::build_in(int fd, const Command &cmd)
 {
-	Client &client = _connect[fd];
+	Client &client = clientManager.get_client_by_fd(fd);
 	CmdType cmdType = cmd._cmdType;
 
 	switch (cmdType)
@@ -174,13 +175,13 @@ void Server::build_in(int fd, const Command &cmd)
 			break;
 		case NAMES:
 			std::cout << "called names" << std::endl;
-			channelManager.names(client, cmd, channelManager, _connect);
+			channelManager.names(client, cmd, channelManager, clientManager._connect);
 			break;
 		case MODE:
 			std::cout << "mode" << std::endl;
 			break;
 		case PRIVMSG:
-			channelManager.privmsg(client, cmd, _connect);
+			channelManager.privmsg(client, cmd, clientManager._connect);
 			std::cout << "privmsg" << std::endl;
 			break;
 		case NOTICE:
