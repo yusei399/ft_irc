@@ -3,15 +3,6 @@
 #include "ChannelManager.hpp"
 #include "CheckRegister.hpp"
 
-static bool is_valid_cmd(Client &client, const Command&cmd)
-{
-	if (cmd._params.size() > 1)
-	{
-		send_errmsg(client, 461, cmd.get_original_str() + " :Not enough parameters");
-		return false;
-	}
-	return true;
-}
 
 static std::vector<std::string> parse_channels(const Command&cmd)
 {
@@ -33,7 +24,7 @@ static void reply_channel_client_list(Channel ch, const Client &client)
 	send_msg(client, ch.get_channel_name()+ " :End of /NAMES list");
 }
 
-static void reply_client_list(std::map<int, Client> connect_clients, const Client &client)
+static void names_all_client(std::map<int, Client> connect_clients, const Client &client)
 {
 	std::string msg;
 	for(std::map<int, Client> ::iterator cl_it = connect_clients.begin(); cl_it != connect_clients.end(); cl_it++)
@@ -45,16 +36,13 @@ static void reply_client_list(std::map<int, Client> connect_clients, const Clien
 //NAMES       : 全てのクライアントを表示
 //NAMES #a,#b : #a,#bチャンネルに所属するクライアントを表示
 //オペレーターは名前の先頭に@がつく
-void ChannelManager::names(Client &client, const Command& cmd,  ChannelManager &chm, std::map<int, Client> connect_clients)
+void ChannelManager::names_channel(Client &client, const Command& cmd,  ChannelManager &chm)
 {
-	if (!is_authenticated(client)) return;
-	if (!is_seted_nick_user(client)) return;
-	if (!is_valid_cmd(client, cmd)) return;
-	if (cmd._params.size() == 0)
+	/*if (cmd._params.size() == 0)
 	{
-		reply_client_list(connect_clients, client);
+		names_all_client(connect_clients, client);
 		return;
-	}
+	}*/
 	std::vector<std::string> channels = parse_channels(cmd);
 	for (size_t i = 0; i < channels.size(); i++)
 	{	

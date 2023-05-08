@@ -37,6 +37,6 @@ int main(int argc, char **argv){
 	}
 }
 // PASS 1234
-// NICK ee
+// NICK gg
 // USER a b c :d
 // NAMES

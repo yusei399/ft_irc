@@ -11,6 +11,7 @@
 #include <map>
 #include "Client.hpp"
 
+//Client全体に対する操作を担う
 class ClientManager
 {
 public:

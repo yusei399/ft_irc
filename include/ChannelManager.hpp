@@ -18,7 +18,7 @@ public:
 	//const std::set<Channel> get_belong_channels(const Client &client);
 	void join(Client &client, const Command& cmd);
 	void nick(Client &client, const Command& cmd);
-	void names(Client &client, const Command& cmd, ChannelManager &chm, std::map<int, Client> connect_clients);
+	void names_channel(Client &client, const Command& cmd,  ChannelManager &chm);
 	void pass(Client &client, const Command& cmd, const std::string &server_pass);
 	void user(Client &client, const Command& cmd);
 	void privmsg_to_channel(Client &sender, const std::string &channel_name, const std::string & msg);
