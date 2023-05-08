@@ -38,6 +38,18 @@ void ChannelManager::privmsg_to_channel(Client &sender, const std::string &chann
 		send_errmsg(sender, 403, channel_name + " :No such channel");
 }
 
+//クライアントが属するチャンネルを全て返す
+const std::set<Channel> ChannelManager::get_belong_channels(const Client &client)
+{
+	std::set<Channel> belongs;
+	for(channel_it ch_it = channels.begin(); ch_it != channels.end(); ch_it++)
+	{
+		if (ch_it->is_member(client))
+			belongs.insert(*ch_it);
+	}
+	return belongs;
+}
+
 //チャンネルから離脱する
 //存在しないチャンネルが指定された場合 403エラー
 void ChannelManager::try_part(std::string channelName, Client& client)

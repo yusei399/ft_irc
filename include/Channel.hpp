@@ -27,7 +27,9 @@ public:
     void join(Client& client, const std::string & pass);
     void privmsg(Client& client, std::string message) const;
     bool correct_pass(const std::string& pass);
-    bool is_member( Client& client) const;
+	void quit(const Client &client,  const std::string &quit_msg);
+    
+    bool is_member(const Client& client) const;
     bool is_operator(const Client& client) const;
     std::string get_channel_name() const;
     std::string get_password() const{ return password;}

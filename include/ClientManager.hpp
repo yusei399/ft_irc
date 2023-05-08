@@ -21,6 +21,7 @@ public:
 	bool exist_client_by_nick(const std::string &nickname);
 	Client& get_client_by_nick(const std::string &nickname);
 	void privmsg(Client &sender, const std::string &reciever_name, const std::string& msg);
+	void erase_client(Client &client);
 };
 
 

@@ -50,8 +50,7 @@ void ChannelManager::names(Client &client, const Command& cmd,  ChannelManager &
 {
 	if (!check_authenticated(client)) return;
 	if (!check_seted_nick_user(client)) return;
-	if (!is_valid_cmd(client, cmd)) 
-		return;
+	if (!is_valid_cmd(client, cmd)) return;
 	if (cmd._params.size() == 0)
 	{
 		reply_client_list(connect_clients, client);

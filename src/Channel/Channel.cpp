@@ -37,10 +37,6 @@ void Channel::join(Client& client, const std::string & pass)
         return;
     }
     members.insert(client);
-    //todo
-    //参加時のメッセージを書く
-    //規格で決まってなさそうなので参加時のメッセージは適当で良いと思う
-    //サーバーの全員に知らせる？
 }
 
 //n
@@ -59,6 +55,14 @@ void Channel::privmsg(Client& sender, std::string message) const{
     }
 }
 
+void Channel::quit(const Client &client, const std::string &quit_msg)
+{
+    assert(is_member(client));
+    members.erase(client);
+    if (is_operator(client))
+        operators.erase(client);
+}
+
 bool Channel::correct_pass(const std::string& pass)
 {
     if (this->password == "")
@@ -66,7 +70,7 @@ bool Channel::correct_pass(const std::string& pass)
     return (this->password == pass);
 }
 
-bool Channel::is_member(Client& client) const
+bool Channel::is_member(const Client& client) const
 {
     return members.find(client) != members.end();
 }

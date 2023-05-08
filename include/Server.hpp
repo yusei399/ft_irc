@@ -44,7 +44,7 @@ public:
 	void create_soket();
 	void connect_client(int socketfd);
 	//todo
-	void quit_client(const Client &client);
+	//void quit(const Client &client);
 	void chat_in(int fd);
 	void start();
 	void allow();

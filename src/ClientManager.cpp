@@ -34,6 +34,12 @@ Client& ClientManager::get_client_by_nick(const std::string &nickname)
 	return const_cast<Client&>(find_client_by_nick(nickname)->second);
 }
 
+void ClientManager::erase_client(Client &client)
+{
+	assert(exist_client_by_nick(client.get_nick()));
+	_connect.erase(find_client_by_nick(client.get_nick()));
+}
+
 void ClientManager::privmsg(Client &sender, const std::string &reciever_name, const std::string& msg)
 {
 	if (exist_client_by_nick(reciever_name))

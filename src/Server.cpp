@@ -114,18 +114,9 @@ static std::string recieve_msg(int fd)
 //todo コマンドが複数に分割されている場合
 void Server::chat_in(int fd)
 {
-/*		std::cout << "-------------Client Message----------------" << std::endl;
-		std::cout << "client fd:" << fd << std::endl;
-		std::cout << "client message:" << buff << std::endl;
-		std::cout << "---------------------------------------------" << std::endl;
-*/
 	std::vector<Command> cmds = parse_commands(recieve_msg(fd));
 	for(size_t i = 0; i < cmds.size(); i++)
-	{
-		//std::cout << "\ncmds["<<i<<"]\n---------------------" << std::endl;cmds[i].debug();std::cout << "---------------------\n" << std::endl;
 		build_in(fd, cmds[i]);
-	}
-	//std::cout << "message finish" << std::endl;
 }
 
 void Server::start()
@@ -150,9 +141,7 @@ void Server::start()
 void Server::build_in(int fd, const Command &cmd)
 {
 	Client &client = clientManager.get_client_by_fd(fd);
-	CmdType cmdType = cmd._cmdType;
-
-	switch (cmdType)
+	switch (cmd._cmdType)
 	{
 		case CAP:
 			std::cout << "cap" << std::endl;
@@ -188,7 +177,7 @@ void Server::build_in(int fd, const Command &cmd)
 			std::cout << "notice" << std::endl;
 			break;
 		case QUIT:
-			std::cout << "quit" << std::endl;
+			quit(client, cmd, clientManager, channelManager);
 			break;
 		case KICK:
 			std::cout << "kick" << std::endl;
