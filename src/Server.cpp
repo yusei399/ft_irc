@@ -108,6 +108,7 @@ static std::string recieve_msg(int fd)
 	return std::string(buff);
 }
 
+//todo コマンドが複数に分割されている場合
 void Server::chat_in(int fd)
 {
 /*		std::cout << "-------------Client Message----------------" << std::endl;
@@ -118,9 +119,7 @@ void Server::chat_in(int fd)
 	std::vector<Command> cmds = parse_commands(recieve_msg(fd));
 	for(size_t i = 0; i < cmds.size(); i++)
 	{
-		std::cout << "\ncmds["<<i<<"]\n---------------------" << std::endl;
-		cmds[i].debug();
-		std::cout << "---------------------\n" << std::endl;
+		//std::cout << "\ncmds["<<i<<"]\n---------------------" << std::endl;cmds[i].debug();std::cout << "---------------------\n" << std::endl;
 		build_in(fd, cmds[i]);
 	}
 	//std::cout << "message finish" << std::endl;
@@ -156,13 +155,13 @@ void Server::build_in(int fd, const Command &cmd)
 			std::cout << "cap" << std::endl;
 			break;
 		case PASS:
-			pass(client, _password);
+			channelManager.pass(client, cmd, _password);
 			break;
 		case NICK:
 			channelManager.nick(client, cmd);
 			break;
 		case USER:
-			user(client);
+			channelManager.user(client, cmd);
 			break;
 		case JOIN:
 			channelManager.join(client, cmd);

@@ -2,32 +2,39 @@
 #include "Client.hpp"
 #include "ChannelManager.hpp"
 
-void user(Client &client)
+static bool check_enough_param(Client &client, const Command&cmd)
 {
-	(void)client;
-}
-/*
-{
-	int const &fd = client.get_client_fd();
-
-	std::string const &nick = client.get_nick();
-
-	if (client.get_params().size() == 1)
-		send_message("461 " + nick + " :Not enough parameters", fd, 0);
-	
-	std::string const &user = client.get_params()[0];
-	std::string const &host_name = client.get_params()[1];
-	std::string const &real_name = client.get_params()[2];
-
-	if (client.get_params().size() == 4)
+	if (cmd._params.size() != 3 || cmd._trailing == "")
 	{
-		client.set_user(user);
-		client.set_hostname(host_name);
-		client.set_real_name(real_name);
-		send_message("001 " + nick + " :Welcome to the Internet Relay Network " + nick + "!", fd, 0);
+		send_errmsg(client, 461, cmd.get_original_str() + " :Not enough parameters");
+		return false;
 	}
-	
-	if (client.get_params().size() > 4)
-		send_message("461 " + nick + " :Too many parameters", fd, 0);
+	return true;
 }
-*/
+
+static bool check_already_set_user(Client &client)
+{
+	if (client.user_seted)
+	{
+		send_errmsg(client,462, ":You may not reregister");
+		return false;
+	}
+	return true;
+}
+
+//USER <username> <hostname> <servername> :<realname>
+void ChannelManager::user(Client &client, const Command&cmd)
+{
+	if (!check_authenticated(client)) return;
+	if (!check_enough_param(client, cmd)) return;
+	client.set_user_name(cmd._params[0]);
+	client.set_host_name(cmd._params[1]);
+	client.set_server_name(cmd._params[2]);
+	client.set_real_name(cmd._trailing);
+	if (!client.user_seted && client.nickname_seted)
+	{
+		send_msg(client, "001 :Welcome to the Internet Relay Network " + client.get_nick());
+	}
+	std::cout << "set user" << std::endl;
+	client.user_seted = true;
+}

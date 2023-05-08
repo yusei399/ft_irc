@@ -53,7 +53,7 @@ void Channel::try_send_message(Client& client, std::string message) const{
     else
     {
         for (client_it user = members.begin(); user != members.end(); ++user) {
-            if (*user == client)continue;
+       //     if (*user == client)continue;
             //todo1
             //send_msg(client, "< ["+get_channel_name()+"] " + user->get_nick()+": "+message);
         }

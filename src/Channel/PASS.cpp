@@ -2,30 +2,36 @@
 #include "Client.hpp"
 #include "ChannelManager.hpp"
 
-void pass(Client &client, std::string const &password)
+static bool check_valid_cmd(Client &client, const Command& cmd)
 {
-	(void)client;
-	(void)password;
-}
-/*
-{
-	int const &fd = client.get_client_fd();
-
-	std::string const &nick = client.get_nick();
-
-	if (client.get_params().size() == 1)
-		send_message("461 " + nick + " :Not enough parameters", fd, 0);
-	
-	std::string const &pass = client.get_params()[0];
-
-	if (pass == password)
+	if (cmd._params.size() != 1)
 	{
-		client.set_permission(true);
-		send_message("001 " + nick + " :Welcome to the Internet Relay Network " + nick, fd, 0);
+		send_errmsg(client, 461, cmd.get_original_str() + " :Not enough parameters");
+		return false;
 	}
-	else
-		send_message("464 " + nick + " :Password incorrect", fd, 0);
-	
-	if (client.get_params().size() > 1)
-		send_message("461 " + nick + " :Too many parameters", fd, 0);
-}*/
+	return true;
+}
+
+static bool check_already_authenticate(Client &client)
+{
+	if (client.is_authenticated())
+	{
+		send_errmsg(client,462, ":You may not reregister");
+		return false;
+	}
+	return true;
+}
+
+void ChannelManager::pass(Client &client, const Command& cmd, const std::string &server_pass)
+{
+	if (!check_already_authenticate(client)) return;
+	if (!check_valid_cmd(client, cmd)) return;
+	const std::string &pass = cmd._params[0];
+	if (pass != server_pass)
+	{
+		send_errmsg(client, 464, " :Password incorrect");
+		return;
+	}
+	client.set_authenticate(true);
+	send_msg(client, "Password correct!");//本家にはないが分かりにくいので、認証時メッセージを送る
+}

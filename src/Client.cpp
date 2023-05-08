@@ -1,8 +1,14 @@
 #include "../include/Client.hpp"
 
-Client::Client(){}
+static size_t generate_id()
+{
+	static size_t cur_id = 0;
+	return cur_id++;
+}
 
-Client::Client(int fd, const std::string &nc) : _fd(fd){set_nick(nc);}
+Client::Client() : authenticated(false), _id(generate_id()){}
+
+Client::Client(int fd, const std::string &nc) : _fd(fd), authenticated(false), _id(generate_id()){}
 
 Client::~Client(){}
 
@@ -35,6 +41,8 @@ void Client::set_nick(const std::string &nick)
 		return;
 	}
 	get_nickname_dict()[*this] = nick;
+	std::cout << "set nick" << std::endl;
+	nickname_seted = true;
 }
 
 bool Client::exist_nickname(const std::string &nick)
@@ -48,25 +56,15 @@ bool Client::exist_nickname(const std::string &nick)
 	return false;
 }
 
-std::string Client::get_real_name() const
-{
-	return _real_name;
-}
-
-std::string Client::get_host_name() const
-{
-	return _hostname;
-}
-
 //Setのキーに使うために必要
 bool Client::operator<(const Client& rhs) const
 {
-	return get_fd() < rhs.get_fd();
+	return _id < rhs.get_id();
 }
 
 bool Client::operator==(const Client& rhs) const
 {
-	return get_fd() == rhs.get_fd() && get_real_name() == rhs.get_real_name();
+	return _id == rhs.get_id();
 }
 
 bool Client::operator!=(const Client& rhs) const

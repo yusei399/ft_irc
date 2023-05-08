@@ -47,6 +47,8 @@ static void reply_client_list(std::map<int, Client> connect_clients, const Clien
 //オペレーターは名前の先頭に@がつく
 void ChannelManager::names(Client &client, const Command& cmd,  ChannelManager &chm, std::map<int, Client> connect_clients)
 {
+	if (!check_authenticated(client)) return;
+	if (!check_seted_nick_user(client)) return;
 	if (!is_valid_cmd(client, cmd)) 
 		return;
 	if (cmd._params.size() == 0)
@@ -57,11 +59,9 @@ void ChannelManager::names(Client &client, const Command& cmd,  ChannelManager &
 	std::vector<std::string> channels = parse_channels(cmd);
 	for (size_t i = 0; i < channels.size(); i++)
 	{	
-		if (!chm.exist_channel(channels[i]))
-		{
+		if (chm.exist_channel(channels[i]))
+			reply_channel_client_list(chm.get_channel(channels[i]), client);
+      	else
       	  	send_errmsg(client, 403, channels[i] + " :No such channel");
-			continue;
-		}
-		reply_channel_client_list(chm.get_channel(channels[i]), client);
 	}
 }
