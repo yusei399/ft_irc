@@ -11,5 +11,6 @@ void quit(Client&client, const Command &cmd, ClientManager &clientManager, Chann
 void names(Client &client, const Command& cmd,  ChannelManager &chm, ClientManager& clientManager);
 void PONG(Client &client, std::vector<std::string> &server_name);
 void privmsg(Client &connect_client, const Command &cmd);
+void kick(Client &client, const Command& cmd, ClientManager& client_manager, ChannelManager& channel_manager);
 
 #endif
