@@ -21,6 +21,7 @@ private:
     std::set<Client> members;// チャンネルに参加しているユーザーのリスト 
     std::set<Client> operators;//オペレーター権限を持ったユーザーのリスト
     std::set<Client> invited; //招待されたユーザーのリスト
+    bool invited_mode;//招待されていないとJOINできないか
 public:
     Channel(const std::string &name, const Client& client, const std::string &pwd);
     void part(Client& target);
@@ -35,6 +36,8 @@ public:
     
     bool is_member(const Client& target) const;
     bool is_operator(const Client& target) const;
+    bool is_invited(const Client& target) const{return invited.find(target) != invited.end();}
+    bool is_invited_mode() const{return invited_mode;}
     bool require_operator(Client& sender) const;
     bool require_member(Client& sender) const;
 

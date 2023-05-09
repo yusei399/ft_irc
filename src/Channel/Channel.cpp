@@ -1,8 +1,9 @@
 #include "Channel.hpp"
 
+#include "CheckRegister.hpp"
 
 Channel::Channel(const std::string &name,const  Client& client, const std::string &pwd)
-    :name(name), password(pwd)
+    :name(name), password(pwd), invited_mode(false)
 {
     //todo
     //新しくチャンネルを作った時のメッセージがあってもいい
@@ -19,9 +20,21 @@ void Channel::part(Client& target) {
     }
 }
 
+
+static bool require_invited_conditions(Client &client, Channel& channel)
+{
+    if (channel.is_invited_mode() && !channel.is_invited(client))
+	{
+		send_errmsg(client, 473, channel.get_name() + " :Cannot join channel (+i)");
+		return false;
+	}
+	return true;
+}
+
 //存在しないチャンネルに対してjoinを行った場合はこの関数ではなくコンストラクタで処理する
 void Channel::join(Client& sender, const std::string & pass)
 {
+    if (!require_invited_conditions(sender, *this)) return;
     //すでに属しているチャンネルにjoinを行った場合,本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
     if (is_member(sender))
         return;
@@ -91,6 +104,28 @@ bool Channel::require_member(Client& sender) const
 	}
     return true;
 }
+
+
+static bool require_not_member(Client& sender, Client& target, Channel& channel)
+{
+	if (channel.is_member(target))
+	{
+		send_errmsg(sender, 443, target.get_nick()+ " "+channel.get_name() +" :is already on channel");
+		return false;
+	}
+	return true;
+}
+
+void Channel::invite(Client &sender, Client& target)
+{
+	if (!require_authed(sender)) return;
+	if (!require_nick_user(sender)) return;
+	if (!require_operator(sender)) return;
+	if (!require_not_member(sender, target, *this)) return;
+	invited.insert(target);
+	send_msg(target, sender.get_nick() + " invites you to join " + get_name());
+}
+
 std::string Channel::get_name() const
 {
     return name;
