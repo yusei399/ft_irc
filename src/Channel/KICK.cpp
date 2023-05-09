@@ -45,11 +45,18 @@ static bool is_operator_user(Client& operator_user, Channel& channel)
 	return true;
 }
 
-void Channel::kick(Client &operator_user, Client& kick_user, const std::string & kick_reason)
+//<nick> has kicked <target> from <channel> (<reason>)
+void Channel::kick(Client &operator_user, Client& kicked_user, const std::string & kick_reason)
 {
-	if (!is_in_channel(operator_user, kick_user, *this))	return;
+	if (!is_authenticated(operator_user)) return;
+	if (!is_seted_nick_user(operator_user)) return;
+	if (!is_in_channel(operator_user, kicked_user, *this))	return;
 	if (!is_operator_user(operator_user, *this)) return;
-	
+	std::string msg = operator_user.get_nick() + " has kicked " +kicked_user.get_nick() +" from " +  get_name();
+    if (kick_reason != "")
+		msg += " (" + kick_reason +")";
+	broadcast(operator_user, msg);
+	try_part(kicked_user);
 }
 
 

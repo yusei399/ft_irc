@@ -22,7 +22,7 @@ public:
 	void pass(Client &client, const Command& cmd, const std::string &server_pass);
 	void user(Client &client, const Command& cmd);
 	void privmsg_to_channel(Client &sender, const std::string &channel_name, const std::string & msg);
-	void quit_channels(Client &client, const Command& cmd);
+	void quit_all_channel(Client &client, const Command& cmd);
 	void try_part(std::string channelName, Client& client);
 };
 #endif

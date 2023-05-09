@@ -33,6 +33,6 @@ void quit(Client&client, const Command &cmd, ClientManager &clientManager, Chann
 	if (!is_enough_param(client, cmd))
 		return ;
 	send_quit_msg(client, cmd, clientManager);
-	channelManager.quit_channels(client, cmd._trailing);
+	channelManager.quit_all_channel(client, cmd._trailing);
 	clientManager.erase_client(client);
 }

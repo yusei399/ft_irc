@@ -160,9 +160,13 @@ static bool is_exist_user(Client &client, const std::string& kick_user, ClientMa
 	}
 	return true;
 }
+#include "ChannelManager.hpp"
+#include "CheckRegister.hpp"
 
 void kick(Client &client, const Command& cmd, ClientManager& client_manager, ChannelManager& channel_manager)
 {
+	if (!is_authenticated(client)) return;
+	if (!is_seted_nick_user(client)) return;
 	if (!is_enough_params(client, cmd))	return;
 	std::string channel_name = cmd._params[0];
 	std::string kick_user_name = cmd._params[1];
@@ -216,6 +220,7 @@ void Server::build_in(int fd, const Command &cmd)
 			quit(client, cmd, clientManager, channelManager);
 			break;
 		case KICK:
+			kick(client, cmd, clientManager, channelManager);
 			std::cout << "kick" << std::endl;
 			break;
 		case INVITE:

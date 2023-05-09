@@ -12,7 +12,7 @@ void signal_handler(int signal)
 	exit(signal);
 }
 
-Server *server;
+//Server *server;
 
 int main(int argc, char **argv){
 	signal(SIGINT, signal_handler);
@@ -22,11 +22,10 @@ int main(int argc, char **argv){
 	{
 		if (argc == 3)
 		{
+			//todo portが数字でない時
 			int port = atoi(argv[1]);
 			std::string password(argv[2]);
-			Server Irc(port, password);
-			server = &Irc;
-			Irc.start();
+			Server(port, password).start();
 		}
 		else
 			std::cerr << "arg error" << std::endl;
@@ -37,6 +36,6 @@ int main(int argc, char **argv){
 	}
 }
 // PASS 1234
-// NICK gg
+// NICK dd
 // USER a b c :d
 // NAMES

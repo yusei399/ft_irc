@@ -25,6 +25,7 @@ public:
     Channel(const std::string &name, const Client& client, const std::string &pwd);
     void try_part(Client& client);
     void join(Client& client, const std::string & pass);
+    void broadcast(Client& sender, std::string message) const;
     void privmsg(Client& client, std::string message) const;
     bool correct_pass(const std::string& pass);
 	void quit(const Client &client,  const std::string &quit_msg);

@@ -26,7 +26,7 @@ static bool is_valid_param(const Client &client, const Command &cmd)
 
 
 
-static std::vector<std::string> parse_recievers(const Command&cmd)
+static std::vector<std::string> parse_targets(const Command&cmd)
 {
 	return split(cmd._params[0], ",");
 }
@@ -41,12 +41,12 @@ void privmsg(Client& client, const Command &cmd, ClientManager& clientManager, C
 	if (!is_authenticated(client)) return;
 	if (!is_seted_nick_user(client)) return;
 	if (!is_valid_param(client, cmd)) return;
-	std::vector<std::string> recievers = parse_recievers(cmd);
-	for (size_t i = 0; i < recievers.size(); i++)
+	std::vector<std::string> targets = parse_targets(cmd);
+	for (size_t i = 0; i < targets.size(); i++)
 	{
-		if (is_channel(recievers[i]))
-			channelManager.privmsg_to_channel(client, recievers[i], cmd._trailing);
+		if (is_channel(targets[i]))
+			channelManager.privmsg_to_channel(client, targets[i], cmd._trailing);
 		else
-			clientManager.privmsg(client, recievers[i], cmd._trailing);
+			clientManager.privmsg(client, targets[i], cmd._trailing);
 	}
 }
