@@ -4,7 +4,7 @@
 #include "CheckRegister.hpp"
 
 
-static bool is_enough_params(Client &client, const Command& cmd)
+static bool require_enough_params(Client &client, const Command& cmd)
 {
 	if (cmd._params.size() == 0 || cmd._params.size() > 2)
 	{
@@ -29,7 +29,7 @@ static std::vector<std::string> parse_ch_pass(const Command& cmd, const std::vec
 	return ch_pwds;
 }
 
-static bool is_valid_channel_name(Client &client, const std::string & channel_name)
+static bool require_valid_channel_name(Client &client, const std::string & channel_name)
 {
 	if (channel_name == "" || channel_name[0] != '#' || channel_name == "#")
 	{
@@ -44,14 +44,14 @@ static bool is_valid_channel_name(Client &client, const std::string & channel_na
 //複数のチャンネルを指定した際、その中で存在するチャンネルにはjoinできる
 void ChannelManager::join(Client &client, const Command& cmd)
 {
-	if (!is_authenticated(client)) return;
-	if (!is_seted_nick_user(client)) return;
-	if (!is_enough_params(client, cmd)) return;
+	if (!require_authed(client)) return;
+	if (!require_nick_user(client)) return;
+	if (!require_enough_params(client, cmd)) return;
 	std::vector<std::string> ch_names = parse_ch_names(cmd);
 	std::vector<std::string> ch_pass = parse_ch_pass(cmd, ch_names);
 	for(size_t i = 0; i < ch_names.size(); i++)
 	{
-		if (!is_valid_channel_name(client, ch_names[i]))
+		if (!require_valid_channel_name(client, ch_names[i]))
 			continue;
 		if (exist_channel(ch_names[i]))
 			get_channel(ch_names[i]).join(client, ch_pass[i]);

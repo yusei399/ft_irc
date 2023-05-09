@@ -3,7 +3,7 @@
 #include "ChannelManager.hpp"
 #include "CheckRegister.hpp"
 
-static bool is_enough_param(Client &client, const Command&cmd)
+static bool require_enough_param(Client &client, const Command&cmd)
 {
 	if (cmd._params.size() != 0)
 	{
@@ -30,7 +30,7 @@ static void send_quit_msg(Client&sender, const Command &cmd, ClientManager &clie
 
 void quit(Client&client, const Command &cmd, ClientManager &clientManager, ChannelManager& channelManager)
 {
-	if (!is_enough_param(client, cmd))
+	if (!require_enough_param(client, cmd))
 		return ;
 	send_quit_msg(client, cmd, clientManager);
 	channelManager.quit_all_channel(client, cmd._trailing);

@@ -12,31 +12,31 @@ Channel::Channel(const std::string &name,const  Client& client, const std::strin
 
 // チャンネルから離脱する
 // チャンネルに属していない場合442エラー
-void Channel::try_part(Client& client) {
-    if (!is_member(client))
+void Channel::try_part(Client& target) {
+    if (!is_member(target))
     {
-        send_errmsg(client, 442, get_name() + " :You're not on that channel");
+        send_errmsg(target, 442, get_name() + " :You're not on that channel");
         return;
     }
-    members.erase(client);
-    if (is_operator(client))
+    members.erase(target);
+    if (is_operator(target))
     {
-        operators.erase(client);
+        operators.erase(target);
     }
 }
 
 //存在しないチャンネルに対してjoinを行った場合はこの関数ではなくコンストラクタで処理する
-void Channel::join(Client& client, const std::string & pass)
+void Channel::join(Client& sender, const std::string & pass)
 {
     //すでに属しているチャンネルにjoinを行った場合,本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
-    if (is_member(client))
+    if (is_member(sender))
         return;
     if (!correct_pass(pass))
     {
-        send_errmsg(client, 475, get_name()+ " :Cannot join channel (+k)");
+        send_errmsg(sender, 475, get_name()+ " :Cannot join channel (+k)");
         return;
     }
-    members.insert(client);
+    members.insert(sender);
 }
 
 void Channel::broadcast(Client& sender, std::string message) const
@@ -56,12 +56,12 @@ void Channel::privmsg(Client& sender, std::string message) const
     broadcast(sender,  ":" + sender.get_nick() +" PRIVMSG " + get_name()+ " :"+message);
 }
 
-void Channel::quit(const Client &client, const std::string &quit_msg)
+void Channel::quit(const Client &target, const std::string &quit_msg)
 {
-    assert(is_member(client));
-    members.erase(client);
-    if (is_operator(client))
-        operators.erase(client);
+    assert(is_member(target));
+    members.erase(target);
+    if (is_operator(target))
+        operators.erase(target);
 }
 
 bool Channel::correct_pass(const std::string& pass)
@@ -71,14 +71,24 @@ bool Channel::correct_pass(const std::string& pass)
     return (this->password == pass);
 }
 
-bool Channel::is_member(const Client& client) const
+bool Channel::is_member(const Client& target) const
 {
-    return members.find(client) != members.end();
+    return members.find(target) != members.end();
 }
 
-bool Channel::is_operator(const Client& client) const
+bool Channel::is_operator(const Client& target) const
 {
-    return operators.find(client) != operators.end();
+    return operators.find(target) != operators.end();
+}
+
+bool Channel::require_operator(Client& sender)
+{
+	if (!is_operator(sender))
+	{
+		send_errmsg(sender, 482, get_name()+ " :You're not channel operator");
+		return false;
+	}
+	return true;
 }
 
 std::string Channel::get_name() const

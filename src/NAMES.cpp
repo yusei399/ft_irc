@@ -3,7 +3,7 @@
 #include "ChannelManager.hpp"
 #include "CheckRegister.hpp"
 
-static bool is_valid_cmd(Client &client, const Command&cmd)
+static bool require_valid_cmd(Client &client, const Command&cmd)
 {
 	if (cmd._params.size() > 1)
 	{
@@ -26,9 +26,9 @@ static void names_all_client(const Client &sender, ClientManager&clientManager)
 
 void names(Client &client, const Command& cmd,  ChannelManager &chm, ClientManager& clientManager)
 {
-	if (!is_authenticated(client)) return;
-	if (!is_seted_nick_user(client)) return;
-	if (!is_valid_cmd(client, cmd)) return;
+	if (!require_authed(client)) return;
+	if (!require_nick_user(client)) return;
+	if (!require_valid_cmd(client, cmd)) return;
 	if (cmd._params.size() == 0)
 		names_all_client(client, clientManager);
 	else

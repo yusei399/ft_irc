@@ -23,17 +23,20 @@ private:
 
 public:
     Channel(const std::string &name, const Client& client, const std::string &pwd);
-    void try_part(Client& client);
-    void join(Client& client, const std::string & pass);
+    void try_part(Client& target);
+    void join(Client& sender, const std::string & pass);
     void broadcast(Client& sender, std::string message) const;
-    void privmsg(Client& client, std::string message) const;
+    void privmsg(Client& sender, std::string message) const;
     bool correct_pass(const std::string& pass);
-	void quit(const Client &client,  const std::string &quit_msg);
+	void quit(const Client &target,  const std::string &quit_msg);
     //オペレーターコマンド
-    void kick(Client &operator_user, Client& kick_user, const std::string & kick_reason);
+    void kick(Client &sender, Client& target, const std::string & kick_reason);
+    void invite(Client &sender, Client& target);
     
-    bool is_member(const Client& client) const;
-    bool is_operator(const Client& client) const;
+    bool is_member(const Client& target) const;
+    bool is_operator(const Client& target) const;
+    bool require_operator(Client& sender);
+
     std::string get_name() const;
     std::string get_password() const{ return password;}
     const std::set<Client>& get_members() const;

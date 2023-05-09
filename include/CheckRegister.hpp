@@ -4,7 +4,7 @@
 #include "Client.hpp"
 #include "Message.hpp"
 
-bool is_authenticated(Client &client);
-bool is_seted_nick_user(Client &client);
+bool require_authed(Client &client);
+bool require_nick_user(Client &client);
 
 #endif // CHECKREGISTER_HPP

@@ -29,7 +29,7 @@ private:
 	std::string _real_name;
 	std::string _host_name;
 	std::string _server_name;
-	bool authenticated; //認証済みでないとコマンドは使えない仕様
+	bool authed; //パスワード認証済みかどうか
 public:
 	bool nickname_seted;//nicknameとuserが設定されると001メッセージが返される
 	bool user_seted;
@@ -37,7 +37,7 @@ public:
 	Client(int fd, const std::string &nc);
 	~Client();
 	int get_fd() const;
-	bool is_authenticated() const{return authenticated;}
+	bool is_authed() const{return authed;}
 	size_t get_id() const{return _id;}
 	std::string get_nick() const;
 	std::string get_user_name() const {return _user_name;}
@@ -50,7 +50,7 @@ public:
 	void set_host_name(const std::string &hostname) {_host_name = hostname;}
 	void set_server_name(const std::string &server_name) {_server_name = server_name;}
 	bool exist_nickname(const std::string &nick);
-	void set_authenticate(bool b) { authenticated = b;}
+	void set_auth(bool b) { authed = b;}
 	
 	//set<client>を使う際に必要
 	bool operator<(const Client& rhs) const;

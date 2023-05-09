@@ -3,7 +3,7 @@
 #include "ChannelManager.hpp"
 #include "CheckRegister.hpp"
 
-static bool is_enough_param(Client &client, const Command&cmd)
+static bool require_enough_param(Client &client, const Command&cmd)
 {
 	if (cmd._params.size() != 3 || cmd._trailing == "")
 	{
@@ -26,8 +26,8 @@ static bool is_already_set_user(Client &client)
 //USER <username> <hostname> <servername> :<realname>
 void ChannelManager::user(Client &client, const Command&cmd)
 {
-	if (!is_authenticated(client)) return;
-	if (!is_enough_param(client, cmd)) return;
+	if (!require_authed(client)) return;
+	if (!require_enough_param(client, cmd)) return;
 	client.set_user_name(cmd._params[0]);
 	client.set_host_name(cmd._params[1]);
 	client.set_server_name(cmd._params[2]);
