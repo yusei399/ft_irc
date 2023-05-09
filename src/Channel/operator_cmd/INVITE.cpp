@@ -45,8 +45,10 @@ static bool require_valid_channel(Client &client, const std::string& channel_nam
 	return true;
 }
 
-void invite(Client& sender, Command& cmd, ChannelManager& channelManager, ClientManager &clientManager)
+void invite(Client& sender, const Command& cmd, ClientManager &clientManager, ChannelManager& channelManager)
 {
+	if (!require_authed(sender)) return;
+	if (!require_nick_user(sender)) return;
 	if (!require_enough_params(sender, cmd))	return;
 	std::string target_user_name = cmd._params[0];
 	std::string channel_name = cmd._params[1];
@@ -55,15 +57,24 @@ void invite(Client& sender, Command& cmd, ChannelManager& channelManager, Client
 	Client& target_user = clientManager.get_client_by_nick(target_user_name);
 	Channel& channel = channelManager.get_channel(channel_name);
 	channel.invite(sender, target_user);
-//	const std::string &target_user, const std::string & channel_name
 }
 
-
+static bool require_not_member(Client& sender, Client& target, Channel& channel)
+{
+	if (channel.is_member(target))
+	{
+		send_errmsg(sender, 443, target.get_nick()+ " "+channel.get_name() +" :is already on channel");
+		return false;
+	}
+	return true;
+}
 
 void Channel::invite(Client &sender, Client& target)
 {
 	if (!require_authed(sender)) return;
 	if (!require_nick_user(sender)) return;
 	if (!require_operator(sender)) return;
-			
+	if (!require_not_member(sender, target, *this)) return;
+	invited.insert(target);
+	send_msg(target, sender.get_nick() + " invites you to join " + get_name());
 }

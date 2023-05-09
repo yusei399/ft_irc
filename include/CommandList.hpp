@@ -12,5 +12,7 @@ void names(Client &client, const Command& cmd,  ChannelManager &chm, ClientManag
 void PONG(Client &client, std::vector<std::string> &server_name);
 void privmsg(Client &connect_client, const Command &cmd);
 void kick(Client &client, const Command& cmd, ClientManager& client_manager, ChannelManager& channel_manager);
+void invite(Client& sender, const Command& cmd, ClientManager &clientManager, ChannelManager& channelManager);
+
 
 #endif

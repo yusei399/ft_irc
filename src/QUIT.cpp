@@ -30,8 +30,9 @@ static void send_quit_msg(Client&sender, const Command &cmd, ClientManager &clie
 
 void quit(Client&client, const Command &cmd, ClientManager &clientManager, ChannelManager& channelManager)
 {
-	if (!require_enough_param(client, cmd))
-		return ;
+	if (!require_authed(client)) return;
+	if (!require_nick_user(client)) return;
+	if (!require_enough_param(client, cmd)) return ;
 	send_quit_msg(client, cmd, clientManager);
 	channelManager.quit_all_channel(client, cmd._trailing);
 	clientManager.erase_client(client);

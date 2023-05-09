@@ -11,13 +11,7 @@ Channel::Channel(const std::string &name,const  Client& client, const std::strin
 }
 
 // チャンネルから離脱する
-// チャンネルに属していない場合442エラー
-void Channel::try_part(Client& target) {
-    if (!is_member(target))
-    {
-        send_errmsg(target, 442, get_name() + " :You're not on that channel");
-        return;
-    }
+void Channel::part(Client& target) {
     members.erase(target);
     if (is_operator(target))
     {
@@ -41,11 +35,7 @@ void Channel::join(Client& sender, const std::string & pass)
 
 void Channel::broadcast(Client& sender, std::string message) const
 {
-    if (!is_member(sender))
-    {
-        send_errmsg(sender, 442,  get_name()+ " :You're not on that channel");
-        return;
-    }
+    if (!require_member(sender))return;
     for (client_it reciever = members.begin(); reciever != members.end(); ++reciever)
         send_msg(*reciever, message);
 }
@@ -81,7 +71,7 @@ bool Channel::is_operator(const Client& target) const
     return operators.find(target) != operators.end();
 }
 
-bool Channel::require_operator(Client& sender)
+bool Channel::require_operator(Client& sender) const
 {
 	if (!is_operator(sender))
 	{
@@ -91,6 +81,16 @@ bool Channel::require_operator(Client& sender)
 	return true;
 }
 
+//コマンドの送信者以外がチャンネルに属さないときのエラーは441なのでこの関数は使えない
+bool Channel::require_member(Client& sender) const
+{
+    if (!is_member(sender))
+	{
+		send_errmsg(sender, 442, get_name() + " :You're not on that channel");
+        return false;
+	}
+    return true;
+}
 std::string Channel::get_name() const
 {
     return name;

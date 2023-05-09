@@ -14,7 +14,7 @@ static bool require_enough_params(Client &client, const Command& cmd)
 	return true;
 }
 
-static bool is_exist_channel(Client&client, const std::string &channel, ChannelManager& chm)
+static bool require_exist_channel(Client&client, const std::string &channel, ChannelManager& chm)
 {
 	if (!chm.exist_channel(channel))
 	{
@@ -34,7 +34,7 @@ static bool is_exist_user(Client&client, const std::string &channel, ChannelMana
 	return true;
 }
 
-static bool is_exist_user(Client &client, const std::string& kick_user, ClientManager& clientManager)
+static bool require_exist_user(Client &client, const std::string& kick_user, ClientManager& clientManager)
 {
 	if (!clientManager.exist_client_by_nick(kick_user))
 	{
@@ -51,8 +51,8 @@ void kick(Client &sender, const Command& cmd, ClientManager& client_manager, Cha
 	if (!require_enough_params(sender, cmd))	return;
 	std::string channel_name = cmd._params[0];
 	std::string kick_user_name = cmd._params[1];
-	if (!is_exist_channel(sender, channel_name, channel_manager))  return;
-	if (!is_exist_user(sender, kick_user_name, client_manager))  return;
+	if (!require_exist_channel(sender, channel_name, channel_manager))  return;
+	if (!require_exist_user(sender, kick_user_name, client_manager))  return;
 	Channel& channel = channel_manager.get_channel(channel_name);
 	Client &ban_user = client_manager.get_client_by_nick(kick_user_name);
 	std::string kick_reason = cmd._params[0];

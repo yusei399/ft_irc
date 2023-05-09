@@ -18,7 +18,6 @@ std::vector<std::string> split(const std::string& s, const std::vector<std::stri
                 delim_len = t[j].size();
             }
         }
-//        std::cout << "wordl : " << word_l <<", wordr "<<word_r << std::endl;
         if (word_l < word_r)
             splited.push_back(s.substr(word_l, word_r - word_l));
         word_l = word_r + delim_len;

@@ -46,7 +46,7 @@ const std::set<Channel> ChannelManager::get_belong_channels(const Client &client
 void ChannelManager::try_part(std::string channelName, Client& client)
 {
 	if (exist_channel(channelName))
-		get_channel(channelName).try_part(client);
+		get_channel(channelName).part(client);
 	else
         send_errmsg(client, 403, channelName + " :No such channel");
 }

@@ -36,6 +36,7 @@ int main(int argc, char **argv){
 	}
 }
 // PASS 1234
-// NICK dd
+// NICK bcmp
 // USER a b c :d
 // NAMES
+//INVITE bcmp #aa

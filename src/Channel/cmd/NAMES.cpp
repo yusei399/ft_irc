@@ -29,7 +29,8 @@ static void send_client_list(Channel ch, const Client &client)
 //オペレーターは名前の先頭に@がつく
 void ChannelManager::names_channel(Client &client, const Command& cmd,  ChannelManager &chm)
 {
-	//ダメなパラメーターは弾かれているのでここで確認していない
+	if (!require_authed(client)) return;
+	if (!require_nick_user(client)) return;
 	std::vector<std::string> channels = parse_channels(cmd);
 	for (size_t i = 0; i < channels.size(); i++)
 	{	

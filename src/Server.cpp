@@ -166,7 +166,7 @@ void Server::build_in(int fd, const Command &cmd)
 			kick(client, cmd, clientManager, channelManager);
 			break;
 		case INVITE:
-			std::cout << "invite" << std::endl;
+			invite(client, cmd, clientManager, channelManager);
 			break;
 		case PART:
 			std::cout << "part" << std::endl;

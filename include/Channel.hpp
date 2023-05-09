@@ -20,11 +20,11 @@ private:
     std::string password; // パスワード
     std::set<Client> members;// チャンネルに参加しているユーザーのリスト 
     std::set<Client> operators;//オペレーター権限を持ったユーザーのリスト
-
+    std::set<Client> invited; //招待されたユーザーのリスト
 public:
     Channel(const std::string &name, const Client& client, const std::string &pwd);
-    void try_part(Client& target);
-    void join(Client& sender, const std::string & pass);
+    void part(Client& target);
+    void join(Client& sender, const std::string & pass = "");
     void broadcast(Client& sender, std::string message) const;
     void privmsg(Client& sender, std::string message) const;
     bool correct_pass(const std::string& pass);
@@ -35,7 +35,8 @@ public:
     
     bool is_member(const Client& target) const;
     bool is_operator(const Client& target) const;
-    bool require_operator(Client& sender);
+    bool require_operator(Client& sender) const;
+    bool require_member(Client& sender) const;
 
     std::string get_name() const;
     std::string get_password() const{ return password;}

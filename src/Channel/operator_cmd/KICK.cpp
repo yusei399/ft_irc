@@ -11,11 +11,7 @@ static bool require_in_channel(Client &sender, Client& kick_user, Channel& chann
 		send_errmsg(sender, 441, kick_user.get_nick()+ " " +channel.get_name() + " :They aren't on that channel");
 		ok = false;
 	}
-	if (!channel.is_member(sender))
-	{
-		send_errmsg(sender, 442, channel.get_name() + " :You're not on that channel");
-		ok = false;
-	}
+	if (!channel.require_member(sender))ok = false;
 	return ok;
 }
 
@@ -36,5 +32,5 @@ void Channel::kick(Client &sender, Client& ban_user, const std::string & kick_re
 	if (!require_in_channel(sender, ban_user, *this)) return;
 	if (!require_operator(sender)) return;
 	broadcast_kick_msg(sender, ban_user, kick_reason, *this);
-	try_part(ban_user);
+	part(ban_user);
 }
