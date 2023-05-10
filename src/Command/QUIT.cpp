@@ -1,7 +1,4 @@
-#include "CommandList.hpp"
-#include "Client.hpp"
-#include "ChannelManager.hpp"
-#include "CheckRegister.hpp"
+#include "CmdManager.hpp"
 
 static bool require_enough_param(Client &client, const Command&cmd)
 {
@@ -28,7 +25,7 @@ static void send_quit_msg(Client&sender, const Command &cmd, ClientManager &clie
 	}
 }
 
-void quit(Client&client, const Command &cmd, ClientManager &clientManager, ChannelManager& channelManager)
+void CmdManager::quit(Client&client, const Command &cmd, ClientManager &clientManager, ChannelManager& channelManager)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;

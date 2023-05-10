@@ -19,6 +19,7 @@
 #include "Message.hpp"
 #include "ChannelManager.hpp"
 #include "ClientManager.hpp"
+#include "CmdManager.hpp"
 #define TIMEOUT 3 * 60 * 1000
 
 # define MSG_LEN 1024
@@ -29,6 +30,7 @@ class Server
 private:
 	ChannelManager channelManager;
 	ClientManager clientManager;
+	CmdManager cmdManager;
 	int _port;
 	std::string	_password;
 	int _socket_fd;

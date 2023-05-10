@@ -2,7 +2,7 @@
 # define COMMAND_LIST_H
 #include "Server.hpp"
 #include "Message.hpp"
-
+/*
 void join(Client &client, const Command &cmd, ChannelManager &channelManager);
 void pass(Client &client, std::string const &passwprd);
 void user(Client &client);
@@ -14,5 +14,6 @@ void privmsg(Client &connect_client, const Command &cmd);
 void kick(Client &client, const Command& cmd, ClientManager& client_manager, ChannelManager& channel_manager);
 void invite(Client& sender, const Command& cmd, ClientManager &clientManager, ChannelManager& channelManager);
 
+*/
 
 #endif

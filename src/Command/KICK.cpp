@@ -1,7 +1,4 @@
-#include "CommandList.hpp"
-#include "Client.hpp"
-#include "ChannelManager.hpp"
-#include "CheckRegister.hpp"
+#include "CmdManager.hpp"
 
 
 static bool require_enough_params(Client &client, const Command& cmd)
@@ -44,7 +41,7 @@ static bool require_exist_user(Client &client, const std::string& kick_user, Cli
 	return true;
 }
 
-void kick(Client &sender, const Command& cmd, ClientManager& client_manager, ChannelManager& channel_manager)
+void CmdManager::kick(Client &sender, const Command& cmd, ClientManager& client_manager, ChannelManager& channel_manager)
 {
 	if (!require_authed(sender)) return;
 	if (!require_nick_user(sender)) return;

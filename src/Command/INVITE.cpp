@@ -1,7 +1,5 @@
-#include "CommandList.hpp"
-#include "Client.hpp"
-#include "ChannelManager.hpp"
-#include "CheckRegister.hpp"
+#include "CmdManager.hpp"
+
 /*
 INVITEコマンドは、チャンネルに招待された人しか入れないように設定されたチャンネル（+iモード）に、他のユーザーを招待するために使われます1。
 
@@ -45,7 +43,7 @@ static bool require_valid_channel(Client &client, const std::string& channel_nam
 	return true;
 }
 
-void invite(Client& sender, const Command& cmd, ClientManager &clientManager, ChannelManager& channelManager)
+void CmdManager::invite(Client& sender, const Command& cmd, ClientManager &clientManager, ChannelManager& channelManager)
 {
 	if (!require_authed(sender)) return;
 	if (!require_nick_user(sender)) return;

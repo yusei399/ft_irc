@@ -1,7 +1,4 @@
-#include "CommandList.hpp"
-#include "Client.hpp"
-#include "ChannelManager.hpp"
-#include "CheckRegister.hpp"
+#include "CmdManager.hpp"
 
 static bool require_valid_param(const Client &client, const Command &cmd)
 {
@@ -36,7 +33,7 @@ static bool is_channel(const std::string &reicieve)
 	return reicieve != "" && reicieve[0] == '#';
 }
 
-void privmsg(Client& client, const Command &cmd, ClientManager& clientManager, ChannelManager& channelManager)
+void CmdManager::privmsg(Client& client, const Command &cmd, ClientManager& clientManager, ChannelManager& channelManager)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;

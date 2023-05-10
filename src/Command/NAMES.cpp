@@ -1,7 +1,8 @@
-#include "CommandList.hpp"
+/*#include "CommandList.hpp"
 #include "Client.hpp"
 #include "ChannelManager.hpp"
-#include "CheckRegister.hpp"
+#include "CheckRegister.hpp"*/
+#include "CmdManager.hpp"
 
 static bool require_valid_cmd(Client &client, const Command&cmd)
 {
@@ -24,7 +25,7 @@ static void names_all_client(const Client &sender, ClientManager&clientManager)
 	send_msg(sender, " :End of /NAMES list");
 }
 
-void names(Client &client, const Command& cmd,  ChannelManager &chm, ClientManager& clientManager)
+void CmdManager::names(Client &client, const Command& cmd,  ChannelManager &chm, ClientManager& clientManager)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;

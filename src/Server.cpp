@@ -3,8 +3,6 @@
 #include "../include/CommandList.hpp"
 #include <signal.h>
 
-void privmsg(Client& client, const Command &cmd, ClientManager& clientManager, ChannelManager& channelManager);
-
 Server::Server () {}
 Server::Server(int port, std::string &password) : _port(port), _password(password) {}
 Server::~Server(){}
@@ -148,25 +146,25 @@ void Server::build_in(int fd, const Command &cmd)
 			std::cout << "ping" << std::endl;
 			break;
 		case NAMES:
-			names(client, cmd, channelManager, clientManager);
+			cmdManager.names(client, cmd, channelManager, clientManager);
 			break;
 		case MODE:
 			std::cout << "mode" << std::endl;
 			break;
 		case PRIVMSG:
-			privmsg(client, cmd, clientManager, channelManager);
+			cmdManager.privmsg(client, cmd, clientManager, channelManager);
 			break;
 		case NOTICE:
 			std::cout << "notice" << std::endl;
 			break;
 		case QUIT:
-			quit(client, cmd, clientManager, channelManager);
+			cmdManager.quit(client, cmd, clientManager, channelManager);
 			break;
 		case KICK:
-			kick(client, cmd, clientManager, channelManager);
+			cmdManager.kick(client, cmd, clientManager, channelManager);
 			break;
 		case INVITE:
-			invite(client, cmd, clientManager, channelManager);
+			cmdManager.invite(client, cmd, clientManager, channelManager);
 			break;
 		case PART:
 			std::cout << "part" << std::endl;
