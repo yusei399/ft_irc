@@ -149,6 +149,11 @@ void Channel::mode_i(Client &sender, const std::string &flag, bool valid)
 例：MODE #foo +o alice
 エラーメッセージ：:irc.example.com 443 alice #foo :is already on channel
 */
+
+//sender, targetには sender sets mode +o target
+//その他には alice has been given operator status by sender
+//mode_o
+
 void Channel::mode(Client &sender, const std::string& flag)
 {
     if (!require_operator(sender)) return;
