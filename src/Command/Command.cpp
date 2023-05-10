@@ -50,15 +50,6 @@ Command::Command(const std::string& cmd) : _original_string(cmd)
     _set_cmd_type();
 }
 
-std::vector<Command> parse_commands(const std::string &commands_msg)
-{
-    std::vector<std::string> cmd_lines = split_lines(commands_msg);
-    std::vector<Command> cmds;
-    for(size_t i = 0; i < cmd_lines.size(); i++)
-        cmds.push_back(Command(cmd_lines[i]));
-    return cmds;
-}
-
 void Command::debug()
 {
     std::cout<<"cmd_name : " << _cmd_name<<std::endl;
@@ -76,16 +67,3 @@ std::string Command::get_original_str() const
 {
     return _original_string;
 }
-
-/*
-int main()
-{
-    std::vector<Command> cmds = parse_commands("JOIN #aaa bbb   ccc :msg:¥n¥r¥nCMD #bbbb ¥n¥r¥nnick ss aa s #ccc :ddd¥n¥r¥n");
-    for(int i = 0; i < (int)cmds.size(); i++)
-    {
-        cmds[i].debug();
-    }
-    return 0;
-}
-*/
-//c++ -Wall -Wextra -Werror -std=c++98 Command.cpp StringExtend.cpp

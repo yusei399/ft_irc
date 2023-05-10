@@ -13,7 +13,7 @@ static bool require_valid_cmd(Client &client, const Command& cmd)
 	return true;
 }
 
-static bool require_yet_authed(Client &client)
+static bool require_first_authed(Client &client)
 {
 	if (client.is_authed())
 	{
@@ -34,9 +34,9 @@ static bool require_correct_pass(Client &client, const std::string & pass, const
 }
 // PASS <server_password> : サーバーのパスワード認証を行う。
 //							認証が行われていないとnick, user以外のコマンドが使えない
-void ChannelManager::pass(Client &client, const Command& cmd, const std::string &server_pass)
+void CmdManager::pass(Client &client, const Command& cmd)
 {
-	if (!require_yet_authed(client)) return;
+	if (!require_first_authed(client)) return;
 	if (!require_valid_cmd(client, cmd)) return;
 	const std::string &pass = cmd._params[0];
 	if (!require_correct_pass(client, pass, server_pass)) return;

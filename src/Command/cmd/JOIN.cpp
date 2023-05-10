@@ -1,3 +1,4 @@
+#include "CmdManager.hpp"
 #include "CommandList.hpp"
 #include "Client.hpp"
 #include "ChannelManager.hpp"
@@ -29,33 +30,15 @@ static std::vector<std::string> parse_ch_pass(const Command& cmd, const std::vec
 	return ch_pwds;
 }
 
-static bool require_valid_channel_name(Client &client, const std::string & channel_name)
-{
-	if (channel_name == "" || channel_name[0] != '#' || channel_name == "#")
-	{
-        send_errmsg(client, 403, channel_name + " :No such channel");
-		return false;
-	}
-	return true;
-}
-
 //JOIN #ch1[,#ch2] [pass_ch1,pass_ch2]
 //存在しないチャンネルを指定した場合無視する(本家通り)
 //複数のチャンネルを指定した際、その中で存在するチャンネルにはjoinできる
-void ChannelManager::join(Client &client, const Command& cmd)
+void CmdManager::join(Client &client, const Command& cmd)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;
 	if (!require_enough_params(client, cmd)) return;
 	std::vector<std::string> ch_names = parse_ch_names(cmd);
 	std::vector<std::string> ch_pass = parse_ch_pass(cmd, ch_names);
-	for(size_t i = 0; i < ch_names.size(); i++)
-	{
-		if (!require_valid_channel_name(client, ch_names[i]))
-			continue;
-		if (exist_channel(ch_names[i]))
-			get_channel(ch_names[i]).join(client, ch_pass[i]);
-		else
-		    channels.insert(Channel(ch_names[i], client, ch_pass[i]));
-	}
+	channelManager.join(client, ch_names, ch_pass);
 }

@@ -1,5 +1,6 @@
 #include "../include/Message.hpp"
 
+//todo delete
 void send_msg(const Client &reciever, const std::string &message)
 {
 	std::string msg_lf = message + "\n";

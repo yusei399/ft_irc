@@ -41,3 +41,4 @@ int main(int argc, char **argv){
 // USER a b c :d
 // NAMES
 //INVITE c #aa
+// MODE #a i

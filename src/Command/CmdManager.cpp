@@ -1,5 +1,14 @@
 #include "CmdManager.hpp"
 
+std::vector<Command> CmdManager::parse_commands(const std::string &commands_msg)
+{
+    std::vector<std::string> cmd_lines = split_lines(commands_msg);
+    std::vector<Command> cmds;
+    for(size_t i = 0; i < cmd_lines.size(); i++)
+        cmds.push_back(Command(cmd_lines[i]));
+    return cmds;
+}
+
 void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 {
 	switch (cmd._cmdType)
@@ -8,16 +17,16 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 			std::cout << "cap" << std::endl;
 			break;
 		case PASS:
-			channelManager.pass(sender, cmd, server_pass);
+			pass(sender, cmd);
 			break;
 		case NICK:
-			channelManager.nick(sender, cmd);
+			nick(sender, cmd);
 			break;
 		case USER:
-			channelManager.user(sender, cmd);
+			user(sender, cmd);
 			break;
 		case JOIN:
-			channelManager.join(sender, cmd);
+			join(sender, cmd);
 			break;
 		case TOPIC:
 			std::cout << "topic" << std::endl;
@@ -29,7 +38,7 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 			names(sender, cmd);
 			break;
 		case MODE:
-			std::cout << "mode" << std::endl;
+			mode(sender, cmd);
 			break;
 		case PRIVMSG:
 			privmsg(sender, cmd);

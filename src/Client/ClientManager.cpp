@@ -52,5 +52,5 @@ void ClientManager::privmsg(Client &sender, const std::string &reciever_name, co
 	if (exist_client_by_nick(reciever_name))
 		send_msg(get_client_by_nick(reciever_name), ":" + sender.get_nick() +" PRIVMSG "+reciever_name +" :" + msg);
 	else
-		send_errmsg(sender, 403, reciever_name + " :No such nick");
+		send_errmsg(sender, 401, reciever_name + " :No such nick");
 }

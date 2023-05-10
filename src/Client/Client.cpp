@@ -17,7 +17,6 @@ int Client::get_fd() const
 	return (_fd);
 }
 
-
 //nicknameだけ静的変数にしている理由
 // nicknameをstd::string nick_nameなどのメンバ変数で持つと
 // Client a; Client b = a;
@@ -39,6 +38,14 @@ void Client::set_nick(const std::string &nick)
 	if (exist_nickname(nick)) return;
 	get_nickname_dict()[*this] = nick;
 	nickname_seted = true;
+}
+
+void Client::set_user_info(const std::string &user, const std::string &host, const std::string &server,const std::string &real)
+{
+	set_user_name(user);
+	set_host_name(host);
+	set_server_name(server);
+	set_real_name(real);
 }
 
 bool Client::exist_nickname(const std::string &nick)

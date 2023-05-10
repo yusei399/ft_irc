@@ -1,6 +1,4 @@
-#include "CommandList.hpp"
-#include "Client.hpp"
-#include "ChannelManager.hpp"
+#include "CmdManager.hpp"
 #include "CheckRegister.hpp"
 
 static bool require_enough_params(Client &client, const Command& cmd)
@@ -29,7 +27,7 @@ static bool require_valid_nick(Client &client, const std::string & new_nick)
 }
 
 //NICK a : 自分のニックネームをaにする
-void ChannelManager::nick(Client &client, const Command& cmd)
+void CmdManager::nick(Client &client, const Command& cmd)
 {
 	if (!require_authed(client)) return;
 	if (!require_enough_params(client, cmd)) return;
@@ -37,6 +35,12 @@ void ChannelManager::nick(Client &client, const Command& cmd)
 	if (!require_valid_nick(client, new_nick)) return;
 	//nickとuserを使わないとpass以外のコマンドが使えない
 	if (!client.nickname_seted && client.user_seted)
+	{
+		client.set_nick(new_nick);
 		send_msg(client, "001 :Welcome to the Internet Relay Network " + client.get_nick());
-	client.set_nick(new_nick);
+	}
+	else
+	{
+		client.set_nick(new_nick);
+	}
 }

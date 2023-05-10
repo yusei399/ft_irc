@@ -2,8 +2,8 @@
 #include "../include/Client.hpp"
 #include <signal.h>
 
-Server::Server () : cmdManager(clientManager, channelManager, _password) {}
-Server::Server(int port, std::string &password) : _port(port), _password(password), cmdManager(clientManager, channelManager, _password) {}
+Server::Server () : cmdManager(clientManager, channelManager, "") {}
+Server::Server(int port, std::string &password) : _port(port), _password(password), cmdManager(clientManager, channelManager, password) {}
 Server::~Server(){}
 
 void Server::create_soket()
@@ -110,7 +110,7 @@ void Server::start()
 //todo コマンドが複数に分割されている場合
 void Server::chat_in(Client &sender)
 {
-	std::vector<Command> cmds = parse_commands(recieve_msg(sender));
+	std::vector<Command> cmds = cmdManager.parse_commands(recieve_msg(sender));
 	for(size_t i = 0; i < cmds.size(); i++)
 		cmdManager.exe_cmd(sender, cmds[i]);
 }

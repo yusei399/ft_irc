@@ -34,6 +34,5 @@ public:
     std::string get_original_str() const;
     void debug();
 };
-std::vector<Command> parse_commands(const std::string &commands_msg);
 
 #endif

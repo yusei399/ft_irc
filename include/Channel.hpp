@@ -34,6 +34,10 @@ public:
     void kick(Client &sender, Client& target, const std::string & kick_reason);
     void invite(Client &sender, Client& target);
     
+    void send_mode_state_i(Client &client);
+    void mode_i(Client &sender, const std::string &flag, bool valid);
+    void mode(Client &sender, const std::string& flag);
+    
     bool is_member(const Client& target) const;
     bool is_operator(const Client& target) const;
     bool is_invited(const Client& target) const{return invited.find(target) != invited.end();}

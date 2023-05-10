@@ -33,15 +33,6 @@ static bool require_valid_user(Client &client, const std::string& user, ClientMa
 	return true;
 }
 
-static bool require_valid_channel(Client &client, const std::string& channel_name, ChannelManager& channelManager)
-{
-	if (!channelManager.exist_channel(channel_name))
-	{
-		send_errmsg(client, 403, channel_name + " :No such channel");
-		return false;
-	}
-	return true;
-}
 
 void CmdManager::invite(Client& sender, const Command& cmd)
 {
@@ -51,7 +42,7 @@ void CmdManager::invite(Client& sender, const Command& cmd)
 	std::string target_user_name = cmd._params[0];
 	std::string channel_name = cmd._params[1];
 	if (!require_valid_user(sender, target_user_name, clientManager))return;
-	if (!require_valid_channel(sender, channel_name, channelManager))return;
+	if (!channelManager.require_exist_channel(sender, channel_name))return;
 	Client& target_user = clientManager.get_client_by_nick(target_user_name);
 	Channel& channel = channelManager.get_channel(channel_name);
 	channel.invite(sender, target_user);

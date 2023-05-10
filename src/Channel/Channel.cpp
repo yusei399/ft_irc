@@ -118,12 +118,48 @@ static bool require_not_member(Client& sender, Client& target, Channel& channel)
 
 void Channel::invite(Client &sender, Client& target)
 {
-	if (!require_authed(sender)) return;
-	if (!require_nick_user(sender)) return;
 	if (!require_operator(sender)) return;
 	if (!require_not_member(sender, target, *this)) return;
 	invited.insert(target);
 	send_msg(target, sender.get_nick() + " invites you to join " + get_name());
+}
+
+void Channel::send_mode_state_i(Client &client)
+{
+    send_msg(client, "MODE " + get_name() + (invited_mode ? " +i" : " -i"));
+}
+
+void Channel::mode_i(Client &sender, const std::string &flag, bool valid)
+{
+    invited_mode = valid;
+    broadcast(sender , "MODE "+ get_name() +" " + flag + " " + sender.get_nick());    
+}
+
+/*
+401 <nickname> :No such nick/channel
+指定されたニックネームまたはチャンネルが存在しない場合に返されます。
+例：MODE #bar +o bob
+エラーメッセージ：:irc.example.com 401 #bar :No such nick/channel
+442 <channel> :You’re not on that channel
+チャンネルに参加していない場合に返されます。
+例：MODE #foo +o alice
+エラーメッセージ：:irc.example.com 442 #foo :You’re not on that channel
+443 <user> <channel> :is already on channel
+チャンネルにすでに参加しているユーザーを招待しようとした場合に返されます。
+例：MODE #foo +o alice
+エラーメッセージ：:irc.example.com 443 alice #foo :is already on channel
+*/
+void Channel::mode(Client &sender, const std::string& flag)
+{
+    if (!require_operator(sender)) return;
+    if (flag == "i")
+        send_mode_state_i(sender);
+	else if (flag == "+i")
+        mode_i(sender, flag, true);
+    else if (flag == "-i")
+        mode_i(sender, flag, false);
+    else
+        send_errmsg(sender, 472, flag+ " :is unknown mode char to me");
 }
 
 std::string Channel::get_name() const
