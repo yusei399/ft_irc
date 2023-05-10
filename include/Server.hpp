@@ -15,7 +15,6 @@
 #include <string>
 #include <algorithm>
 #include <map>
-#include "Command.hpp"
 #include "Message.hpp"
 #include "ChannelManager.hpp"
 #include "ClientManager.hpp"
@@ -42,10 +41,10 @@ private:
 	~Server();
 	void create_soket();
 	void connect_client(int socketfd);
-	void chat_in(int fd);
+	void chat_in(Client &client);
 	void start();
 	void allow();
-	void build_in(int fd, const Command &cmd);
+	void build_in(Client &sender, const Command &cmd);
 };
 void signal_handler(int signal);
 

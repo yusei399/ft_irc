@@ -1,10 +1,9 @@
 #include "../include/Server.hpp"
 #include "../include/Client.hpp"
-#include "../include/CommandList.hpp"
 #include <signal.h>
 
-Server::Server () {}
-Server::Server(int port, std::string &password) : _port(port), _password(password) {}
+Server::Server () : cmdManager(clientManager, channelManager, _password) {}
+Server::Server(int port, std::string &password) : _port(port), _password(password), cmdManager(clientManager, channelManager, _password) {}
 Server::~Server(){}
 
 void Server::create_soket()
@@ -66,12 +65,12 @@ void Server::create_poll(int socket_fd)
 	_pfds.push_back(pollfd);
 }
 
-static std::string recieve_msg(int fd)
+static std::string recieve_msg(Client &client)
 {
 	char buff[MSG_LEN];
 	ssize_t	 byte;
 	std::memset(buff, 0, sizeof(buff));
-	if ((byte = recv(fd, buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
+	if ((byte = recv(client.get_fd(), buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
 	{
 		if (byte < 0)
 		{
@@ -80,9 +79,6 @@ static std::string recieve_msg(int fd)
 		}
 		else if (byte > MSG_LEN)
 			throw std::exception();
-		// else if (byte == 0)
-		// quitの処理後で追記する
-		//todo ?
 		else
 		{
 			throw std::exception();
@@ -105,74 +101,16 @@ void Server::start()
 			if (_pfds[i].revents == 0)
 				continue;
 			if (_pfds[i].revents == POLLIN)
-				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(_pfds[i].fd);
+				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(clientManager.get_client_by_fd(_pfds[i].fd));
 		}
 	}
 }
 
 
 //todo コマンドが複数に分割されている場合
-void Server::chat_in(int fd)
+void Server::chat_in(Client &sender)
 {
-	std::vector<Command> cmds = parse_commands(recieve_msg(fd));
+	std::vector<Command> cmds = parse_commands(recieve_msg(sender));
 	for(size_t i = 0; i < cmds.size(); i++)
-		build_in(fd, cmds[i]);
-}
-
-void Server::build_in(int fd, const Command &cmd)
-{
-	Client &client = clientManager.get_client_by_fd(fd);
-	switch (cmd._cmdType)
-	{
-		case CAP:
-			std::cout << "cap" << std::endl;
-			break;
-		case PASS:
-			channelManager.pass(client, cmd, _password);
-			break;
-		case NICK:
-			channelManager.nick(client, cmd);
-			break;
-		case USER:
-			channelManager.user(client, cmd);
-			break;
-		case JOIN:
-			channelManager.join(client, cmd);
-			break;
-		case TOPIC:
-			std::cout << "topic" << std::endl;
-			break;
-		case PING:
-			std::cout << "ping" << std::endl;
-			break;
-		case NAMES:
-			cmdManager.names(client, cmd, channelManager, clientManager);
-			break;
-		case MODE:
-			std::cout << "mode" << std::endl;
-			break;
-		case PRIVMSG:
-			cmdManager.privmsg(client, cmd, clientManager, channelManager);
-			break;
-		case NOTICE:
-			std::cout << "notice" << std::endl;
-			break;
-		case QUIT:
-			cmdManager.quit(client, cmd, clientManager, channelManager);
-			break;
-		case KICK:
-			cmdManager.kick(client, cmd, clientManager, channelManager);
-			break;
-		case INVITE:
-			cmdManager.invite(client, cmd, clientManager, channelManager);
-			break;
-		case PART:
-			std::cout << "part" << std::endl;
-			break;
-		case UNKNOWN:
-			send_errmsg(client, 421, cmd._cmd_name + " :Unknown command");
-			break;
-		default:
-			break;
-	}
+		cmdManager.exe_cmd(sender, cmds[i]);
 }

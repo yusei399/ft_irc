@@ -43,7 +43,7 @@ static bool require_valid_channel(Client &client, const std::string& channel_nam
 	return true;
 }
 
-void CmdManager::invite(Client& sender, const Command& cmd, ClientManager &clientManager, ChannelManager& channelManager)
+void CmdManager::invite(Client& sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;
 	if (!require_nick_user(sender)) return;

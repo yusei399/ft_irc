@@ -27,15 +27,15 @@ static void send_client_list(Channel ch, const Client &client)
 //NAMES       : 全てのクライアントを表示
 //NAMES #a,#b : #a,#bチャンネルに所属するクライアントを表示
 //オペレーターは名前の先頭に@がつく
-void ChannelManager::names_channel(Client &client, const Command& cmd,  ChannelManager &chm)
+void ChannelManager::names_channel(Client &client, const Command& cmd)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;
 	std::vector<std::string> channels = parse_channels(cmd);
 	for (size_t i = 0; i < channels.size(); i++)
 	{	
-		if (chm.exist_channel(channels[i]))
-			send_client_list(chm.get_channel(channels[i]), client);
+		if (exist_channel(channels[i]))
+			send_client_list(get_channel(channels[i]), client);
       	else
       	  	send_errmsg(client, 403, channels[i] + " :No such channel");
 	}

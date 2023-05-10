@@ -25,7 +25,7 @@ static void names_all_client(const Client &sender, ClientManager&clientManager)
 	send_msg(sender, " :End of /NAMES list");
 }
 
-void CmdManager::names(Client &client, const Command& cmd,  ChannelManager &chm, ClientManager& clientManager)
+void CmdManager::names(Client &client, const Command& cmd)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;
@@ -33,5 +33,5 @@ void CmdManager::names(Client &client, const Command& cmd,  ChannelManager &chm,
 	if (cmd._params.size() == 0)
 		names_all_client(client, clientManager);
 	else
-		chm.names_channel(client, cmd, chm);
+		channelManager.names_channel(client, cmd);
 }

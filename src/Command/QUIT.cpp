@@ -25,7 +25,7 @@ static void send_quit_msg(Client&sender, const Command &cmd, ClientManager &clie
 	}
 }
 
-void CmdManager::quit(Client&client, const Command &cmd, ClientManager &clientManager, ChannelManager& channelManager)
+void CmdManager::quit(Client&client, const Command &cmd)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;
