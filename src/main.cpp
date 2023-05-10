@@ -18,6 +18,7 @@ int main(int argc, char **argv){
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
 	signal(SIGPIPE, SIG_IGN);
+
 	try
 	{
 		if (argc == 3)
