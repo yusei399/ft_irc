@@ -1,5 +1,6 @@
 #include "CmdManager.hpp"
 
+//cmdのパラメーターのサイズがok_size_min以上、ng_size_min未満であることを要求する
 bool CmdManager::require_enough_params(Client &sender, const Command& cmd, size_t ok_size_min, size_t ng_size_min, bool require_trailing)
 {
 	assert(ok_size_min < ng_size_min);

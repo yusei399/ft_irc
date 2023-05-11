@@ -1,16 +1,6 @@
 #include "CmdManager.hpp"
 #include "CheckRegister.hpp"
 
-static bool require_enough_params(Client &client, const Command& cmd)
-{
-	if (cmd._params.size() == 0 || cmd._params.size() > 1)
-	{
-		send_errmsg(client, 461, cmd.get_original_str() + " :Not enough parameters");
-		return false;
-	}
-	return true;
-}
-
 static bool require_valid_nick(Client &client, const std::string & new_nick)
 {
 	if (new_nick.size() > 9)
@@ -30,7 +20,7 @@ static bool require_valid_nick(Client &client, const std::string & new_nick)
 void CmdManager::nick(Client &client, const Command& cmd)
 {
 	if (!require_authed(client)) return;
-	if (!require_enough_params(client, cmd)) return;
+	if (!require_enough_params(client, cmd, 1, 2)) return;
 	std::string new_nick = cmd._params[0];
 	if (!require_valid_nick(client, new_nick)) return;
 	//nickとuserを使わないとpass以外のコマンドが使えない
