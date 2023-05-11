@@ -11,16 +11,6 @@ static bool require_enough_params(Client &client, const Command& cmd)
 	return true;
 }
 
-static bool require_exist_user(Client &client, const std::string& kick_user, ClientManager& clientManager)
-{
-	if (!clientManager.exist_client_by_nick(kick_user))
-	{
-		send_errmsg(client, 401, kick_user + " :No such nick");
-		return false;
-	}
-	return true;
-}
-
 void CmdManager::kick(Client &sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;
@@ -29,7 +19,7 @@ void CmdManager::kick(Client &sender, const Command& cmd)
 	std::string channel_name = cmd._params[0];
 	std::string kick_user_name = cmd._params[1];
 	if (!channelManager.require_exist_channel(sender, channel_name))  return;
-	if (!require_exist_user(sender, kick_user_name, clientManager))  return;
+	if (!clientManager.require_exist_nick(sender, kick_user_name))  return;
 	Channel& channel = channelManager.get_channel(channel_name);
 	Client &ban_user = clientManager.get_client_by_nick(kick_user_name);
 	std::string kick_reason = cmd._params[0];

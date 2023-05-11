@@ -40,6 +40,15 @@ const std::vector<Client> ClientManager::get_connect_clients()
 	return connect_clients;
 }
 
+bool ClientManager::require_exist_nick(Client& sender, const std::string &target_nick)
+{
+	if (!exist_client_by_nick(target_nick))
+	{
+		send_errmsg(sender, 401, target_nick + " :No such nick");
+		return false;
+	}
+	return true;
+}
 
 void ClientManager::erase_client(Client &client)
 {
@@ -49,8 +58,7 @@ void ClientManager::erase_client(Client &client)
 
 void ClientManager::privmsg(Client &sender, const std::string &reciever_name, const std::string& msg)
 {
-	if (exist_client_by_nick(reciever_name))
-		send_msg(get_client_by_nick(reciever_name), ":" + sender.get_nick() +" PRIVMSG "+reciever_name +" :" + msg);
-	else
-		send_errmsg(sender, 401, reciever_name + " :No such nick");
+	if (!require_exist_nick(sender, reciever_name))
+		return;
+	send_msg(get_client_by_nick(reciever_name), ":" + sender.get_nick() +" PRIVMSG "+reciever_name +" :" + msg);
 }

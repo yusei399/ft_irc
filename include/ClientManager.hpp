@@ -22,6 +22,7 @@ public:
 	Client& get_client_by_nick(const std::string &nickname);
 	const std::vector<Client> get_connect_clients();
 	bool exist_client_by_nick(const std::string &nickname);
+	bool require_exist_nick(Client& sender, const std::string &target_nick);
 	void privmsg(Client &sender, const std::string &reciever_name, const std::string& msg);
 	void erase_client(Client &client);
 };

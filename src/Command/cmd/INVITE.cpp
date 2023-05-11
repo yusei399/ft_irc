@@ -23,17 +23,6 @@ static bool require_enough_params(Client &client, const Command& cmd)
 	return true;
 }
 
-static bool require_valid_user(Client &client, const std::string& user, ClientManager& clientManager)
-{
-	if (!clientManager.exist_client_by_nick(user))
-	{
-		send_errmsg(client, 401, user + " :No such nick");
-		return false;
-	}
-	return true;
-}
-
-
 void CmdManager::invite(Client& sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;
@@ -41,7 +30,7 @@ void CmdManager::invite(Client& sender, const Command& cmd)
 	if (!require_enough_params(sender, cmd))	return;
 	std::string target_user_name = cmd._params[0];
 	std::string channel_name = cmd._params[1];
-	if (!require_valid_user(sender, target_user_name, clientManager))return;
+	if (!clientManager.require_exist_nick(sender, target_user_name))return;
 	if (!channelManager.require_exist_channel(sender, channel_name))return;
 	Client& target_user = clientManager.get_client_by_nick(target_user_name);
 	Channel& channel = channelManager.get_channel(channel_name);

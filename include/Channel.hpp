@@ -35,15 +35,18 @@ public:
     void invite(Client &sender, Client& target);
     
     void send_mode_state_i(Client &client);
-    void mode_i(Client &sender, const std::string &flag, bool valid);
-    void mode(Client &sender, const std::string& flag);
+    void mode_i(Client &sender, bool valid);
+    void mode_o(Client &sender, bool valid, Client &target_user);
+    
+    
     
     bool is_member(const Client& target) const;
     bool is_operator(const Client& target) const;
     bool is_invited(const Client& target) const{return invited.find(target) != invited.end();}
     bool is_invited_mode() const{return invited_mode;}
     bool require_operator(Client& sender) const;
-    bool require_member(Client& sender) const;
+    bool require_sender_is_member(Client& sender) const;
+    bool require_target_is_member(Client& sender, Client &target) const;
 
     std::string get_name() const;
     std::string get_password() const{ return password;}

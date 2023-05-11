@@ -48,7 +48,7 @@ void Channel::join(Client& sender, const std::string & pass)
 
 void Channel::broadcast(Client& sender, std::string message) const
 {
-    if (!require_member(sender))return;
+    if (!require_sender_is_member(sender))return;
     for (client_it reciever = members.begin(); reciever != members.end(); ++reciever)
         send_msg(*reciever, message);
 }
@@ -94,8 +94,19 @@ bool Channel::require_operator(Client& sender) const
 	return true;
 }
 
-//コマンドの送信者以外がチャンネルに属さないときのエラーは441なのでこの関数は使えない
-bool Channel::require_member(Client& sender) const
+//コマンドの送信者ではなく、指定したクライアントがメンバーであることを要求する
+bool Channel::require_target_is_member(Client& sender, Client &target) const
+{
+    if (!is_member(target))
+	{
+		send_errmsg(sender, 441, target.get_nick()+ " " +get_name() + " :They aren't on that channel");
+        return false;
+	}
+	return true;
+}
+
+//コマンドの送信者以外がメンバーであることを要求する
+bool Channel::require_sender_is_member(Client& sender) const
 {
     if (!is_member(sender))
 	{
@@ -126,46 +137,35 @@ void Channel::invite(Client &sender, Client& target)
 
 void Channel::send_mode_state_i(Client &client)
 {
+    if (!require_operator(client)) return;
     send_msg(client, "MODE " + get_name() + (invited_mode ? " +i" : " -i"));
 }
 
-void Channel::mode_i(Client &sender, const std::string &flag, bool valid)
-{
-    invited_mode = valid;
-    broadcast(sender , "MODE "+ get_name() +" " + flag + " " + sender.get_nick());    
-}
-
-/*
-401 <nickname> :No such nick/channel
-指定されたニックネームまたはチャンネルが存在しない場合に返されます。
-例：MODE #bar +o bob
-エラーメッセージ：:irc.example.com 401 #bar :No such nick/channel
-442 <channel> :You’re not on that channel
-チャンネルに参加していない場合に返されます。
-例：MODE #foo +o alice
-エラーメッセージ：:irc.example.com 442 #foo :You’re not on that channel
-443 <user> <channel> :is already on channel
-チャンネルにすでに参加しているユーザーを招待しようとした場合に返されます。
-例：MODE #foo +o alice
-エラーメッセージ：:irc.example.com 443 alice #foo :is already on channel
-*/
-
-//sender, targetには sender sets mode +o target
-//その他には alice has been given operator status by sender
-//mode_o
-
-void Channel::mode(Client &sender, const std::string& flag)
+void Channel::mode_i(Client &sender, bool valid)
 {
     if (!require_operator(sender)) return;
-    if (flag == "i")
-        send_mode_state_i(sender);
-	else if (flag == "+i")
-        mode_i(sender, flag, true);
-    else if (flag == "-i")
-        mode_i(sender, flag, false);
-    else
-        send_errmsg(sender, 472, flag+ " :is unknown mode char to me");
+    invited_mode = valid;
+    broadcast(sender , "MODE "+ get_name() +" " + (valid ? "+i" : "-i") + " " + sender.get_nick());    
 }
+
+void Channel::mode_o(Client &sender, bool valid, Client &target)
+{
+    if (!require_operator(sender)) return;
+    if (!require_sender_is_member(sender))return;
+    if (!require_target_is_member(sender, target))return;
+    if (valid)
+    {
+        operators.insert(target);
+        broadcast(sender, sender.get_nick() + " sets mode +o" + target.get_nick());
+    }
+    else
+    {
+        if (operators.count(target))
+            operators.erase(target);
+        broadcast(sender, sender.get_nick() + " sets mode -o" + target.get_nick());    
+    }
+}
+
 
 std::string Channel::get_name() const
 {

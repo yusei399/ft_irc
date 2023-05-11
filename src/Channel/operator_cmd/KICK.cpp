@@ -6,12 +6,8 @@
 static bool require_in_channel(Client &sender, Client& kick_user, Channel& channel)
 {
 	bool ok = true;
-	if (!channel.is_member(kick_user))
-	{
-		send_errmsg(sender, 441, kick_user.get_nick()+ " " +channel.get_name() + " :They aren't on that channel");
-		ok = false;
-	}
-	if (!channel.require_member(sender))ok = false;
+	if (!channel.require_target_is_member(sender, kick_user))ok = false;
+	if (!channel.require_sender_is_member(sender))ok = false;
 	return ok;
 }
 
