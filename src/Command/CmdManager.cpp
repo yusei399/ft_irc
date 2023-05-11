@@ -1,5 +1,20 @@
 #include "CmdManager.hpp"
 
+bool CmdManager::require_enough_params(Client &sender, const Command& cmd, size_t ok_size_min, size_t ng_size_min, bool require_trailing)
+{
+	assert(ok_size_min < ng_size_min);
+	size_t param_size = cmd._params.size();
+	bool ok = true;
+	ok &= ok_size_min <= param_size && param_size < ng_size_min;
+	ok &= require_trailing && cmd._trailing != "";
+	if (!ok)
+	{
+		send_errmsg(sender, 461, cmd.get_original_str() + " :Not enough parameters");	
+		return false;
+	}
+	return true;
+}
+
 std::vector<Command> CmdManager::parse_commands(const std::string &commands_msg)
 {
     std::vector<std::string> cmd_lines = split_lines(commands_msg);
