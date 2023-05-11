@@ -1,10 +1,9 @@
 #include "../include/Server.hpp"
 #include "../include/Client.hpp"
-#include "../include/Command.hpp"
 #include <signal.h>
 
-Server::Server () {}
-Server::Server(int port, std::string &password) : _port(port), _password(password) {}
+Server::Server () : cmdManager(clientManager, channelManager, "") {}
+Server::Server(int port, std::string &password) : _port(port), _password(password), cmdManager(clientManager, channelManager, password) {}
 Server::~Server(){}
 
 void Server::create_soket()
@@ -50,7 +49,7 @@ void Server::allow()
 			else {
 				std::cout << "connection - " << connect_fd << std::endl;
 				this->create_poll(connect_fd);
-				connect_client(connect_fd);
+				clientManager.connect_client(connect_fd);
 			}
 		} while (connect_fd == -1);
 }
@@ -66,45 +65,12 @@ void Server::create_poll(int socket_fd)
 	_pfds.push_back(pollfd);
 }
 
-
-std::map<int, Client>& Server::get_user()
-{
-	return (this->_user);
-}
-
-int Server::search(const std::string &str, const std::string &target)
-{
-	for (size_t i = 0; i < str.size(); i++)
-	{
-		size_t j = 0;
-		if (str[i] == target[0])
-		{
-			while (str[i] && target[j] && str[i] == target[j])
-				i++, j++;
-			if (j == target.size())
-				return i - (target.size() - 1);
-		}
-	}
-	return -1;
-}
-
-void Server::connect_client(int socketfd)
-{
-	const std::string nick = "unknown" + std::to_string(socketfd);
-	Client client(socketfd, nick);
-	_connect[socketfd] = client;
-}
-
-void Server::chat_in(int fd)
+static std::string recieve_msg(Client &client)
 {
 	char buff[MSG_LEN];
 	ssize_t	 byte;
-	std::cout << "fd : " << fd << std::endl;
-	std::cout << "buff :" << buff << std::endl;
-	std::cout << "sizeof buff : " << sizeof(buff) << std::endl;
-
 	std::memset(buff, 0, sizeof(buff));
-	if ((byte = recv(fd, buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
+	if ((byte = recv(client.get_fd(), buff, sizeof(buff), 0)) < 0 || (byte > MSG_LEN))
 	{
 		if (byte < 0)
 		{
@@ -113,33 +79,12 @@ void Server::chat_in(int fd)
 		}
 		else if (byte > MSG_LEN)
 			throw std::exception();
-		// else if (byte == 0)
-		// quitの処理後で追記する
-	}
-	else
-	{
-		Client &client = _connect[fd];
-		std::cout << "-------------Client Message----------------" << std::endl;
-		std::cout << "client fd:" << fd << std::endl;
-		std::cout << "client message:" << buff << std::endl;
-		std::cout << "---------------------------------------------" << std::endl;
-
-		size_t i = 0;
-		while (search(&buff[i], "\r\n") != -1)
+		else
 		{
-			std::cout << "in search" << std::endl;
-			size_t len = 0;
-			std::string command;
-			for (; buff[i] != '\r' && buff[i] != '\n'; i++)
-				len++;
-			command.append(&buff[i - len], len + 2);
-			client.command_parser(command);
-			this->do_buildin(fd);
-			std::cout << "command finish" << std::endl;
-			i += 2;
+			throw std::exception();
 		}
-		std::cout << "message finish" << std::endl;
 	}
+	return std::string(buff);
 }
 
 void Server::start()
@@ -156,47 +101,16 @@ void Server::start()
 			if (_pfds[i].revents == 0)
 				continue;
 			if (_pfds[i].revents == POLLIN)
-				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(_pfds[i].fd);
+				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(clientManager.get_client_by_fd(_pfds[i].fd));
 		}
 	}
 }
 
-void Server::do_buildin(int fd)
+
+//todo コマンドが複数に分割されている場合
+void Server::chat_in(Client &sender)
 {
-	Client &connect_client = _connect[fd];
-	const std::string &command = connect_client.get_cmd();
-	const std::vector<std::string> &param = connect_client.get_params();
-
-
-	if (command == "CAP")
-		std ::cout << "CAP" << std::endl;
-	else if (command == "PASS")
-		pass(connect_client, _password);
-	else if (command == "NICK")
-		std ::cout << "NICK" << std::endl;
-	else if (command == "USER")
-		user(connect_client);
-	else if (command == "JOIN")
-		std ::cout << "JOIN" << std::endl;
-	else if (command == "TOPIC")
-		std ::cout << "TOPIC" << std::endl;
-	else if (command == "PING")
-		std ::cout << "PING" << std::endl;
-	else if (command == "NAMES")
-		std ::cout << "NAMES" << std::endl;
-	else if (command == "MODE")
-		std ::cout << "MODE" << std::endl;
-	else if (command == "PRIVMSG")
-		std	::cout << "PRIVMSG" << std::endl;
-	else if (command == "NOTICE")
-		std ::cout << "NOTICE" << std::endl;
-	else if (command == "QUIT")
-		std ::cout << "QUIT" << std::endl;
-	else if (command == "KICK")
-		std ::cout << "KICK" << std::endl;
-	else if (command == "INVITE")
-		std ::cout << "INVITE" << std::endl;
-	else if (command == "PART")
-		std ::cout << "PART" << std::endl;
-	
+	std::vector<Command> cmds = cmdManager.parse_commands(recieve_msg(sender));
+	for(size_t i = 0; i < cmds.size(); i++)
+		cmdManager.exe_cmd(sender, cmds[i]);
 }

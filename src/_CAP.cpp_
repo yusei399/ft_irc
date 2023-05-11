@@ -1,4 +1,4 @@
-#include "../include/Command.hpp"
+#include "../include/CommandList.hpp"
 #include "../include/Client.hpp"
 
 void cap(Client &client)
@@ -6,7 +6,7 @@ void cap(Client &client)
 	int const &fd = client.get_client_fd();
 
 	std::string const &nick = client.get_nick();
-
+	
 	if (client.get_params().size() == 1)
 		send_message("461 " + nick + " :Not enough parameters", fd, 0);
 	

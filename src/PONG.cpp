@@ -1,9 +1,13 @@
-
-#include "../include/Command.hpp"
-#include "../include/Client.hpp"
-
+#include "CommandList.hpp"
+#include "Client.hpp"
+#include "ChannelManager.hpp"
 
 void PONG(Client &client, std::vector<std::string> &server_name)
+{
+	(void)client;
+	(void)server_name;
+}
+/*
 {
 	int const &fd = client.get_client_fd();
 	std::string const &nick = client.get_nick();
@@ -20,4 +24,4 @@ void PONG(Client &client, std::vector<std::string> &server_name)
 		std::string message = "PONG " + server_name[0] + " " + server;
 		send_message(message, fd, 0);
 	}
-}
+}*/

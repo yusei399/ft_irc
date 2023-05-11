@@ -1,5 +1,9 @@
 #include "../include/Server.hpp"
 #include <signal.h>
+#include "../include/StringExtend.hpp"
+#include "../include/Client.hpp"
+#include "../include/Channel.hpp"
+#include "../include/ChannelManager.hpp"
 
 
 void signal_handler(int signal)
@@ -8,7 +12,8 @@ void signal_handler(int signal)
 	exit(signal);
 }
 
-Server *server;
+//Server *server;
+
 int main(int argc, char **argv){
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
@@ -18,11 +23,10 @@ int main(int argc, char **argv){
 	{
 		if (argc == 3)
 		{
+			//todo portが数字でない時
 			int port = atoi(argv[1]);
 			std::string password(argv[2]);
-			Server Irc(port, password);
-			server = &Irc;
-			Irc.start();
+			Server(port, password).start();
 		}
 		else
 			std::cerr << "arg error" << std::endl;
@@ -32,3 +36,9 @@ int main(int argc, char **argv){
 		std::cerr << e.what() << '\n';
 	}
 }
+// PASS 1234
+// NICK b
+// USER a b c :d
+// NAMES
+//INVITE c #aa
+// MODE #a i

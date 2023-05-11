@@ -6,25 +6,56 @@
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <set>
 #include "Client.hpp"
+#include "ostreamExtend.hpp"
+#include "Message.hpp"
+
+typedef std::set<Client>::iterator client_it;
 
 class Channel
 {
 private:
-    std::vector<Channel> channels; // IRCサーバーが持つチャンネルのリスト
     std::string name; // チャンネル名
-    std::map<int, Client> users; // チャンネルに参加しているユーザーのリスト 
-
+    std::string password; // パスワード
+    std::set<Client> members;// チャンネルに参加しているユーザーのリスト 
+    std::set<Client> operators;//オペレーター権限を持ったユーザーのリスト
+    std::set<Client> invited; //招待されたユーザーのリスト
+    bool invited_mode;//招待されていないとJOINできないか
 public:
-    Channel();
-	Channel(const std::map<int, Client> &initial_users);
-    ~Channel();
+    Channel(const std::string &name, const Client& client, const std::string &pwd);
+    void part(Client& target);
+    void join(Client& sender, const std::string & pass = "");
+    void broadcast(Client& sender, std::string message) const;
+    void privmsg(Client& sender, std::string message) const;
+    bool correct_pass(const std::string& pass);
+	void quit(const Client &target,  const std::string &quit_msg);
+    //オペレーターコマンド
+    void kick(Client &sender, Client& target, const std::string & kick_reason);
+    void invite(Client &sender, Client& target);
+    
+    void send_mode_state_i(Client &client);
+    void mode_i(Client &sender, bool valid);
+    void mode_o(Client &sender, bool valid, Client &target_user);
+    
+    
+    
+    bool is_member(const Client& target) const;
+    bool is_operator(const Client& target) const;
+    bool is_invited(const Client& target) const{return invited.find(target) != invited.end();}
+    bool is_invited_mode() const{return invited_mode;}
+    bool require_operator(Client& sender) const;
+    bool require_sender_is_member(Client& sender) const;
+    bool require_target_is_member(Client& sender, Client &target) const;
 
-    void createChannel(std::string channelName);
-    void joinChannel(std::string channelName, int client_fd, const Client &client);
-    void leaveChannel(std::string channelName, int client_fd);
-    void sendMessage(std::string channelName, int client_fd, std::string message);
+    std::string get_name() const;
+    std::string get_password() const{ return password;}
+    const std::set<Client>& get_members() const;
+    const std::set<Client>& get_operators() const;
+    bool operator<(const Channel& rhs) const;
 };
+
+std::ostream& operator<<(std::ostream& os, const Channel& channel);
 
 #endif
 
