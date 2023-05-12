@@ -1,4 +1,4 @@
-NAME = irs_server
+NAME = ircserv 
 
 CXX = c++
 
