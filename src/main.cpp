@@ -37,7 +37,7 @@ int main(int argc, char **argv){
 	}
 }
 // PASS 1234
-// NICK b
+// NICK c
 // USER a b c :d
 // NAMES
 //INVITE c #aa

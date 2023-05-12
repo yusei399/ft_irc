@@ -31,6 +31,7 @@ public:
     void join(Client& sender, const std::string & pass = "");
     void broadcast(Client& sender, std::string message) const;
     void privmsg(Client& sender, std::string message) const;
+    void names(const Client& sender) const;
     bool correct_pass(const std::string& pass);
 	void quit(const Client &target,  const std::string &quit_msg);
     //オペレーターコマンド
@@ -50,7 +51,7 @@ public:
     bool is_invited(const Client& target) const{return invited.find(target) != invited.end();}
     bool is_invited_mode() const{return invited_mode;}
     bool require_operator(Client& sender) const;
-    bool require_sender_is_member(Client& sender) const;
+    bool require_sender_is_member(const Client& sender) const;
     bool require_target_is_member(Client& sender, Client &target) const;
 
     std::string get_name() const;

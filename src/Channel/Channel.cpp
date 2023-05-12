@@ -10,6 +10,7 @@ Channel::Channel(const std::string &name,const  Client& client, const std::strin
     members.insert(client);
     operators.insert(client);
     send_msg(client, get_prl_topic_msg());
+    names(client);
 }
 
 // チャンネルから離脱する
@@ -46,7 +47,7 @@ void Channel::join(Client& sender, const std::string & pass)
     }
     members.insert(sender);
     send_msg(sender, get_prl_topic_msg());
-   // names();
+    names(sender);
 }
 
 void Channel::broadcast(Client& sender, std::string message) const
@@ -61,6 +62,32 @@ void Channel::privmsg(Client& sender, std::string message) const
 {
     broadcast(sender,  ":" + sender.get_nick() +" PRIVMSG " + get_name()+ " :"+message);
 }
+
+
+
+
+static std::string get_names_str(const Channel &ch, const Client &client)
+{
+	std::string msg = ch.get_name() + " :";
+	for(std::set<Client>::iterator cl_it = ch.get_members().begin(); cl_it != ch.get_members().end(); cl_it++)
+	{
+		if (cl_it != ch.get_members().begin())
+			msg += " ";
+		if (ch.is_operator(*cl_it))
+			msg+="@";
+		msg += cl_it->get_nick();
+	}
+	return msg;
+}
+
+void Channel::names(const Client& sender) const
+{
+    if (!require_sender_is_member(sender))return;
+    send_msg(sender, get_names_str(*this, sender));
+	send_msg(sender, get_name()+ " :End of /NAMES list");
+}
+
+
 
 void Channel::quit(const Client &target, const std::string &quit_msg)
 {
@@ -109,7 +136,7 @@ bool Channel::require_target_is_member(Client& sender, Client &target) const
 }
 
 //コマンドの送信者以外がメンバーであることを要求する
-bool Channel::require_sender_is_member(Client& sender) const
+bool Channel::require_sender_is_member(const Client& sender) const
 {
     if (!is_member(sender))
 	{
