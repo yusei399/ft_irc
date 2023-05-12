@@ -21,6 +21,9 @@ const std::string MODE_I_REM = "-i";
 const std::string MODE_I = "i";
 const std::string MODE_O_ADD = "+o";
 const std::string MODE_O_REM = "-o";
+const std::string MODE_T = "t";
+const std::string MODE_T_ADD = "+t";
+const std::string MODE_T_REM = "-t";
 
 std::string get_flag(const Command&cmd)
 {
@@ -38,6 +41,12 @@ bool is_mode_o(const Command&cmd)
 {
 	std::string flag = get_flag(cmd);
 	return flag == MODE_O_ADD || flag == MODE_O_REM;
+}
+
+bool is_mode_t(const Command&cmd)
+{
+	std::string flag = get_flag(cmd);
+	return flag == MODE_T_ADD || flag == MODE_T_REM || flag == MODE_T;
 }
 
 

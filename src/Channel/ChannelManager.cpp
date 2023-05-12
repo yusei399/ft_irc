@@ -45,7 +45,7 @@ bool ChannelManager::require_valid_channel_name(Client &client, const std::strin
 {
 	if (channel_name == "" || channel_name[0] != '#' || channel_name == "#")
 	{
-        send_errmsg(client, 403, channel_name + " :No such channel");
+        send_numeric_msg(client, 403, channel_name + " :No such channel");
 		return false;
 	}
 	return true;
@@ -55,11 +55,14 @@ bool ChannelManager::require_exist_channel(Client &client, const std::string & c
 {
 	if (!exist_channel(channel_name))
 	{
-        send_errmsg(client, 403, channel_name + " :No such channel");
+        send_numeric_msg(client, 403, channel_name + " :No such channel");
 		return false;
 	}
 	return true;
 }
+
+//todo
+//参加時トピックと、namesを表示
 void ChannelManager::join(Client &client, const std::vector<std::string> &ch_names, const std::vector<std::string> &ch_pass)
 {
 	for(size_t i = 0; i < ch_names.size(); i++)
@@ -72,6 +75,7 @@ void ChannelManager::join(Client &client, const std::vector<std::string> &ch_nam
 		    channels.insert(Channel(ch_names[i], client, ch_pass[i]));
 	}
 }
+
 //チャンネルから離脱する
 //存在しないチャンネルが指定された場合 403エラー
 void ChannelManager::try_part(std::string channelName, Client& client)

@@ -22,7 +22,10 @@ private:
     std::set<Client> operators;//オペレーター権限を持ったユーザーのリスト
     std::set<Client> invited; //招待されたユーザーのリスト
     bool invited_mode;//招待されていないとJOINできないか
+    std::string topic_msg;
+    bool topic_restricted;//trueならオペレーターだけがトピックを変えられる
 public:
+    std::string get_topic();
     Channel(const std::string &name, const Client& client, const std::string &pwd);
     void part(Client& target);
     void join(Client& sender, const std::string & pass = "");
@@ -33,12 +36,14 @@ public:
     //オペレーターコマンド
     void kick(Client &sender, Client& target, const std::string & kick_reason);
     void invite(Client &sender, Client& target);
-    
-    void send_mode_state_i(Client &client);
+    void mode_i_state(Client &client);
     void mode_i(Client &sender, bool valid);
-    void mode_o(Client &sender, bool valid, Client &target_user);
-    
-    
+    void mode_o(Client &sender, bool valid, Client &target);
+    void mode_t_state(Client &sender);
+    void mode_t(Client &sender, bool valid);
+    std::string get_prl_topic_msg();
+    void set_topic(Client &sender, const std::string &topic_msg);    
+    void show_topic(Client &sender);
     
     bool is_member(const Client& target) const;
     bool is_operator(const Client& target) const;

@@ -16,7 +16,7 @@ bool require_nick_user(Client &client)
 {
 	if (!client.user_seted || !client.nickname_seted)
 	{
-		send_errmsg(client, 451, "You have not registered");
+		send_numeric_msg(client, 451, "You have not registered");
 		return false;
 	}
 	return true;

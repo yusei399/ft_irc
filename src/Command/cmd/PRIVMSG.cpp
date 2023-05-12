@@ -5,17 +5,17 @@ static bool require_valid_param(const Client &client, const Command &cmd)
 	bool is_ok = true;
 	if (cmd._params.size() == 0)
 	{
-		send_errmsg(client, 411, ":No recipient given (" + cmd.get_original_str()+ ")");
+		send_numeric_msg(client, 411, ":No recipient given (" + cmd.get_original_str()+ ")");
 		is_ok = false;
 	}
 	else if (cmd._params.size() > 1)
 	{
-		send_errmsg(client, 461, cmd.get_original_str() + " :Not enough parameters");
+		send_numeric_msg(client, 461, cmd.get_original_str() + " :Not enough parameters");
 		is_ok = false;
 	}
-	if (cmd._trailing == "")
+	if (!cmd.has_trailing())
 	{
-		send_errmsg(client, 412, ":No text to send");
+		send_numeric_msg(client, 412, ":No text to send");
 		is_ok = false;	
 	}
 	return is_ok;

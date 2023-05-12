@@ -41,7 +41,14 @@ Command::Command(const std::string& cmd) : _original_string(cmd)
 {
     size_t trailing_begin = cmd.find(":");
     if (trailing_begin == std::string::npos)
+    {
+        _has_trailing = false;
         trailing_begin = cmd.size();
+    }
+    else
+    {
+        _has_trailing = true;
+    }
     std::vector<std::string> prefix_trailing = split(cmd.substr(0, trailing_begin), std::vector<std::string>(1, " "));
     _cmd_name = prefix_trailing[0];
     _params = std::vector<std::string>(prefix_trailing.begin() + 1, prefix_trailing.end());

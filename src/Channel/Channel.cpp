@@ -3,12 +3,13 @@
 #include "CheckRegister.hpp"
 
 Channel::Channel(const std::string &name,const  Client& client, const std::string &pwd)
-    :name(name), password(pwd), invited_mode(false)
+    :name(name), password(pwd), invited_mode(false), topic_msg(""), topic_restricted(false)
 {
     //todo
     //新しくチャンネルを作った時のメッセージがあってもいい
     members.insert(client);
     operators.insert(client);
+    send_msg(client, get_prl_topic_msg());
 }
 
 // チャンネルから離脱する
@@ -25,7 +26,7 @@ static bool require_invited_conditions(Client &client, Channel& channel)
 {
     if (channel.is_invited_mode() && !channel.is_invited(client))
 	{
-		send_errmsg(client, 473, channel.get_name() + " :Cannot join channel (+i)");
+		send_numeric_msg(client, 473, channel.get_name() + " :Cannot join channel (+i)");
 		return false;
 	}
 	return true;
@@ -40,10 +41,12 @@ void Channel::join(Client& sender, const std::string & pass)
         return;
     if (!correct_pass(pass))
     {
-        send_errmsg(sender, 475, get_name()+ " :Cannot join channel (+k)");
+        send_numeric_msg(sender, 475, get_name()+ " :Cannot join channel (+k)");
         return;
     }
     members.insert(sender);
+    send_msg(sender, get_prl_topic_msg());
+   // names();
 }
 
 void Channel::broadcast(Client& sender, std::string message) const
@@ -88,7 +91,7 @@ bool Channel::require_operator(Client& sender) const
 {
 	if (!is_operator(sender))
 	{
-		send_errmsg(sender, 482, get_name()+ " :You're not channel operator");
+		send_numeric_msg(sender, 482, get_name()+ " :You're not channel operator");
 		return false;
 	}
 	return true;
@@ -99,7 +102,7 @@ bool Channel::require_target_is_member(Client& sender, Client &target) const
 {
     if (!is_member(target))
 	{
-		send_errmsg(sender, 441, target.get_nick()+ " " +get_name() + " :They aren't on that channel");
+		send_numeric_msg(sender, 441, target.get_nick()+ " " +get_name() + " :They aren't on that channel");
         return false;
 	}
 	return true;
@@ -110,7 +113,7 @@ bool Channel::require_sender_is_member(Client& sender) const
 {
     if (!is_member(sender))
 	{
-		send_errmsg(sender, 442, get_name() + " :You're not on that channel");
+		send_numeric_msg(sender, 442, get_name() + " :You're not on that channel");
         return false;
 	}
     return true;
@@ -121,7 +124,7 @@ static bool require_not_member(Client& sender, Client& target, Channel& channel)
 {
 	if (channel.is_member(target))
 	{
-		send_errmsg(sender, 443, target.get_nick()+ " "+channel.get_name() +" :is already on channel");
+		send_numeric_msg(sender, 443, target.get_nick()+ " "+channel.get_name() +" :is already on channel");
 		return false;
 	}
 	return true;
@@ -135,9 +138,9 @@ void Channel::invite(Client &sender, Client& target)
 	send_msg(target, sender.get_nick() + " invites you to join " + get_name());
 }
 
-void Channel::send_mode_state_i(Client &client)
+void Channel::mode_i_state(Client &client)
 {
-    if (!require_operator(client)) return;
+    if (!require_sender_is_member(client))return;
     send_msg(client, "MODE " + get_name() + (invited_mode ? " +i" : " -i"));
 }
 
@@ -166,7 +169,49 @@ void Channel::mode_o(Client &sender, bool valid, Client &target)
     }
 }
 
+std::string Channel::get_topic()
+{
+    if (topic_msg == "")
+        return "No topic is set.";
+    else
+        return topic_msg;
+}
 
+void Channel::mode_t_state(Client &sender)
+{
+    if (!require_sender_is_member(sender))return;
+   send_numeric_msg(sender, 332, get_name() + " :" + get_topic());
+}
+
+void Channel::mode_t(Client &sender, bool valid)
+{
+    if (!require_operator(sender)) return;
+    topic_restricted = valid;
+    broadcast(sender , "MODE "+ get_name() +" " + (valid ? "+t" : "-t") + " " + sender.get_nick());       
+}
+
+std::string Channel::get_prl_topic_msg()
+{
+    std::string msg_base = get_name()+ " :" + get_topic();
+    if (this->topic_msg == "")
+        return  "331 " + msg_base;
+    else
+        return  "332 " + msg_base;
+}
+
+void Channel::set_topic(Client &sender, const std::string &topic_msg)
+{
+    if (topic_restricted && !require_operator(sender)) return;
+    this->topic_msg = topic_msg;
+    broadcast(sender,get_prl_topic_msg());
+}
+
+void Channel::show_topic(Client &sender)
+{
+    if (!require_sender_is_member(sender)) return;
+    send_msg(sender, get_prl_topic_msg());
+}
+    
 std::string Channel::get_name() const
 {
     return name;

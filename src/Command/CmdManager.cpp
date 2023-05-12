@@ -8,10 +8,10 @@ bool CmdManager::require_enough_params(Client &sender, const Command& cmd, size_
 	bool ok = true;
 	ok &= ok_size_min <= param_size && param_size < ng_size_min;
 	if (require_trailing)
-		ok &=  cmd._trailing != "";
+		ok &=  cmd.has_trailing();
 	if (!ok)
 	{
-		send_errmsg(sender, 461, cmd.get_original_str() + " :Not enough parameters");	
+		send_numeric_msg(sender, 461, cmd.get_original_str() + " :Not enough parameters");	
 		return false;
 	}
 	return true;
@@ -47,7 +47,7 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 			join(sender, cmd);
 			break;
 		case TOPIC:
-			std::cout << "topic" << std::endl;
+			topic(sender, cmd);
 			break;
 		case PING:
 			std::cout << "ping" << std::endl;
@@ -77,7 +77,7 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 			std::cout << "part" << std::endl;
 			break;
 		case UNKNOWN:
-			send_errmsg(sender, 421, cmd._cmd_name + " :Unknown command");
+			send_numeric_msg(sender, 421, cmd._cmd_name + " :Unknown command");
 			break;
 		default:
 			break;

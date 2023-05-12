@@ -4,7 +4,7 @@ static bool require_yet_set_user(Client &client)
 {
 	if (client.user_seted)
 	{
-		send_errmsg(client,462, ":You may not reregister");
+		send_numeric_msg(client,462, ":You may not reregister");
 		return false;
 	}
 	return true;

@@ -8,7 +8,7 @@ static bool require_valid_cmd(Client &client, const Command&cmd)
 {
 	if (cmd._params.size() > 1)
 	{
-		send_errmsg(client, 461, cmd.get_original_str() + " :Not enough parameters");
+		send_numeric_msg(client, 461, cmd.get_original_str() + " :Not enough parameters");
 		return false;
 	}
 	return true;
