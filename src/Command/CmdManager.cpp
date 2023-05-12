@@ -7,7 +7,8 @@ bool CmdManager::require_enough_params(Client &sender, const Command& cmd, size_
 	size_t param_size = cmd._params.size();
 	bool ok = true;
 	ok &= ok_size_min <= param_size && param_size < ng_size_min;
-	ok &= require_trailing && cmd._trailing != "";
+	if (require_trailing)
+		ok &=  cmd._trailing != "";
 	if (!ok)
 	{
 		send_errmsg(sender, 461, cmd.get_original_str() + " :Not enough parameters");	
@@ -18,6 +19,7 @@ bool CmdManager::require_enough_params(Client &sender, const Command& cmd, size_
 
 std::vector<Command> CmdManager::parse_commands(const std::string &commands_msg)
 {
+	//std::cout<< 
     std::vector<std::string> cmd_lines = split_lines(commands_msg);
     std::vector<Command> cmds;
     for(size_t i = 0; i < cmd_lines.size(); i++)
