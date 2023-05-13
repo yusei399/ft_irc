@@ -29,19 +29,23 @@ class Server
 private:
 	ChannelManager channelManager;
 	ClientManager clientManager;
-	CmdManager cmdManager;
 	int _port;
 	std::string	_password;
 	int _socket_fd;
 	std::vector<struct pollfd>		_pfds;
 	void create_poll(int socket_fd);
-	public:
+	void signal_handler(int signal);
+	void set_signal();
+public:
+	CmdManager cmdManager;
 	Server();
 	Server(int port, std::string &password);
 	~Server();
+	void close_all_fd();
 	void create_soket();
 	void connect_client(int socketfd);
 	void recieve_cmd(Client &client);
+	void poll_loop();
 	void start();
 	void allow();
 	void build_in(Client &sender, const Command &cmd);

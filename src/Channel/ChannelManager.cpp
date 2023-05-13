@@ -40,10 +40,14 @@ const std::set<Channel> ChannelManager::get_belong_channels(const Client &client
 	return belongs;
 }*/
 
+bool ChannelManager::is_valid_channel_name(const std::string & channel_name)
+{
+	return !(channel_name == "" || channel_name[0] != '#' || channel_name == "#");
+}
 
 bool ChannelManager::require_valid_channel_name(Client &client, const std::string & channel_name)
 {
-	if (channel_name == "" || channel_name[0] != '#' || channel_name == "#")
+	if (!(is_valid_channel_name(channel_name)))
 	{
         send_numeric_msg(client, 403, channel_name + " :No such channel");
 		return false;
@@ -83,4 +87,14 @@ void ChannelManager::try_part(std::string channelName, Client& client)
 	if (!require_exist_channel(client, channelName))
 		return;
 	get_channel(channelName).part(client);
+}
+
+void ChannelManager::part_list(Client &sender, std::vector<std::string> &ch_names)
+{
+	for(size_t i = 0; i < ch_names.size(); i++)
+	{
+		if (!require_exist_channel(sender, ch_names[i]))
+			continue;
+		get_channel(ch_names[i]).part(sender);
+	}
 }

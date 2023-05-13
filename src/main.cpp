@@ -6,27 +6,34 @@
 #include "../include/ChannelManager.hpp"
 
 
+Server *server;
+
 void signal_handler(int signal)
 {
+	server->close_all_fd();
 	std::cout << " exit " << std::endl;
 	exit(signal);
 }
 
-//Server *server;
 
 int main(int argc, char **argv){
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
 	signal(SIGPIPE, SIG_IGN);
-
 	try
 	{
 		if (argc == 3)
 		{
 			//todo portが数字でない時
 			int port = atoi(argv[1]);
+			if (port < 1024 || port > 65565) {
+				std::cerr << "invalid port num" << std::endl;
+				return 1;
+			}
 			std::string password(argv[2]);
-			Server(port, password).start();
+			Server serv(port, password);
+			server = &serv;
+			serv.start();
 		}
 		else
 			std::cerr << "arg error" << std::endl;
@@ -36,9 +43,9 @@ int main(int argc, char **argv){
 		std::cerr << e.what() << '\n';
 	}
 }
-//PASS 1234
-//NICK a
-//USER a b c :d
+// PASS 1234
+// NICK b
+// USER a b c :d
 // NAMES
 //INVITE c #aa
 // MODE #a i

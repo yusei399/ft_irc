@@ -15,7 +15,8 @@ Channel::Channel(const std::string &name,const  Client& client, const std::strin
 
 // チャンネルから離脱する
 void Channel::part(Client& target) {
-    members.erase(target);
+    if (!require_sender_is_member(target))return;
+    members.erase(target);  
     if (is_operator(target))
     {
         operators.erase(target);

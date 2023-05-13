@@ -23,4 +23,5 @@ void CmdManager::quit(Client&client, const Command &cmd)
 	send_quit_msg(client, cmd, clientManager);
 	channelManager.quit_all_channel(client, cmd._trailing);
 	clientManager.erase_client(client);
+	close(client.get_fd());
 }

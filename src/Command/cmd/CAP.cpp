@@ -36,7 +36,7 @@ void CmdManager::cap(Client &sender, const Command&cmd)
 	std::string sub_cmd = cmd._params[0];
 	if (sub_cmd == "LS")
 	{
-		send_msg(sender, ":ft_irc CAP * LS\r\n");
+		send_msg(sender, "CAP * LS\r\n");
 		//send_message("CAP " + nick + " LS :multi-prefix sasl", fd, 0);
 	}
 	/*else if (sub_cmd == "REQ")
@@ -59,5 +59,10 @@ void CmdManager::cap(Client &sender, const Command&cmd)
 		}
 	}*/
 	else if (sub_cmd == "END")
-		send_msg(sender, "authenticated!");
+	{
+		if (sender.is_authed())
+			send_msg(sender, "authenticated!");
+		else
+			send_msg(sender, "fail authenticate");
+	}
 }

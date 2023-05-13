@@ -19,6 +19,7 @@ void CmdManager::user(Client &client, const Command&cmd)
 	client.set_user_info(cmd._params[0], cmd._params[1], cmd._params[2], cmd._trailing);
 	//nickとuserを使わないとpass以外のコマンドが使えない
 	if (!client.user_seted && client.nickname_seted)
-		send_msg(client, "001 :Welcome to the Internet Relay Network " + client.get_nick());
+		send_msg(client, "001 "+client.get_nick() + " :Welcome to the Internet Relay Network " + client.get_nick());
+		//send_msg(client, "001 :Welcome to the Internet Relay Network " + client.get_nick());
 	client.user_seted = true;
 }

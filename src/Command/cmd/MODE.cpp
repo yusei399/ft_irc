@@ -99,7 +99,8 @@ void CmdManager::mode(Client &sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;
 	if (!require_nick_user(sender)) return;
-	if (!require_enough_params(sender, cmd, 2, 6))	return;
+	if (!require_enough_params(sender, cmd, 2))	return;
+	if (!channelManager.is_valid_channel_name(cmd._params[0])) return;
 	if (is_mode_i(cmd))
 		mode_i(sender, cmd);
     else if (is_mode_o(cmd))
