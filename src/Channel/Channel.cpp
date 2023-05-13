@@ -216,7 +216,16 @@ void Channel::mode_t(Client &sender, bool valid)
     topic_restricted = valid;
     broadcast(sender , "MODE "+ get_name() +" " + (valid ? "+t" : "-t") + " " + sender.get_nick());       
 }
+void Channel::mode_k_state(Client &sender)
+{
 
+}
+
+void Channel::mode_k_rem(Client &sender)
+{
+
+}
+    
 std::string Channel::get_prl_topic_msg()
 {
     std::string msg_base = get_name()+ " :" + get_topic();

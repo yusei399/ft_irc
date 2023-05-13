@@ -42,6 +42,8 @@ public:
     void mode_o(Client &sender, bool valid, Client &target);
     void mode_t_state(Client &sender);
     void mode_t(Client &sender, bool valid);
+    void mode_k_state(Client &sender);
+    void mode_k_rem(Client &sender);
     std::string get_prl_topic_msg();
     void set_topic(Client &sender, const std::string &topic_msg);    
     void show_topic(Client &sender);
