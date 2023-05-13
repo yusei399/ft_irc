@@ -32,6 +32,7 @@ static bool require_correct_pass(Client &client, const std::string & pass, const
 	}
 	return true;
 }
+
 // PASS <server_password> : サーバーのパスワード認証を行う。
 //							認証が行われていないとnick, user以外のコマンドが使えない
 void CmdManager::pass(Client &client, const Command& cmd)

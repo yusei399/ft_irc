@@ -19,7 +19,6 @@ bool CmdManager::require_enough_params(Client &sender, const Command& cmd, size_
 
 std::vector<Command> CmdManager::parse_commands(const std::string &commands_msg)
 {
-	//std::cout<< 
     std::vector<std::string> cmd_lines = split_lines(commands_msg);
     std::vector<Command> cmds;
     for(size_t i = 0; i < cmd_lines.size(); i++)
@@ -50,7 +49,7 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 			topic(sender, cmd);
 			break;
 		case PING:
-			std::cout << "ping" << std::endl;
+			ping(sender, cmd);
 			break;
 		case NAMES:
 			names(sender, cmd);
@@ -61,9 +60,9 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 		case PRIVMSG:
 			privmsg(sender, cmd);
 			break;
-		case NOTICE:
+		/*case NOTICE:
 			std::cout << "notice" << std::endl;
-			break;
+			break;*/
 		case QUIT:
 			quit(sender, cmd);
 			break;
@@ -73,9 +72,9 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 		case INVITE:
 			invite(sender, cmd);
 			break;
-		case PART:
+		/*case PART:
 			std::cout << "part" << std::endl;
-			break;
+			break;*/
 		case UNKNOWN:
 			send_numeric_msg(sender, 421, cmd._cmd_name + " :Unknown command");
 			break;

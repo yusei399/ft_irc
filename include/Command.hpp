@@ -17,7 +17,7 @@
 #include <stdexcept>
 #include "StringExtend.hpp"
 
-enum CmdType { CAP, PASS, NICK, USER, JOIN, TOPIC, PING, NAMES, MODE, PRIVMSG, NOTICE, QUIT, KICK, INVITE, PART, UNKNOWN};
+enum CmdType { CAP, PASS, NICK, USER, JOIN, TOPIC, PING, NAMES, MODE, PRIVMSG, /*NOTICE,*/ QUIT, KICK, INVITE, /*PART,*/ UNKNOWN};
 
 //COMMAND [PARAMETER1] [PARAMETER2] ... [:TRAILING]
 //trailingはスペースを含む

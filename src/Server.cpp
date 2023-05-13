@@ -84,7 +84,9 @@ static std::string recieve_msg(Client &client)
 			throw std::exception();
 		}
 	}
-	return std::string(buff);
+	std::string res = std::string(buff);
+	std::cout << "recieve : \n"<<  res<< "\n\n"<< std::endl;
+	return res;
 }
 
 void Server::start()

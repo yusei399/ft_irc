@@ -1,17 +1,6 @@
 
 #include "CmdManager.hpp"
 
-static bool require_valid_cmd(Client &client, const Command&cmd)
-{
-	if (cmd._params.size() > 1)
-	{
-		send_numeric_msg(client, 461, cmd.get_original_str() + " :Not enough parameters");
-		return false;
-	}
-	return true;
-}
-
-
 static void names_all_client(const Client &sender, ClientManager&clientManager)
 {
 	std::string msg;
@@ -26,7 +15,7 @@ void CmdManager::names(Client &client, const Command& cmd)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;
-	if (!require_valid_cmd(client, cmd)) return;
+	if (!require_enough_params(client, cmd, 0, 2)) return;
 	if (cmd._params.size() == 0)
 		names_all_client(client, clientManager);
 	else

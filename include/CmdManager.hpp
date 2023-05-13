@@ -34,6 +34,7 @@ public:
 	void kick(Client &client, const Command& cmd);
 	void invite(Client& sender, const Command& cmd);
 	void topic(Client& sender, const Command& cmd);
+	void ping(Client &sender, const Command& cmd);
 };
 
 #endif // CMD_MANAGER_HPP

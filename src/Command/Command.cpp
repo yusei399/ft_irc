@@ -22,16 +22,16 @@ void Command::_set_cmd_type()
         _cmdType = MODE;
     else if (_cmd_name == "PRIVMSG")
         _cmdType = PRIVMSG;
-    else if (_cmd_name == "NOTICE")
-        _cmdType = NOTICE;
+    /*else if (_cmd_name == "NOTICE")
+        _cmdType = NOTICE;*/
     else if (_cmd_name == "QUIT")
         _cmdType = QUIT;
     else if (_cmd_name == "KICK")
         _cmdType = KICK;
     else if (_cmd_name == "INVITE")
         _cmdType = INVITE;
-    else if (_cmd_name == "PART")
-        _cmdType = PART;
+    /*else if (_cmd_name == "PART")
+        _cmdType = PART;*/
     else
         _cmdType = UNKNOWN;
 }

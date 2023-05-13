@@ -36,9 +36,9 @@ int main(int argc, char **argv){
 		std::cerr << e.what() << '\n';
 	}
 }
-// PASS 1234
-// NICK b
-// USER a b c :d
+//PASS 1234
+//NICK a
+//USER a b c :d
 // NAMES
 //INVITE c #aa
 // MODE #a i

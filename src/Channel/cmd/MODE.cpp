@@ -134,7 +134,6 @@ void Channel::mode_l_add(Client &sender, const std::string &limit_num_str)
 }
 
 
-//t
 void Channel::mode_l_rem(Client &sender)
 {
     if (!require_operator(sender)) return;
