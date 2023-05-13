@@ -1,7 +1,4 @@
-/*#include "CommandList.hpp"
-#include "Client.hpp"
-#include "ChannelManager.hpp"
-#include "CheckRegister.hpp"*/
+
 #include "CmdManager.hpp"
 
 static bool require_valid_cmd(Client &client, const Command&cmd)

@@ -13,6 +13,7 @@ class CmdManager
 	void mode_o(Client&sender, const Command&cmd);
 	void mode_t(Client&sender, const Command&cmd);
 	void mode_k(Client&sender, const Command&cmd);
+	void mode_l(Client&sender, const Command&cmd);
 
 public:
 	CmdManager(ClientManager &clientManager, ChannelManager &channelManager, const std::string &server_pass) :clientManager(clientManager), channelManager(channelManager), server_pass(server_pass){};

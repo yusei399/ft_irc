@@ -3,7 +3,7 @@
 #include "CheckRegister.hpp"
 
 Channel::Channel(const std::string &name,const  Client& client, const std::string &pwd)
-    :name(name), password(pwd), invited_mode(false), topic_msg(""), topic_restricted(false)
+    :name(name), password(pwd), invited_mode(false), topic_msg(""), topic_restricted(false), has_limit_(false), limit_num(0)
 {
     //todo
     //新しくチャンネルを作った時のメッセージがあってもいい
@@ -33,12 +33,30 @@ static bool require_invited_conditions(Client &client, Channel& channel)
 	return true;
 }
 
+int Channel::get_member_cnt()
+{
+    return members.size();
+}
+
+bool Channel::require_limit_safe(Client &sender)
+{
+    if (!has_limit())return true;
+    if (limit_num < members.size() + 1)
+    {
+        send_numeric_msg(sender, 471,  get_name() + " :Cannot join channel (+l)");
+        return false;
+    }
+    return true;
+}
+
 //存在しないチャンネルに対してjoinを行った場合はこの関数ではなくコンストラクタで処理する
 void Channel::join(Client& sender, const std::string & pass)
 {
     if (!require_invited_conditions(sender, *this)) return;
     //すでに属しているチャンネルにjoinを行った場合,本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
     if (is_member(sender))
+        return;
+    if (!require_limit_safe(sender)) 
         return;
     if (!correct_pass(pass))
     {
@@ -165,89 +183,6 @@ void Channel::invite(Client &sender, Client& target)
 	send_msg(target, sender.get_nick() + " invites you to join " + get_name());
 }
 
-void Channel::mode_i_state(Client &client)
-{
-    if (!require_sender_is_member(client))return;
-    send_msg(client, "MODE " + get_name() + (invited_mode ? " +i" : " -i"));
-}
-
-void Channel::mode_i(Client &sender, bool valid)
-{
-    if (!require_operator(sender)) return;
-    invited_mode = valid;
-    broadcast(sender , "MODE "+ get_name() +" " + (valid ? "+i" : "-i") + " " + sender.get_nick());    
-}
-
-void Channel::mode_o(Client &sender, bool valid, Client &target)
-{
-    if (!require_operator(sender)) return;
-    if (!require_sender_is_member(sender))return;
-    if (!require_target_is_member(sender, target))return;
-    if (valid)
-    {
-        operators.insert(target);
-        broadcast(sender, sender.get_nick() + " sets mode +o " + target.get_nick());
-    }
-    else
-    {
-        if (operators.count(target))
-            operators.erase(target);
-        broadcast(sender, sender.get_nick() + " sets mode -o " + target.get_nick());    
-    }
-}
-
-std::string Channel::get_topic()
-{
-    if (topic_msg == "")
-        return "No topic is set.";
-    else
-        return topic_msg;
-}
-
-std::string Channel::get_channel_modeis(Client &sender, const std::string &mode, const std::string &param)
-{
-    std::string msg =  "324 " + get_name()+ " " + mode;
-    if (param != "") msg += " " + param;
-    return msg;
-}
-
-void Channel::mode_t_state(Client &sender)
-{
-    if (!require_sender_is_member(sender))return;
-   send_numeric_msg(sender, 332, get_name() + " :" + get_topic());
-}
-
-void Channel::mode_t(Client &sender, bool valid)
-{
-    if (!require_operator(sender)) return;
-    topic_restricted = valid;
-    std::string mode = valid ? "mode +t" : "mode -t";
-    broadcast(sender , get_channel_modeis(sender, mode, ""));
-}
-
-void Channel::mode_k_state(Client &sender)
-{
-    if (!require_sender_is_member(sender))return;
-    std::string mode = "MODE ";
-    if (password == "") mode += "-k";
-    else                mode += "+k";
-    send_msg(sender, get_channel_modeis(sender, mode, ""));
-}
-
-void Channel::mode_k_add(Client &sender, const std::string &new_pass)
-{
-    if (!require_operator(sender)) return;
-    password = new_pass;
-    broadcast(sender , get_channel_modeis(sender, "MODE +k", password));
-}
-
-void Channel::mode_k_rem(Client &sender)
-{
-    if (!require_operator(sender)) return;
-    password = "";
-    broadcast(sender , get_channel_modeis(sender, "MODE -k", ""));
-}
-    
 std::string Channel::get_prl_topic_msg()
 {
     std::string msg_base = get_name()+ " :" + get_topic();
