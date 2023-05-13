@@ -7,10 +7,11 @@ bool CmdManager::require_enough_params(Client &sender, const Command& cmd, size_
 	size_t param_size = cmd._params.size();
 	bool ok = true;
 	ok &= ok_size_min <= param_size && param_size < ng_size_min;
-	ok &= require_trailing && cmd._trailing != "";
+	if (require_trailing)
+		ok &=  cmd.has_trailing();
 	if (!ok)
 	{
-		send_errmsg(sender, 461, cmd.get_original_str() + " :Not enough parameters");	
+		send_numeric_msg(sender, 461, cmd.get_original_str() + " :Not enough parameters");	
 		return false;
 	}
 	return true;
@@ -27,57 +28,19 @@ std::vector<Command> CmdManager::parse_commands(const std::string &commands_msg)
 
 void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 {
-	switch (cmd._cmdType)
-	{
-		case CAP:
-			std::cout << "cap" << std::endl;
-			break;
-		case PASS:
-			pass(sender, cmd);
-			break;
-		case NICK:
-			nick(sender, cmd);
-			break;
-		case USER:
-			user(sender, cmd);
-			break;
-		case JOIN:
-			join(sender, cmd);
-			break;
-		case TOPIC:
-			std::cout << "topic" << std::endl;
-			break;
-		case PING:
-			std::cout << "ping" << std::endl;
-			break;
-		case NAMES:
-			names(sender, cmd);
-			break;
-		case MODE:
-			mode(sender, cmd);
-			break;
-		case PRIVMSG:
-			privmsg(sender, cmd);
-			break;
-		case NOTICE:
-			std::cout << "notice" << std::endl;
-			break;
-		case QUIT:
-			quit(sender, cmd);
-			break;
-		case KICK:
-			kick(sender, cmd);
-			break;
-		case INVITE:
-			invite(sender, cmd);
-			break;
-		case PART:
-			std::cout << "part" << std::endl;
-			break;
-		case UNKNOWN:
-			send_errmsg(sender, 421, cmd._cmd_name + " :Unknown command");
-			break;
-		default:
-			break;
-	}
+	if 		(cmd._cmd_name == CAP) cap(sender, cmd);
+	else if (cmd._cmd_name == PASS) pass(sender, cmd);
+	else if (cmd._cmd_name == NICK) nick(sender, cmd);
+	else if (cmd._cmd_name == USER) user(sender, cmd);
+	else if (cmd._cmd_name == JOIN) join(sender, cmd);
+	else if (cmd._cmd_name == TOPIC) topic(sender, cmd);
+	else if (cmd._cmd_name == PING)	ping(sender, cmd);
+	else if (cmd._cmd_name == NAMES) names(sender, cmd);
+	else if (cmd._cmd_name == MODE) mode(sender, cmd);
+	else if (cmd._cmd_name == PRIVMSG) privmsg(sender, cmd);
+	else if (cmd._cmd_name == QUIT)	quit(sender, cmd);
+	else if (cmd._cmd_name == KICK) kick(sender, cmd);
+	else if (cmd._cmd_name == INVITE) invite(sender, cmd);
+	else if (cmd._cmd_name == PART) part(sender, cmd);
+	//else send_numeric_msg(sender, 421, cmd._cmd_name + " :Unknown command");
 }

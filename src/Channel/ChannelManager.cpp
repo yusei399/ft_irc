@@ -40,12 +40,16 @@ const std::set<Channel> ChannelManager::get_belong_channels(const Client &client
 	return belongs;
 }*/
 
+bool ChannelManager::is_valid_channel_name(const std::string & channel_name)
+{
+	return !(channel_name == "" || channel_name[0] != '#' || channel_name == "#");
+}
 
 bool ChannelManager::require_valid_channel_name(Client &client, const std::string & channel_name)
 {
-	if (channel_name == "" || channel_name[0] != '#' || channel_name == "#")
+	if (!(is_valid_channel_name(channel_name)))
 	{
-        send_errmsg(client, 403, channel_name + " :No such channel");
+        send_numeric_msg(client, 403, channel_name + " :No such channel");
 		return false;
 	}
 	return true;
@@ -55,11 +59,14 @@ bool ChannelManager::require_exist_channel(Client &client, const std::string & c
 {
 	if (!exist_channel(channel_name))
 	{
-        send_errmsg(client, 403, channel_name + " :No such channel");
+        send_numeric_msg(client, 403, channel_name + " :No such channel");
 		return false;
 	}
 	return true;
 }
+
+//todo
+//参加時トピックと、namesを表示
 void ChannelManager::join(Client &client, const std::vector<std::string> &ch_names, const std::vector<std::string> &ch_pass)
 {
 	for(size_t i = 0; i < ch_names.size(); i++)
@@ -72,6 +79,7 @@ void ChannelManager::join(Client &client, const std::vector<std::string> &ch_nam
 		    channels.insert(Channel(ch_names[i], client, ch_pass[i]));
 	}
 }
+
 //チャンネルから離脱する
 //存在しないチャンネルが指定された場合 403エラー
 void ChannelManager::try_part(std::string channelName, Client& client)
@@ -79,4 +87,14 @@ void ChannelManager::try_part(std::string channelName, Client& client)
 	if (!require_exist_channel(client, channelName))
 		return;
 	get_channel(channelName).part(client);
+}
+
+void ChannelManager::part_list(Client &sender, std::vector<std::string> &ch_names)
+{
+	for(size_t i = 0; i < ch_names.size(); i++)
+	{
+		if (!require_exist_channel(sender, ch_names[i]))
+			continue;
+		get_channel(ch_names[i]).part(sender);
+	}
 }

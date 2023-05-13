@@ -1,21 +1,20 @@
 #include "CmdManager.hpp"
 
-static bool require_valid_param(const Client &client, const Command &cmd)
+static bool require_valid_param(Client &client, const Command &cmd, CmdManager &cmdManager)
 {
 	bool is_ok = true;
 	if (cmd._params.size() == 0)
 	{
-		send_errmsg(client, 411, ":No recipient given (" + cmd.get_original_str()+ ")");
+		send_numeric_msg(client, 411, ":No recipient given (" + cmd.get_original_str()+ ")");
 		is_ok = false;
 	}
-	else if (cmd._params.size() > 1)
+	else if (!cmdManager.require_enough_params(client, cmd, 1, 2))
 	{
-		send_errmsg(client, 461, cmd.get_original_str() + " :Not enough parameters");
 		is_ok = false;
 	}
-	if (cmd._trailing == "")
+	if (!cmd.has_trailing())
 	{
-		send_errmsg(client, 412, ":No text to send");
+		send_numeric_msg(client, 412, ":No text to send");
 		is_ok = false;	
 	}
 	return is_ok;
@@ -37,7 +36,7 @@ void CmdManager::privmsg(Client& client, const Command &cmd)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;
-	if (!require_valid_param(client, cmd)) return;
+	if (!require_valid_param(client, cmd, *this)) return;
 	std::vector<std::string> targets = parse_targets(cmd);
 	for (size_t i = 0; i < targets.size(); i++)
 	{

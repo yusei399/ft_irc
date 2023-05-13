@@ -8,7 +8,7 @@ static void send_quit_msg(Client&sender, const Command &cmd, ClientManager &clie
 		if (recievers[i] == sender)
 			continue;
 		std::string msg =sender.get_nick()+" has quit";
-		if (cmd._trailing == "") 
+		if (!cmd.has_trailing()) 
 			send_msg(recievers[i], msg);
 		else
 			send_msg(recievers[i], msg + " (Quit: " + cmd._trailing + ")");
@@ -23,4 +23,5 @@ void CmdManager::quit(Client&client, const Command &cmd)
 	send_quit_msg(client, cmd, clientManager);
 	channelManager.quit_all_channel(client, cmd._trailing);
 	clientManager.erase_client(client);
+	close(client.get_fd());
 }

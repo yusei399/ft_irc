@@ -6,6 +6,18 @@ Server::Server () : cmdManager(clientManager, channelManager, "") {}
 Server::Server(int port, std::string &password) : _port(port), _password(password), cmdManager(clientManager, channelManager, password) {}
 Server::~Server(){}
 
+
+void Server::close_all_fd()
+{
+	std::vector<Client> clients = clientManager.get_connect_clients();
+	for (size_t i = 0; i < clients.size(); i++)
+	{
+		close(clients[i].get_fd());
+	}
+	close(_socket_fd);
+	std::cout << "close all fd" << std::endl;
+}
+
 void Server::create_soket()
 {
 	int enable = 1;
@@ -84,14 +96,13 @@ static std::string recieve_msg(Client &client)
 			throw std::exception();
 		}
 	}
-	return std::string(buff);
+	std::string res = std::string(buff);
+	std::cout << "recieve : \n"<<  res<< "\n\n"<< std::endl;
+	return res;
 }
 
-void Server::start()
+void Server::poll_loop()
 {
-	this->create_soket();
-	this->create_poll(_socket_fd);
-
 	while (1)
 	{
 		if (poll(_pfds.data(), _pfds.size() ,TIMEOUT)== -1)
@@ -101,14 +112,21 @@ void Server::start()
 			if (_pfds[i].revents == 0)
 				continue;
 			if (_pfds[i].revents == POLLIN)
-				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(clientManager.get_client_by_fd(_pfds[i].fd));
+				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->recieve_cmd(clientManager.get_client_by_fd(_pfds[i].fd));
 		}
 	}
 }
 
+void Server::start()
+{
+	this->create_soket();
+	this->create_poll(_socket_fd);
+	this->poll_loop();
+}
+
 
 //todo コマンドが複数に分割されている場合
-void Server::chat_in(Client &sender)
+void Server::recieve_cmd(Client &sender)
 {
 	std::vector<Command> cmds = cmdManager.parse_commands(recieve_msg(sender));
 	for(size_t i = 0; i < cmds.size(); i++)
