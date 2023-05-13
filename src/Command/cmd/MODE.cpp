@@ -112,11 +112,14 @@ void CmdManager::mode_k(Client&sender, const Command&cmd)
 	if (flag == MODE_K)
 		channel.mode_k_state(sender);
 	else if (flag == MODE_K_ADD)
-		channel.mode_k_rem(sender, true);
+	{
+		if (!require_enough_params(sender, cmd, 3, 6))return;
+		channel.mode_k_add(sender, cmd._params[2]);
+	}
 	else if (flag == MODE_K_REM)
 	{
-		
-		channel.mode_k_rem(sender, false);
+		//2つ channel, flag
+		channel.mode_k_rem(sender);
 	}
 	else
 		throw std::logic_error("");

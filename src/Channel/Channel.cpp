@@ -186,13 +186,13 @@ void Channel::mode_o(Client &sender, bool valid, Client &target)
     if (valid)
     {
         operators.insert(target);
-        broadcast(sender, sender.get_nick() + " sets mode +o" + target.get_nick());
+        broadcast(sender, sender.get_nick() + " sets mode +o " + target.get_nick());
     }
     else
     {
         if (operators.count(target))
             operators.erase(target);
-        broadcast(sender, sender.get_nick() + " sets mode -o" + target.get_nick());    
+        broadcast(sender, sender.get_nick() + " sets mode -o " + target.get_nick());    
     }
 }
 
@@ -202,6 +202,13 @@ std::string Channel::get_topic()
         return "No topic is set.";
     else
         return topic_msg;
+}
+
+std::string Channel::get_channel_modeis(Client &sender, const std::string &mode, const std::string &param)
+{
+    std::string msg =  "324 " + get_name()+ " " + mode;
+    if (param != "") msg += " " + param;
+    return msg;
 }
 
 void Channel::mode_t_state(Client &sender)
@@ -214,16 +221,31 @@ void Channel::mode_t(Client &sender, bool valid)
 {
     if (!require_operator(sender)) return;
     topic_restricted = valid;
-    broadcast(sender , "MODE "+ get_name() +" " + (valid ? "+t" : "-t") + " " + sender.get_nick());       
+    std::string mode = valid ? "mode +t" : "mode -t";
+    broadcast(sender , get_channel_modeis(sender, mode, ""));
 }
+
 void Channel::mode_k_state(Client &sender)
 {
+    if (!require_sender_is_member(sender))return;
+    std::string mode = "MODE ";
+    if (password == "") mode += "-k";
+    else                mode += "+k";
+    send_msg(sender, get_channel_modeis(sender, mode, ""));
+}
 
+void Channel::mode_k_add(Client &sender, const std::string &new_pass)
+{
+    if (!require_operator(sender)) return;
+    password = new_pass;
+    broadcast(sender , get_channel_modeis(sender, "MODE +k", password));
 }
 
 void Channel::mode_k_rem(Client &sender)
 {
-
+    if (!require_operator(sender)) return;
+    password = "";
+    broadcast(sender , get_channel_modeis(sender, "MODE -k", ""));
 }
     
 std::string Channel::get_prl_topic_msg()

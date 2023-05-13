@@ -24,6 +24,7 @@ private:
     bool invited_mode;//招待されていないとJOINできないか
     std::string topic_msg;
     bool topic_restricted;//trueならオペレーターだけがトピックを変えられる
+    std::string get_channel_modeis(Client &sender, const std::string &mode, const std::string &param);
 public:
     std::string get_topic();
     Channel(const std::string &name, const Client& client, const std::string &pwd);
@@ -43,6 +44,7 @@ public:
     void mode_t_state(Client &sender);
     void mode_t(Client &sender, bool valid);
     void mode_k_state(Client &sender);
+    void mode_k_add(Client &sender, const std::string &new_pass);
     void mode_k_rem(Client &sender);
     std::string get_prl_topic_msg();
     void set_topic(Client &sender, const std::string &topic_msg);    
