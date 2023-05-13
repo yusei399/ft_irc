@@ -35,6 +35,7 @@ int main(int argc, char **argv){
 	{
 		std::cerr << e.what() << '\n';
 	}
+	return 0;
 }
 // PASS 1234
 // NICK b
