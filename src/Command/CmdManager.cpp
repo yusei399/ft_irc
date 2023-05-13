@@ -28,57 +28,18 @@ std::vector<Command> CmdManager::parse_commands(const std::string &commands_msg)
 
 void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 {
-	switch (cmd._cmdType)
-	{
-		case CAP:
-			std::cout << "cap" << std::endl;
-			break;
-		case PASS:
-			pass(sender, cmd);
-			break;
-		case NICK:
-			nick(sender, cmd);
-			break;
-		case USER:
-			user(sender, cmd);
-			break;
-		case JOIN:
-			join(sender, cmd);
-			break;
-		case TOPIC:
-			topic(sender, cmd);
-			break;
-		case PING:
-			ping(sender, cmd);
-			break;
-		case NAMES:
-			names(sender, cmd);
-			break;
-		case MODE:
-			mode(sender, cmd);
-			break;
-		case PRIVMSG:
-			privmsg(sender, cmd);
-			break;
-		/*case NOTICE:
-			std::cout << "notice" << std::endl;
-			break;*/
-		case QUIT:
-			quit(sender, cmd);
-			break;
-		case KICK:
-			kick(sender, cmd);
-			break;
-		case INVITE:
-			invite(sender, cmd);
-			break;
-		/*case PART:
-			std::cout << "part" << std::endl;
-			break;*/
-		case UNKNOWN:
-			send_numeric_msg(sender, 421, cmd._cmd_name + " :Unknown command");
-			break;
-		default:
-			break;
-	}
+	if 		(cmd._cmd_name == CAP) cap(sender, cmd);
+	else if (cmd._cmd_name == PASS) pass(sender, cmd);
+	else if (cmd._cmd_name == NICK) nick(sender, cmd);
+	else if (cmd._cmd_name == USER) user(sender, cmd);
+	else if (cmd._cmd_name == JOIN) join(sender, cmd);
+	else if (cmd._cmd_name == TOPIC) topic(sender, cmd);
+	else if (cmd._cmd_name == PING)	ping(sender, cmd);
+	else if (cmd._cmd_name == NAMES) names(sender, cmd);
+	else if (cmd._cmd_name == MODE) mode(sender, cmd);
+	else if (cmd._cmd_name == PRIVMSG) privmsg(sender, cmd);
+	else if (cmd._cmd_name == QUIT)	quit(sender, cmd);
+	else if (cmd._cmd_name == KICK) kick(sender, cmd);
+	else if (cmd._cmd_name == INVITE) invite(sender, cmd);
+	else send_numeric_msg(sender, 421, cmd._cmd_name + " :Unknown command");
 }

@@ -103,14 +103,14 @@ void Server::start()
 			if (_pfds[i].revents == 0)
 				continue;
 			if (_pfds[i].revents == POLLIN)
-				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->chat_in(clientManager.get_client_by_fd(_pfds[i].fd));
+				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->recieve_cmd(clientManager.get_client_by_fd(_pfds[i].fd));
 		}
 	}
 }
 
 
 //todo コマンドが複数に分割されている場合
-void Server::chat_in(Client &sender)
+void Server::recieve_cmd(Client &sender)
 {
 	std::vector<Command> cmds = cmdManager.parse_commands(recieve_msg(sender));
 	for(size_t i = 0; i < cmds.size(); i++)

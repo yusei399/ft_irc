@@ -41,7 +41,7 @@ private:
 	~Server();
 	void create_soket();
 	void connect_client(int socketfd);
-	void chat_in(Client &client);
+	void recieve_cmd(Client &client);
 	void start();
 	void allow();
 	void build_in(Client &sender, const Command &cmd);

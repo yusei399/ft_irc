@@ -1,41 +1,5 @@
 #include "../include/Command.hpp"
 
-void Command::_set_cmd_type()
-{
-    if (_cmd_name == "CAP")
-        _cmdType = CAP;
-    else if (_cmd_name == "PASS")
-        _cmdType = PASS;
-    else if (_cmd_name == "NICK")
-        _cmdType = NICK;
-    else if (_cmd_name == "USER")
-        _cmdType = USER;
-    else if (_cmd_name == "JOIN")
-        _cmdType = JOIN;
-    else if (_cmd_name == "TOPIC")
-        _cmdType = TOPIC;
-    else if (_cmd_name == "PING")
-        _cmdType = PING;
-    else if (_cmd_name == "NAMES")
-        _cmdType = NAMES;
-    else if (_cmd_name == "MODE")
-        _cmdType = MODE;
-    else if (_cmd_name == "PRIVMSG")
-        _cmdType = PRIVMSG;
-    /*else if (_cmd_name == "NOTICE")
-        _cmdType = NOTICE;*/
-    else if (_cmd_name == "QUIT")
-        _cmdType = QUIT;
-    else if (_cmd_name == "KICK")
-        _cmdType = KICK;
-    else if (_cmd_name == "INVITE")
-        _cmdType = INVITE;
-    /*else if (_cmd_name == "PART")
-        _cmdType = PART;*/
-    else
-        _cmdType = UNKNOWN;
-}
-
 //trailingはスペースを含むことができ、二つ目以降の:は通常の文字列として使われる
 Command::Command(const std::string& cmd) : _original_string(cmd)
 {
@@ -54,7 +18,6 @@ Command::Command(const std::string& cmd) : _original_string(cmd)
     _params = std::vector<std::string>(prefix_trailing.begin() + 1, prefix_trailing.end());
     if (trailing_begin != cmd.size())
         _trailing = cmd.substr(trailing_begin + 1);
-    _set_cmd_type();
 }
 
 void Command::debug()

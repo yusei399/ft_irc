@@ -4,6 +4,21 @@
 #include "ChannelManager.hpp"
 #include "CheckRegister.hpp"
 
+#define CAP  "CAP"
+#define  PASS  "PASS"	
+#define  NICK  "NICK"	
+#define USER  "USER"	
+#define  JOIN  "JOIN"	
+#define  TOPIC  "TOPIC"	
+#define  PING  "PING"	
+#define  NAMES  "NAMES"	
+#define  MODE  "MODE"	
+#define  PRIVMSG  "PRIVMSG"	
+#define  QUIT  "QUIT"	
+#define  KICK  "KICK"	
+#define  INVITE  "INVITE"	
+#define  UNKNOWN  "UNKNOWN"	
+
 class CmdManager
 {
 	ClientManager &clientManager;
@@ -21,6 +36,7 @@ public:
 	
 	std::vector<Command> parse_commands(const std::string &commands_msg);
 	void exe_cmd(Client &sender, const Command &cmd);
+	void cap(Client &client, const Command &cmd);
 	void join(Client &client, const Command &cmd);
 	void pass(Client &client, const Command& cmd);
 	void nick(Client &client, const Command& cmd);
