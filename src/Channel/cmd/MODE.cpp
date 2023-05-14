@@ -1,5 +1,5 @@
 #include "Channel.hpp"
-
+#include "FtCfunc.hpp"
 
 void Channel::mode_i_state(Client &client)
 {
@@ -93,30 +93,9 @@ void Channel::mode_l_state(Client &sender)
     send_msg(sender, get_channel_modeis(sender, mode, std::to_string(limit_num)));
 }
 
-static int try_atoi(const std::string &str, int limit)
-{
-    int i = 0;
-    int val = 0;
-    bool valid = false;
-	if (str[0] == '+')
-		i++;
-	val = 0;
-    for (; i < str.size(); i++)
-    {
-        if (! ('0' <=str[i] &&  str[i] <= '9'))
-            return -1;
-		val = val * 10 + (int)(str[i] - '0');
-        if (val > limit)
-            return -1;
-        valid = true;
-	}
-    if (!valid)return -1;
-    return val;
-}
-
 bool Channel::require_valid_num(Client &sender, const std::string &limit_num_str)
 {
-    if (try_atoi(limit_num_str, 32767) == -1)
+    if (ft_atoi(limit_num_str, 0, 32767, allow_one_plus) == -1)
     {
 		send_numeric_msg(sender, 461, "MODE "+get_name() + " +l " + limit_num_str + " :Not enough parameters");	
         return false;
@@ -129,7 +108,7 @@ void Channel::mode_l_add(Client &sender, const std::string &limit_num_str)
     if (!require_operator(sender)) return;
     if (!require_valid_num(sender, limit_num_str)) return;
     has_limit_ = true;
-    limit_num = try_atoi(limit_num_str, 32767);
+    limit_num = ft_atoi(limit_num_str, 0, 32767, allow_one_plus);
     broadcast(sender , get_channel_modeis(sender, "MODE +l", limit_num_str));
 }
 

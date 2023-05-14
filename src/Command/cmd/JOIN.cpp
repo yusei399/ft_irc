@@ -1,8 +1,5 @@
 #include "CmdManager.hpp"
-#include "CommandList.hpp"
-#include "Client.hpp"
-#include "ChannelManager.hpp"
-#include "CheckRegister.hpp"
+
 
 static std::vector<std::string> parse_ch_names(const Command& cmd)
 {

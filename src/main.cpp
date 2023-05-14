@@ -4,7 +4,7 @@
 #include "../include/Client.hpp"
 #include "../include/Channel.hpp"
 #include "../include/ChannelManager.hpp"
-
+#include "FtCfunc.hpp"
 
 Server *server;
 
@@ -12,7 +12,7 @@ void signal_handler(int signal)
 {
 	server->close_all_fd();
 	std::cout << " exit " << std::endl;
-	exit(signal);
+	std::exit(signal);
 }
 
 
@@ -24,15 +24,8 @@ int main(int argc, char **argv){
     {
         if (argc == 3)
         {
-            std::string port_str = argv[1];
-            for (int i = 0; i < port_str.length(); i++) {
-                if (!isdigit(port_str[i])) {
-                    std::cerr << "invalid port num" << std::endl;
-                    return 1;
-                }
-            }
-            int port = atoi(argv[1]);
-            if (port < 1024 || port > 65565) {
+            int port = ft_atoi(argv[1], 1024, 65535, dont_allow_operator);
+            if (port == -1) {
                 std::cerr << "invalid port num" << std::endl;
                 return 1;
             }

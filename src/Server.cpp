@@ -1,6 +1,7 @@
 #include "../include/Server.hpp"
 #include "../include/Client.hpp"
 #include <signal.h>
+#include "FtCfunc.hpp"
 
 Server::Server () : cmdManager(clientManager, channelManager, "") {}
 Server::Server(int port, std::string &password) : _port(port), _password(password), cmdManager(clientManager, channelManager, password) {}
@@ -33,7 +34,7 @@ void Server::create_soket()
 	if (fcntl(_socket_fd, F_SETFL, O_NONBLOCK) == -1)
 		throw std::exception();
 	//通信、ポートアドレスの設定
-	bzero((char *) &reader_addr, sizeof(reader_addr));
+	ft_bzero((char *) &reader_addr, sizeof(reader_addr));
 	reader_addr.sin_family = AF_INET;
 	reader_addr.sin_addr.s_addr = INADDR_ANY;
 	reader_addr.sin_port = htons(_port);
