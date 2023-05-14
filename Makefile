@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 NAME = ircserv
-=======
-NAME = ircserv 
->>>>>>> main
 
 CXX = c++
 
