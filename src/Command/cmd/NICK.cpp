@@ -1,5 +1,5 @@
 #include "CmdManager.hpp"
-#include "CheckRegister.hpp"
+
 
 static bool require_valid_nick(Client &client, const std::string & new_nick)
 {
