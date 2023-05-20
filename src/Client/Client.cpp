@@ -57,6 +57,12 @@ bool Client::exist_nickname(const std::string &nick)
 	return false;
 }
 
+std::string Client::get_user_info() const
+{
+	return get_nick() + "!" + get_user_name() + "@" + get_host_name();
+}
+
+
 //Setのキーに使うために必要
 bool Client::operator<(const Client& rhs) const
 {
