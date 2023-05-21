@@ -49,7 +49,7 @@ bool ChannelManager::require_valid_channel_name(Client &client, const std::strin
 {
 	if (!(is_valid_channel_name(channel_name)))
 	{
-        send_numeric_msg(client, 403, channel_name + " :No such channel");
+		send_msg(client, ERR_NOSUCHCHANNEL(client, channel_name));
 		return false;
 	}
 	return true;
@@ -59,7 +59,7 @@ bool ChannelManager::require_exist_channel(Client &client, const std::string & c
 {
 	if (!exist_channel(channel_name))
 	{
-        send_numeric_msg(client, 403, channel_name + " :No such channel");
+		send_msg(client, ERR_NOSUCHCHANNEL(client, channel_name));
 		return false;
 	}
 	return true;

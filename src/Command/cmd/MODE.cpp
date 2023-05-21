@@ -112,5 +112,5 @@ void CmdManager::mode(Client &sender, const Command& cmd)
 	else if (is_mode_l(cmd))
 		mode_l(sender, cmd);
 	else
-        send_numeric_msg(sender, 472, get_flag(cmd)+ " :is unknown mode char to me");
+		send_msg(sender, ERR_NOCHANMODES(sender, get_flag(cmd)));
 }

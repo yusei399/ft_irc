@@ -28,7 +28,7 @@ static bool require_invited_conditions(Client &client, Channel& channel)
 {
     if (channel.is_invited_mode() && !channel.is_invited(client))
 	{
-		send_numeric_msg(client, 473, channel.get_name() + " :Cannot join channel (+i)");
+        send_msg(client, ERR_INVITEONLYCHAN(client, channel));
 		return false;
 	}
 	return true;
@@ -44,7 +44,7 @@ bool Channel::require_limit_safe(Client &sender)
     if (!has_limit())return true;
     if (limit_num < members.size() + 1)
     {
-        send_numeric_msg(sender, 471,  get_name() + " :Cannot join channel (+l)");
+        send_msg(sender, ERR_CHANNELISFULL(sender, (*this)));
         return false;
     }
     return true;
@@ -61,7 +61,7 @@ void Channel::join(Client& sender, const std::string & pass)
         return;
     if (!correct_pass(pass))
     {
-        send_numeric_msg(sender, 475, get_name()+ " :Cannot join channel (+k)");
+        send_msg(sender, ERR_BADCHANNELKEY(sender, (*this)));
         return;
     }
     members.insert(sender);
@@ -137,7 +137,7 @@ bool Channel::require_operator(Client& sender) const
 {
 	if (!is_operator(sender))
 	{
-		send_numeric_msg(sender, 482, get_name()+ " :You're not channel operator");
+        send_msg(sender, ERR_CHANOPRIVSNEEDED((*this)));
 		return false;
 	}
 	return true;
@@ -148,7 +148,7 @@ bool Channel::require_target_is_member(Client& sender, Client &target) const
 {
     if (!is_member(target))
 	{
-		send_numeric_msg(sender, 441, target.get_nick()+ " " +get_name() + " :They aren't on that channel");
+        send_msg(sender, ERR_USERNOTINCHANNEL(sender, target, (*this)));
         return false;
 	}
 	return true;
@@ -159,7 +159,7 @@ bool Channel::require_sender_is_member(const Client& sender) const
 {
     if (!is_member(sender))
 	{
-		send_numeric_msg(sender, 442, get_name() + " :You're not on that channel");
+        send_msg(sender, ERR_NOTONCHANNEL(sender, (*this)));
         return false;
 	}
     return true;
@@ -170,7 +170,7 @@ static bool require_not_member(Client& sender, Client& target, Channel& channel)
 {
 	if (channel.is_member(target))
 	{
-		send_numeric_msg(sender, 443, target.get_nick()+ " "+channel.get_name() +" :is already on channel");
+        send_msg(sender, ERR_USERONCHANNEL(sender, target, channel));
 		return false;
 	}
 	return true;

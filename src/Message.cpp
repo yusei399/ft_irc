@@ -7,10 +7,11 @@ void send_msg(const Client &reciever, const std::string &message)
 	std::cout << "send_msg to "<<reciever.get_nick()<<" {"<<msg_lf << "}\n\n"<<std::endl;
 }
 
+/*
 void send_numeric_msg(const Client &reciever, int err_code, const std::string &message)
 {
 	send_msg(reciever, std::to_string(err_code)+" "+ message);
-}
+}*/
 
 void send_welcome_msgs(const Client &reciever)
 {

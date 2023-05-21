@@ -44,7 +44,7 @@ bool ClientManager::require_exist_nick(Client& sender, const std::string &target
 {
 	if (!exist_client_by_nick(target_nick))
 	{
-		send_numeric_msg(sender, 401, target_nick + " :No such nick");
+		send_msg(sender, ERR_NOSUCHNICK(sender, target_nick));
 		return false;
 	}
 	return true;

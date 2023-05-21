@@ -50,7 +50,7 @@ std::string Channel::get_channel_modeis(Client &sender, const std::string &mode,
 void Channel::mode_t_state(Client &sender)
 {
     //tはメンバーでなくても使える
-     send_numeric_msg(sender, 332, get_name() + " :" + get_topic());
+    send_msg(sender, RPL_TOPIC(sender, (*this), get_topic()));
 }
 
 void Channel::mode_t(Client &sender, bool valid)
@@ -97,7 +97,7 @@ bool Channel::require_valid_num(Client &sender, const std::string &limit_num_str
 {
     if (ft_atoi(limit_num_str, 0, 32767, allow_one_plus) == -1)
     {
-		send_numeric_msg(sender, 461, "MODE "+get_name() + " +l " + limit_num_str + " :Not enough parameters");	
+        send_msg(sender, ERR_NEEDMOREPARAMS(sender, "MODE "+get_name() + " +l " + limit_num_str));
         return false;
     }
     return true;
