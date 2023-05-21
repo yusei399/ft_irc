@@ -61,8 +61,8 @@ void CmdManager::cap(Client &sender, const Command&cmd)
 	else if (sub_cmd == "END")
 	{
 		if (sender.is_authed())
-			send_msg(sender, "authenticated!");
+			send_prl_none(sender, "authenticated!");
 		else
-			send_msg(sender, "fail authenticate");
+			send_prl_none(sender, "fail authenticate");
 	}
 }

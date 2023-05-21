@@ -5,3 +5,5 @@ USER a b c :d
 NAMES
 NVITE c #aa
 MODE #a i
+
+/connect localhost 6667 1234

@@ -20,5 +20,7 @@ void send_welcome_msgs(const Client &reciever)
 	send_msg(reciever, RPL_MYINFO(reciever));
 }
 
-
-
+void send_prl_none(const Client &reciever, const std::string &msg)
+{
+	send_msg(reciever, RPL_NONE(msg));
+}

@@ -87,4 +87,5 @@ const std::string server_name = "ircserv";
 void send_msg(const Client &reciever, const std::string &message);
 void send_numeric_msg(const Client &reciever, int err_code, const std::string &message);
 void send_welcome_msgs(const Client &reciever);
+void send_prl_none(const Client &reciever, const std::string &msg);
 #endif // MESSAGE_HPP
