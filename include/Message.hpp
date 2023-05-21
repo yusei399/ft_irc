@@ -31,27 +31,27 @@ const std::string server_name = "ircserv";
 
 #define REP_CMD(client, cmd_name, parameters, trailing) REPLY(client.get_user_info(), cmd_name, parameters, trailing)
 
-#define JOIN_MSG(client, ch)	REP_CMD(client, "JOIN", ch.get_name(), "")
+//#define JOIN_MSG(client, ch)	REP_CMD(client, "JOIN", ch.get_name(), "")
 
 //todo ターゲットがいない場合もある      +k, -kなど
-#define MODE_MSG(sender, target, ch, mode)	REP_CMD(sender, "MODE", ch.get_name() + " " + (std::string)mode + " " + target.get_nick_name())
+//#define MODE_MSG(sender, target, ch, mode)	REP_CMD(sender, "MODE", ch.get_name() + " " + (std::string)mode + " " + target.get_nick_name())
 
-#define QUIT_MSG(sender, msg)			    REP_CMD(sender, "QUIT :Quit", msg)
+//#define QUIT_MSG(sender, msg)			    REP_CMD(sender, "QUIT :Quit", msg)
 #define PRIVMSG_MSG(sender, target_name, msg)	REP_CMD(sender, "PRIVMSG", target_name, msg)
-#define NOTICE_MSG(sender, msg)				REP_CMD(sender, "NOTICE",  target.get_nick(), msg)
-#define INVITE_MSG(sender, msg, ch)			REP_CMD(sender, "INVITE",  target.getnick() + " " +ch.get_name())
-#define KICK_MSG(sender, ch, target, msg)	REP_CMD(sender, "KICK",    ch.get_name() + " " + target.get_nick(), msg)
-#define PART_MSG(sender, ch, msg) 			REP_CMD(sender, "PART", ch.get_name(), msg)
-#define SETTOPIC_MSG(sender, ch, topic)		REP_CMD(sender, "TOPIC", ch.get_name(), topic)
+//#define NOTICE_MSG(sender, msg)				REP_CMD(sender, "NOTICE",  target.get_nick(), msg)
+//#define INVITE_MSG(sender, msg, ch)			REP_CMD(sender, "INVITE",  target.getnick() + " " +ch.get_name())
+//#define KICK_MSG(sender, ch, target, msg)	REP_CMD(sender, "KICK",    ch.get_name() + " " + target.get_nick(), msg)
+//#define PART_MSG(sender, ch, msg) 			REP_CMD(sender, "PART", ch.get_name(), msg)
+//#define SETTOPIC_MSG(sender, ch, topic)		REP_CMD(sender, "TOPIC", ch.get_name(), topic)
 
-#define NICK_MSG(oldNick, newNick)			":" + old_nick + " NICK :" + new_nick
-#define PONG_MSG(arg)						":" + server_name + " PONG :" + arg
+//#define NICK_MSG(oldNick, newNick)			":" + old_nick + " NICK :" + new_nick
+//#define PONG_MSG(arg)						":" + server_name + " PONG :" + arg
 
 //RPL
 #define RPL_NONE(msg) 									REPLY(server_name, "300", "*", msg)
 
 #define RPL_NICK_MSG(sender, command, parameters, trailing)	REPLY(server_name, command, sender.get_nick() + ((std::string)parameters == "" ? (std::string)"" : (" " + (std::string)parameters)), trailing)
-#define RPL_CHANNELMODEIS(sender, ch, mode) 			RPL_NICK_MSG(sender, "324", ch.get_name() + " " + (std::string)mode, "")
+#define RPL_CHANNELMODEIS(sender, ch, mode, target_nick) 			RPL_NICK_MSG(sender, "324", ch.get_name() + " " + (std::string)mode + ((std::string)target_nick == "" ? "" : " " + (std::string)target_nick), "")
 //#define RPL_INVITING(sender, target, ch) 				RPL_NICK_MSG(sender, "341", target.get_nick()+ " " + ch.get_name())
 //#define RPL_NAMREPLY(sender, ch, name_list) 			RPL_NICK_MSG(sender, "353", " = " + ch.get_name(),name_list)
 //#define RPL_ENDOFNAMES(sender, ch) 						RPL_NICK_MSG(sender, "366", ch.get_name(),"End of /NAMES list")

@@ -11,7 +11,7 @@ void Channel::mode_i(Client &sender, bool valid)
 {
     if (!require_operator(sender)) return;
     invited_mode = valid;
-    broadcast_reply(sender ,RPL_CHANNELMODEIS(sender, (*this), (valid ? "+i" : "-i")));
+    broadcast_reply(sender ,RPL_CHANNELMODEIS(sender, (*this), (valid ? "+i" : "-i"), ""));
 }
 
 void Channel::mode_o(Client &sender, bool valid, Client &target)
@@ -22,13 +22,13 @@ void Channel::mode_o(Client &sender, bool valid, Client &target)
     if (valid)
     {
         operators.insert(target);
-        broadcast_reply(sender, sender.get_nick() + " sets mode +o " + target.get_nick());
+        broadcast_reply(sender, RPL_CHANNELMODEIS(sender, (*this), "+o", target.get_nick()));
     }
     else
     {
         if (operators.count(target))
             operators.erase(target);
-        broadcast_reply(sender, sender.get_nick() + " sets mode -o " + target.get_nick());    
+        broadcast_reply(sender, RPL_CHANNELMODEIS(sender, (*this), "-o", target.get_nick()));
     }
 }
 
@@ -58,7 +58,7 @@ void Channel::mode_t(Client &sender, bool valid)
     if (!require_operator(sender)) return;
     topic_restricted = valid;
     std::string mode = valid ? "mode +t" : "mode -t";
-    broadcast_reply(sender , get_channel_modeis(sender, mode, ""));
+    broadcast_reply(sender , RPL_CHANNELMODEIS(sender, (*this), (valid ? "+t" : "-t"), ""));
 }
 
 void Channel::mode_k_state(Client &sender)
@@ -74,14 +74,14 @@ void Channel::mode_k_add(Client &sender, const std::string &new_pass)
 {
     if (!require_operator(sender)) return;
     password = new_pass;
-    broadcast_reply(sender , get_channel_modeis(sender, "MODE +k", password));
+    broadcast_reply(sender , RPL_CHANNELMODEIS(sender, (*this), "+k", password));
 }
 
 void Channel::mode_k_rem(Client &sender)
 {
     if (!require_operator(sender)) return;
     password = "";
-    broadcast_reply(sender , get_channel_modeis(sender, "MODE -k", ""));
+    broadcast_reply(sender , RPL_CHANNELMODEIS(sender, (*this), "-k", password));
 }
 
 //人数制限がない場合、何も出力されない仕様
@@ -109,7 +109,7 @@ void Channel::mode_l_add(Client &sender, const std::string &limit_num_str)
     if (!require_valid_num(sender, limit_num_str)) return;
     has_limit_ = true;
     limit_num = ft_atoi(limit_num_str, 0, 32767, allow_one_plus);
-    broadcast_reply(sender , get_channel_modeis(sender, "MODE +l", limit_num_str));
+    broadcast_reply(sender , RPL_CHANNELMODEIS(sender, (*this), "+l", limit_num_str));
 }
 
 
@@ -118,5 +118,5 @@ void Channel::mode_l_rem(Client &sender)
     if (!require_operator(sender)) return;
     has_limit_ = false;
     limit_num = 0;
-    broadcast_reply(sender , get_channel_modeis(sender, "MODE -l", ""));
+    broadcast_reply(sender , RPL_CHANNELMODEIS(sender, (*this), "-l", ""));
 }
