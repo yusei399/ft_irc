@@ -1,0 +1,7 @@
+PASS 1234
+NICK koromo
+USER a b c :d
+
+NAMES
+NVITE c #aa
+MODE #a i

@@ -20,10 +20,10 @@ const std::string server_name = "ircserv";
 
 //todo 末尾の\r\nはsend_msgの方でつける
 
-#define REPLY(prefix, command, parameters, trailing) ":" + prefix + " " + command + (parameters == "" ? "" : " " + parameters) + (trailing == "" ? "" : " :" +trailing)
+#define REPLY(prefix, command, parameters, trailing) ":" + (std::string)prefix + " " + (std::string)command + ((std::string)parameters == "" ? (std::string)"" : (std::string)" " + (std::string)parameters) + ((std::string)trailing == "" ? (std::string)"" : ((std::string)" :" +(std::string)trailing))
 
-#define REP_REGIST(client, command, trailing)	REPLY(server_name, client.get_nick(), parameters, trailing)
-#define RPL_WELCOME(client)						REP_REGIST(client, "001", "Hello! " + client.get_nick() +" Welcome to the Internet Relay Chat Network" + client.get_user_info())
+#define REP_REGIST(client, command, trailing)	REPLY(server_name, command, client.get_nick(), trailing)
+#define RPL_WELCOME(client)						REP_REGIST(client, "001", "Hello! " + client.get_nick() +" Welcome to the Internet Relay Chat Network " + client.get_user_info())
 #define RPL_YOURHOST(client)					REP_REGIST(client, "002", "Your host is " + server_name + ", running version 1.0")
 #define RPL_CREATED(client)						REP_REGIST(client, "003", "This server was created [Thursday, June 1, 2023]")
 #define RPL_MYINFO(client) 						REP_REGIST(client, "004", server_name + " 1.0 - -")
@@ -34,7 +34,7 @@ const std::string server_name = "ircserv";
 #define JOIN_MSG(client, ch)	REP_CMD(client, "JOIN", ch.get_name(), "")
 
 //todo ターゲットがいない場合もある      +k, -kなど
-#define MODE_MSG(sender, target, ch, mode)	REP_CMD(sender, "MODE", ch.get_name() + " " + mode + " " + target.get_nick_name())
+#define MODE_MSG(sender, target, ch, mode)	REP_CMD(sender, "MODE", ch.get_name() + " " + (std::string)mode + " " + target.get_nick_name())
 
 #define QUIT_MSG(sender, msg)			    REP_CMD(sender, "QUIT :Quit", msg)
 #define PRIVMSG_MSG(sender, target, msg)	REP_CMD(sender, "PRIVMSG", target.get_nick(), msg)
@@ -50,8 +50,8 @@ const std::string server_name = "ircserv";
 //RPL
 #define RPL_NONE(msg) 									REPLY(server_name, "300", "*", msg)
 
-#define PRL_NICK_MSG(sender, command, parameters, trailing)	REPLY(server_name, command, sender.get_nick() + (parameters == "" ? "" : (" " + parameters)), trailing)
-#define RPL_CHANNELMODEIS(sender, ch, mode) 			PRL_NICK_MSG(sender, "324", ch.get_name() + " " + mode)
+#define PRL_NICK_MSG(sender, command, parameters, trailing)	REPLY(server_name, command, sender.get_nick() + ((std::string)parameters == "" ? (std::string)"" : (" " + (std::string)parameters)), trailing)
+#define RPL_CHANNELMODEIS(sender, ch, mode) 			PRL_NICK_MSG(sender, "324", ch.get_name() + " " + (std::string)mode)
 #define RPL_NOTOPIC(sender, ch) 						PRL_NICK_MSG(sender, "331", "TOPIC " + ch.get_name(), "No topic set for "+ ch.get_name())
 #define RPL_TOPIC(sender, ch, topic)    				PRL_NICK_MSG(sender, "332", ch.get_name(), topic)
 #define RPL_INVITING(sender, target, ch) 				PRL_NICK_MSG(sender, "341", target.get_nick()+ " " + ch.get_name())
@@ -67,6 +67,8 @@ const std::string server_name = "ircserv";
 #define ERR_TOOMANYCHANNELS(sender, ch)					PRL_NICK_MSG(sender, "405", ch.get_name(), "Too many channel")
 #define ERR_NORECIPIENT(sender, command) 				PRL_NICK_MSG(sender, "411", "", "No recipient given " + command)
 #define ERR_NOTEXTTOSEND(sender)						PRL_NICK_MSG(sender, "412", "", "No text to send")
+//todo unknown
+#define ERR_UNKNOWNCOMMAND(sender, cmd_name)			PRL_NICK_MSG(sender, "421", cmd_name, "Unknown command")
 #define ERR_NONICKNAMEGIVEN 							REPLY(":"+server_name, "431", "", "No nickname given")
 #define ERR_ERRONEUSNICKNAME(sender)					PRL_NICK_MSG(sender, "432", "Error one use nickname")
 #define ERR_NICKNAMEINUSE(sender, new_nick)				PRL_NICK_MSG(sender, "433", new_nick, "Nickname is already in use")
@@ -84,5 +86,5 @@ const std::string server_name = "ircserv";
 
 void send_msg(const Client &reciever, const std::string &message);
 void send_numeric_msg(const Client &reciever, int err_code, const std::string &message);
-
+void send_welcome_msgs(const Client &reciever);
 #endif // MESSAGE_HPP

@@ -27,8 +27,7 @@ void CmdManager::nick(Client &client, const Command& cmd)
 	if (!client.nickname_seted && client.user_seted)
 	{
 		client.set_nick(new_nick);
-		//:irc.example.com 001 kaou :Welcome to the Internet Relay Network kaou
-		send_msg(client, "001 "+new_nick + " :Welcome to the Internet Relay Network " + client.get_nick());
+		send_welcome_msgs(client);
 	}
 	else
 	{

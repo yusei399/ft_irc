@@ -40,5 +40,5 @@ void CmdManager::pass(Client &client, const Command& cmd)
 	const std::string &pass = cmd._params[0];
 	if (!require_correct_pass(client, pass, server_pass)) return;
 	client.set_auth(true);
-	send_msg(client, "Password correct!");//本家にはないが分かりにくいので、認証時メッセージを送る
+	//send_msg(client, "Password correct!");//本家にはないが分かりにくいので、認証時メッセージを送る
 }

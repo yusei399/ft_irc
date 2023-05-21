@@ -42,5 +42,5 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 	else if (cmd._cmd_name == KICK) kick(sender, cmd);
 	else if (cmd._cmd_name == INVITE) invite(sender, cmd);
 	else if (cmd._cmd_name == PART) part(sender, cmd);
-	//else send_numeric_msg(sender, 421, cmd._cmd_name + " :Unknown command");
+	else send_numeric_msg(sender, 421, cmd._cmd_name + " :Unknown command");
 }
