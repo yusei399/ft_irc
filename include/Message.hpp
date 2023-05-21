@@ -17,18 +17,18 @@ const std::string server_name = "ircserv";
 
 
 //todo
-#define CAP_LS ":ircserv CAP * LS\r\n"
+#define CAP_LS ":" +server_name + " CAP * LS\r\n"
 //:<prefix> <command> <parameters> :<trailing>
 
 //todo 末尾の\r\nはsend_msgの方でつける
 
-#define REPLY(prefix, command, parameters, trailing) ":" + prefix + " " + command + " " + parameters + (trailing == "" ? "" : " :" +trailing)
+#define REPLY(prefix, command, parameters, trailing) ":" + prefix + " " + command + (parameters == "" ? "" : " " + parameters) + (trailing == "" ? "" : " :" +trailing)
 
-#define REP_REGIST(client, command, trailing) REPLY(server_name, client.get_nick(), parameters, trailing)
-#define RPL_WELCOME(client)		REP_REGIST(client, "001", "Hello! " + client.get_nick() +" Welcome to the Internet Relay Chat Network" + client.get_user_info())
-#define RPL_YOURHOST(client)	REP_REGIST(client, "002", "Your host is " + server_name + ", running version 1.0")
-#define RPL_CREATED(client)		REP_REGIST(client, "003", "This server was created [Thursday, June 1, 2023]")
-#define RPL_MYINFO(client) 		REP_REGIST(client, "004", server_name + " 1.0 - -")
+#define REP_REGIST(client, command, trailing)	REPLY(server_name, client.get_nick(), parameters, trailing)
+#define RPL_WELCOME(client)						REP_REGIST(client, "001", "Hello! " + client.get_nick() +" Welcome to the Internet Relay Chat Network" + client.get_user_info())
+#define RPL_YOURHOST(client)					REP_REGIST(client, "002", "Your host is " + server_name + ", running version 1.0")
+#define RPL_CREATED(client)						REP_REGIST(client, "003", "This server was created [Thursday, June 1, 2023]")
+#define RPL_MYINFO(client) 						REP_REGIST(client, "004", server_name + " 1.0 - -")
 
 
 #define REP_CMD(client, cmd_name, parameters, trailing) REPLY(client.get_user_info(), cmd_name, parameters, trailing)
@@ -50,11 +50,40 @@ const std::string server_name = "ircserv";
 #define PONG_MSG(arg)						":" + server_name + " PONG :" + arg
 
 //RPL
-#define PRL_MSG(command, parameters, trailing) REPLY(server_name, command, parameters, trailing)
+#define RPL_NONE(msg) 									REPLY(server_name, "300", "*", msg)
 
-#define RPL_NONE(msg) 					PRL_MSG("300", "*", msg)
-#define RPL_NOTOPIC(sender, ch) 		PRL_MSG("331", sender.get_nick() + " TOPIC " + ch.get_name(), "No topic set for "+ ch.get_name())
+#define PRL_NICK_MSG(sender, command, parameters, trailing)	REPLY(server_name, command, sender.get_nick() + (parameters == "" ? "" : (" " + parameters)), trailing)
+#define RPL_CHANNELMODEIS(sender, ch, mode) 			PRL_NICK_MSG(sender, "324", ch.get_name() + " " + mode)
+#define RPL_NOTOPIC(sender, ch) 						PRL_NICK_MSG(sender, "331", "TOPIC " + ch.get_name(), "No topic set for "+ ch.get_name())
+#define RPL_TOPIC(sender, ch, topic)    				PRL_NICK_MSG(sender, "332", ch.get_name(), topic)
+#define RPL_INVITING(sender, target, ch) 				PRL_NICK_MSG(sender, "341", target.get_nick()+ " " + ch.get_name())
+#define RPL_NAMREPLY(sender, ch, name_list) 			PRL_NICK_MSG(sender, "353", " = " + ch.get_name(),name_list)
+#define RPL_ENDOFNAMES(sender, ch) 						PRL_NICK_MSG(sender, "366", ch.get_name(),"End of /NAMES list")
+//									+k, -kなど
+//#define RPL_CREATIONTIME(nick, channelName, nowTime) PRL_NICK_MSG(sender, "329", " #" + channelName + " " + nowTime)
 
+//ERR
+#define ERR_NOSUCHNICK(sender, target) 					PRL_NICK_MSG(sender, "401", target.get_nick(), "No such nick")
+#define ERR_NOSUCHCHANNEL(sender, ch)					PRL_NICK_MSG(sender, "403", ch.get_name(), "No such channel")
+#define ERR_NOTJOINCHANNEL(sender, ch)					PRL_NICK_MSG(sender, "404", ch.get_name(), "Cannot send to channel (+n)")
+#define ERR_TOOMANYCHANNELS(sender, ch)					PRL_NICK_MSG(sender, "405", ch.get_name(), "Too many channel")
+#define ERR_NORECIPIENT(sender, command) 				PRL_NICK_MSG(sender, "411", "", "No recipient given " + command)
+#define ERR_NOTEXTTOSEND(sender)						PRL_NICK_MSG(sender, "412", "", "No text to send")
+#define ERR_NONICKNAMEGIVEN 							REPLY(":"+server_name, "431", "", "No nickname given")
+#define ERR_NOTONCHANNEL(sender, ch)					PRL_NICK_MSG(sender, "442", ch.get_name(), "You're not on that channel")
+#define ERR_USERONCHANNEL(sender, target, ch) 			PRL_NICK_MSG(sender, "443", target.get_nick()+" "+ch.get_name(), "User is already on that channel")
+#define ERR_BADCHANNELKEY(sender, ch) 					PRL_NICK_MSG(sender, "457", ch.get_name(), "Cannot join channel (+k) - bad key")
+#define ERR_NEEDMOREPARAMS(sender, cmd_name)			PRL_NICK_MSG(sender, "461", cmd_name, "Not enough parameters")
+#define ERR_ALREADYREGISTRED(sender) 					PRL_NICK_MSG(sender, "462", "", "You may not reregister")
+#define ERR_CHANNELISFULL(sender, ch) 					PRL_NICK_MSG(sender, "471", ch.get_name(), "Cannot join channel (+l)")
+#define ERR_NOCHANMODES(sender, mode) 					PRL_NICK_MSG(sender, "472", mode, "is an unknown mode character to me")
+#define ERR_INVITEONLYCHAN(sender, ch)					PRL_NICK_MSG(sender, "473", ch.get_name(), + "Cannot join channel (+i)")
+#define ERR_NOPRIVILEGES(sender)						PRL_NICK_MSG(sender, "481", "", "Permission Denied- You're not an " + sever_name +" operator")
+
+#define ERR_CHANOPRIVSNEEDED(ch)						REPLY(":"+server_name, "482", ch.get_name(), "You're not a channel operator")
+#define ERR_ERRONEUSNICKNAME(sender)					PRL_NICK_MSG(sender, "432", "Error one use nickname")
+#define ERR_NICKNAMEINUSE(sender, new_nick)				PRL_NICK_MSG(sender, "433", new_nick, "Nickname is already in use")
+#define ERR_PASSWDMISMATCH(sender)						PRL_NICK_MSG(sender, "464", "", "Password incorrect")
 
 void send_msg(const Client &reciever, const std::string &message);
 void send_numeric_msg(const Client &reciever, int err_code, const std::string &message);
