@@ -15,8 +15,6 @@
 
 const std::string server_name = "ircserv";
 
-
-//todo
 #define CAP_LS ":" +server_name + " CAP * LS\r\n"
 //:<prefix> <command> <parameters> :<trailing>
 
@@ -70,20 +68,19 @@ const std::string server_name = "ircserv";
 #define ERR_NORECIPIENT(sender, command) 				PRL_NICK_MSG(sender, "411", "", "No recipient given " + command)
 #define ERR_NOTEXTTOSEND(sender)						PRL_NICK_MSG(sender, "412", "", "No text to send")
 #define ERR_NONICKNAMEGIVEN 							REPLY(":"+server_name, "431", "", "No nickname given")
+#define ERR_ERRONEUSNICKNAME(sender)					PRL_NICK_MSG(sender, "432", "Error one use nickname")
+#define ERR_NICKNAMEINUSE(sender, new_nick)				PRL_NICK_MSG(sender, "433", new_nick, "Nickname is already in use")
 #define ERR_NOTONCHANNEL(sender, ch)					PRL_NICK_MSG(sender, "442", ch.get_name(), "You're not on that channel")
 #define ERR_USERONCHANNEL(sender, target, ch) 			PRL_NICK_MSG(sender, "443", target.get_nick()+" "+ch.get_name(), "User is already on that channel")
 #define ERR_BADCHANNELKEY(sender, ch) 					PRL_NICK_MSG(sender, "457", ch.get_name(), "Cannot join channel (+k) - bad key")
 #define ERR_NEEDMOREPARAMS(sender, cmd_name)			PRL_NICK_MSG(sender, "461", cmd_name, "Not enough parameters")
 #define ERR_ALREADYREGISTRED(sender) 					PRL_NICK_MSG(sender, "462", "", "You may not reregister")
+#define ERR_PASSWDMISMATCH(sender)						PRL_NICK_MSG(sender, "464", "", "Password incorrect")
 #define ERR_CHANNELISFULL(sender, ch) 					PRL_NICK_MSG(sender, "471", ch.get_name(), "Cannot join channel (+l)")
 #define ERR_NOCHANMODES(sender, mode) 					PRL_NICK_MSG(sender, "472", mode, "is an unknown mode character to me")
 #define ERR_INVITEONLYCHAN(sender, ch)					PRL_NICK_MSG(sender, "473", ch.get_name(), + "Cannot join channel (+i)")
 #define ERR_NOPRIVILEGES(sender)						PRL_NICK_MSG(sender, "481", "", "Permission Denied- You're not an " + sever_name +" operator")
-
 #define ERR_CHANOPRIVSNEEDED(ch)						REPLY(":"+server_name, "482", ch.get_name(), "You're not a channel operator")
-#define ERR_ERRONEUSNICKNAME(sender)					PRL_NICK_MSG(sender, "432", "Error one use nickname")
-#define ERR_NICKNAMEINUSE(sender, new_nick)				PRL_NICK_MSG(sender, "433", new_nick, "Nickname is already in use")
-#define ERR_PASSWDMISMATCH(sender)						PRL_NICK_MSG(sender, "464", "", "Password incorrect")
 
 void send_msg(const Client &reciever, const std::string &message);
 void send_numeric_msg(const Client &reciever, int err_code, const std::string &message);
