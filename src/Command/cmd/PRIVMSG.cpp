@@ -5,7 +5,7 @@ static bool require_valid_param(Client &client, const Command &cmd, CmdManager &
 	bool is_ok = true;
 	if (cmd._params.size() == 0)
 	{
-		send_msg(client, ERR_NORECIPIENT(client, cmd.get_original_str()));
+		reply(client, ERR_NORECIPIENT(client, cmd.get_original_str()));
 		is_ok = false;
 	}
 	else if (!cmdManager.require_enough_params(client, cmd, 1, 2))
@@ -14,7 +14,7 @@ static bool require_valid_param(Client &client, const Command &cmd, CmdManager &
 	}
 	if (!cmd.has_trailing())
 	{
-		send_msg(client, ERR_NOTEXTTOSEND(client));
+		reply(client, ERR_NOTEXTTOSEND(client));
 		is_ok = false;	
 	}
 	return is_ok;

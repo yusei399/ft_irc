@@ -7,7 +7,7 @@ static void pong(Client &sender, const Command &cmd)
 		msg += cmd._params[0];
 	else
 		msg += cmd._params[0] + " " + cmd._params[1];
-	send_msg(sender, msg);
+	send_msg_past(sender, msg);
 }
 
 void CmdManager::ping(Client &sender, const Command& cmd)

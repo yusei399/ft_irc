@@ -36,7 +36,7 @@ void CmdManager::cap(Client &sender, const Command&cmd)
 	std::string sub_cmd = cmd._params[0];
 	if (sub_cmd == "LS")
 	{
-		send_msg(sender, "CAP * LS\r\n");
+		send_msg_past(sender, "CAP * LS\r\n");
 		//send_message("CAP " + nick + " LS :multi-prefix sasl", fd, 0);
 	}
 	/*else if (sub_cmd == "REQ")

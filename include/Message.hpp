@@ -88,7 +88,8 @@ const std::string server_name = "ircserv";
 #define ERR_CHANOPRIVSNEEDED(ch)						REPLY(":"+server_name, "482", ch.get_name(), "You're not a channel operator")
 
 
-void send_msg(const Client &reciever, const std::string &message);
+void send_msg_past(const Client &reciever, const std::string &message);
+void reply(const Client &reciever, const std::string &message);
 
 void send_welcome_msgs(const Client &reciever);
 void send_prl_none(const Client &reciever, const std::string &msg);

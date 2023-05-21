@@ -4,7 +4,7 @@ static bool require_yet_set_user(Client &client)
 {
 	if (client.user_seted)
 	{
-		send_msg(client, ERR_ALREADYREGISTRED(client));
+		reply(client, ERR_ALREADYREGISTRED(client));
 		return false;
 	}
 	return true;

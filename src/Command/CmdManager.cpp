@@ -11,7 +11,7 @@ bool CmdManager::require_enough_params(Client &sender, const Command& cmd, size_
 		ok &=  cmd.has_trailing();
 	if (!ok)
 	{
-		send_msg(sender, ERR_NEEDMOREPARAMS(sender, cmd._cmd_name));
+		reply(sender, ERR_NEEDMOREPARAMS(sender, cmd._cmd_name));
 		return false;
 	}
 	return true;
@@ -42,5 +42,5 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 	else if (cmd._cmd_name == KICK) kick(sender, cmd);
 	else if (cmd._cmd_name == INVITE) invite(sender, cmd);
 	else if (cmd._cmd_name == PART) part(sender, cmd);
-	else send_msg(sender, ERR_UNKNOWNCOMMAND(sender, cmd._cmd_name));
+	else reply(sender, ERR_UNKNOWNCOMMAND(sender, cmd._cmd_name));
 }

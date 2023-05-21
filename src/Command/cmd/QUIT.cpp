@@ -9,9 +9,9 @@ static void send_quit_msg(Client&sender, const Command &cmd, ClientManager &clie
 			continue;
 		std::string msg =sender.get_nick()+" has quit";
 		if (!cmd.has_trailing()) 
-			send_msg(recievers[i], msg);
+			send_msg_past(recievers[i], msg);
 		else
-			send_msg(recievers[i], msg + " (Quit: " + cmd._trailing + ")");
+			send_msg_past(recievers[i], msg + " (Quit: " + cmd._trailing + ")");
 	}
 }
 

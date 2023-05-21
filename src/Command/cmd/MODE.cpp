@@ -112,5 +112,5 @@ void CmdManager::mode(Client &sender, const Command& cmd)
 	else if (is_mode_l(cmd))
 		mode_l(sender, cmd);
 	else
-		send_msg(sender, ERR_NOCHANMODES(sender, get_flag(cmd)));
+		reply(sender, ERR_NOCHANMODES(sender, get_flag(cmd)));
 }

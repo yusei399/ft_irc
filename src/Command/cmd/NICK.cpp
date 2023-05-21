@@ -5,12 +5,12 @@ static bool require_valid_nick(Client &client, const std::string & new_nick)
 {
 	if (new_nick.size() > 9)
 	{
-		send_msg(client, ERR_ERRONEUSNICKNAME(client));
+		reply(client, ERR_ERRONEUSNICKNAME(client));
 		return false;
 	}
 	if (client.exist_nickname(new_nick))
 	{
-		send_msg(client, ERR_NICKNAMEINUSE(client, new_nick));
+		reply(client, ERR_NICKNAMEINUSE(client, new_nick));
 		return false;
 	}
 	return true;

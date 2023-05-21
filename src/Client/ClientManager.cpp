@@ -44,7 +44,7 @@ bool ClientManager::require_exist_nick(Client& sender, const std::string &target
 {
 	if (!exist_client_by_nick(target_nick))
 	{
-		send_msg(sender, ERR_NOSUCHNICK(sender, target_nick));
+		reply(sender, ERR_NOSUCHNICK(sender, target_nick));
 		return false;
 	}
 	return true;
@@ -60,5 +60,5 @@ void ClientManager::privmsg(Client &sender, const std::string &reciever_name, co
 {
 	if (!require_exist_nick(sender, reciever_name))
 		return;
-	send_msg(get_client_by_nick(reciever_name), ":" + sender.get_nick() +" PRIVMSG "+reciever_name +" :" + msg);
+	send_msg_past(get_client_by_nick(reciever_name), ":" + sender.get_nick() +" PRIVMSG "+reciever_name +" :" + msg);
 }

@@ -5,7 +5,7 @@ static bool require_valid_cmd(Client &client, const Command& cmd)
 {
 	if (cmd._params.size() != 1)
 	{
-		send_msg(client, ERR_NEEDMOREPARAMS(client, cmd._cmd_name));
+		reply(client, ERR_NEEDMOREPARAMS(client, cmd._cmd_name));
 		return false;
 	}
 	return true;
@@ -15,7 +15,7 @@ static bool require_first_auth(Client &client)
 {
 	if (client.is_authed())
 	{
-		send_msg(client, ERR_ALREADYREGISTRED(client));
+		reply(client, ERR_ALREADYREGISTRED(client));
 		return false;
 	}
 	return true;
@@ -25,7 +25,7 @@ static bool require_correct_pass(Client &client, const std::string & pass, const
 {
 	if (pass != server_pass)
 	{
-		send_msg(client, ERR_PASSWDMISMATCH(client));
+		reply(client, ERR_PASSWDMISMATCH(client));
 		return false;
 	}
 	return true;

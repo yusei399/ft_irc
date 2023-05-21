@@ -4,7 +4,7 @@
 void Channel::mode_i_state(Client &client)
 {
     if (!require_sender_is_member(client))return;
-    send_msg(client, "MODE " + get_name() + (invited_mode ? " +i" : " -i"));
+    send_msg_past(client, "MODE " + get_name() + (invited_mode ? " +i" : " -i"));
 }
 
 void Channel::mode_i(Client &sender, bool valid)
@@ -50,7 +50,7 @@ std::string Channel::get_channel_modeis(Client &sender, const std::string &mode,
 void Channel::mode_t_state(Client &sender)
 {
     //tはメンバーでなくても使える
-    send_msg(sender, RPL_TOPIC(sender, (*this), get_topic()));
+    reply(sender, RPL_TOPIC(sender, (*this), get_topic()));
 }
 
 void Channel::mode_t(Client &sender, bool valid)
@@ -67,7 +67,7 @@ void Channel::mode_k_state(Client &sender)
     std::string mode = "MODE ";
     if (password == "") mode += "-k";
     else                mode += "+k";
-    send_msg(sender, get_channel_modeis(sender, mode, ""));
+    send_msg_past(sender, get_channel_modeis(sender, mode, ""));
 }
 
 void Channel::mode_k_add(Client &sender, const std::string &new_pass)
@@ -90,14 +90,14 @@ void Channel::mode_l_state(Client &sender)
     if (!require_sender_is_member(sender))return;
     if (!has_limit())return;
     std::string mode = "MODE +l";
-    send_msg(sender, get_channel_modeis(sender, mode, std::to_string(limit_num)));
+    send_msg_past(sender, get_channel_modeis(sender, mode, std::to_string(limit_num)));
 }
 
 bool Channel::require_valid_num(Client &sender, const std::string &limit_num_str)
 {
     if (ft_atoi(limit_num_str, 0, 32767, allow_one_plus) == -1)
     {
-        send_msg(sender, ERR_NEEDMOREPARAMS(sender, "MODE "+get_name() + " +l " + limit_num_str));
+        reply(sender, ERR_NEEDMOREPARAMS(sender, "MODE "+get_name() + " +l " + limit_num_str));
         return false;
     }
     return true;

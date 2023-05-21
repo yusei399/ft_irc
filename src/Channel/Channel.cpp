@@ -9,7 +9,7 @@ Channel::Channel(const std::string &name,const  Client& client, const std::strin
     //新しくチャンネルを作った時のメッセージがあってもいい
     members.insert(client);
     operators.insert(client);
-    send_msg(client, get_prl_topic_msg());
+    send_msg_past(client, get_prl_topic_msg());
     names(client);
 }
 
@@ -28,7 +28,7 @@ static bool require_invited_conditions(Client &client, Channel& channel)
 {
     if (channel.is_invited_mode() && !channel.is_invited(client))
 	{
-        send_msg(client, ERR_INVITEONLYCHAN(client, channel));
+        reply(client, ERR_INVITEONLYCHAN(client, channel));
 		return false;
 	}
 	return true;
@@ -44,7 +44,7 @@ bool Channel::require_limit_safe(Client &sender)
     if (!has_limit())return true;
     if (limit_num < members.size() + 1)
     {
-        send_msg(sender, ERR_CHANNELISFULL(sender, (*this)));
+        reply(sender, ERR_CHANNELISFULL(sender, (*this)));
         return false;
     }
     return true;
@@ -61,11 +61,11 @@ void Channel::join(Client& sender, const std::string & pass)
         return;
     if (!correct_pass(pass))
     {
-        send_msg(sender, ERR_BADCHANNELKEY(sender, (*this)));
+        reply(sender, ERR_BADCHANNELKEY(sender, (*this)));
         return;
     }
     members.insert(sender);
-    send_msg(sender, get_prl_topic_msg());
+    send_msg_past(sender, get_prl_topic_msg());
     names(sender);
 }
 
@@ -73,7 +73,7 @@ void Channel::broadcast(Client& sender, std::string message) const
 {
     if (!require_sender_is_member(sender))return;
     for (client_it reciever = members.begin(); reciever != members.end(); ++reciever)
-        send_msg(*reciever, message);
+        send_msg_past(*reciever, message);
 }
 
 //ユーザーがチャンネルに属していない場合442エラー
@@ -102,8 +102,8 @@ static std::string get_names_str(const Channel &ch, const Client &client)
 void Channel::names(const Client& sender) const
 {
     if (!require_sender_is_member(sender))return;
-    send_msg(sender, get_names_str(*this, sender));
-	send_msg(sender, get_name()+ " :End of /NAMES list");
+    send_msg_past(sender, get_names_str(*this, sender));
+	send_msg_past(sender, get_name()+ " :End of /NAMES list");
 }
 
 
@@ -137,7 +137,7 @@ bool Channel::require_operator(Client& sender) const
 {
 	if (!is_operator(sender))
 	{
-        send_msg(sender, ERR_CHANOPRIVSNEEDED((*this)));
+        reply(sender, ERR_CHANOPRIVSNEEDED((*this)));
 		return false;
 	}
 	return true;
@@ -148,7 +148,7 @@ bool Channel::require_target_is_member(Client& sender, Client &target) const
 {
     if (!is_member(target))
 	{
-        send_msg(sender, ERR_USERNOTINCHANNEL(sender, target, (*this)));
+        reply(sender, ERR_USERNOTINCHANNEL(sender, target, (*this)));
         return false;
 	}
 	return true;
@@ -159,7 +159,7 @@ bool Channel::require_sender_is_member(const Client& sender) const
 {
     if (!is_member(sender))
 	{
-        send_msg(sender, ERR_NOTONCHANNEL(sender, (*this)));
+        reply(sender, ERR_NOTONCHANNEL(sender, (*this)));
         return false;
 	}
     return true;
@@ -170,7 +170,7 @@ static bool require_not_member(Client& sender, Client& target, Channel& channel)
 {
 	if (channel.is_member(target))
 	{
-        send_msg(sender, ERR_USERONCHANNEL(sender, target, channel));
+        reply(sender, ERR_USERONCHANNEL(sender, target, channel));
 		return false;
 	}
 	return true;
@@ -181,7 +181,7 @@ void Channel::invite(Client &sender, Client& target)
 	if (!require_operator(sender)) return;
 	if (!require_not_member(sender, target, *this)) return;
 	invited.insert(target);
-	send_msg(target, sender.get_nick() + " invites you to join " + get_name());
+	send_msg_past(target, sender.get_nick() + " invites you to join " + get_name());
 }
 
 std::string Channel::get_prl_topic_msg()
@@ -203,7 +203,7 @@ void Channel::set_topic(Client &sender, const std::string &topic_msg)
 void Channel::show_topic(Client &sender)
 {
     if (!require_sender_is_member(sender)) return;
-    send_msg(sender, get_prl_topic_msg());
+    send_msg_past(sender, get_prl_topic_msg());
 }
     
 std::string Channel::get_name() const
