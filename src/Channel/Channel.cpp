@@ -9,7 +9,7 @@ Channel::Channel(const std::string &name,const  Client& client, const std::strin
     //新しくチャンネルを作った時のメッセージがあってもいい
     members.insert(client);
     operators.insert(client);
-    send_msg_past(client, get_prl_topic_msg());
+    reply(client, get_rpl_topic_msg(client));
     names(client);
 }
 
@@ -65,21 +65,21 @@ void Channel::join(Client& sender, const std::string & pass)
         return;
     }
     members.insert(sender);
-    send_msg_past(sender, get_prl_topic_msg());
+    reply(sender,get_rpl_topic_msg(sender));
     names(sender);
 }
 
-void Channel::broadcast(Client& sender, std::string message) const
+void Channel::broadcast_reply(Client& sender, std::string message) const
 {
     if (!require_sender_is_member(sender))return;
     for (client_it reciever = members.begin(); reciever != members.end(); ++reciever)
-        send_msg_past(*reciever, message);
+        reply(*reciever, message);
 }
 
 //ユーザーがチャンネルに属していない場合442エラー
 void Channel::privmsg(Client& sender, std::string message) const
 {
-    broadcast(sender,  ":" + sender.get_nick() +" PRIVMSG " + get_name()+ " :"+message);
+    broadcast_reply(sender,  PRIVMSG_MSG(sender, get_name(), message));
 }
 
 
@@ -184,26 +184,25 @@ void Channel::invite(Client &sender, Client& target)
 	send_msg_past(target, sender.get_nick() + " invites you to join " + get_name());
 }
 
-std::string Channel::get_prl_topic_msg()
+std::string Channel::get_rpl_topic_msg(const Client& sender)
 {
-    std::string msg_base = get_name()+ " :" + get_topic();
     if (this->topic_msg == "")
-        return  "331 " + msg_base;
+        return RPL_NOTOPIC(sender, (*this));
     else
-        return  "332 " + msg_base;
+        return RPL_TOPIC(sender, (*this), this->topic_msg);
 }
 
 void Channel::set_topic(Client &sender, const std::string &topic_msg)
 {
     if (topic_restricted && !require_operator(sender)) return;
     this->topic_msg = topic_msg;
-    broadcast(sender,get_prl_topic_msg());
+    broadcast_reply(sender, get_rpl_topic_msg(sender));
 }
 
 void Channel::show_topic(Client &sender)
 {
     if (!require_sender_is_member(sender)) return;
-    send_msg_past(sender, get_prl_topic_msg());
+    send_msg_past(sender, get_rpl_topic_msg(sender));
 }
     
 std::string Channel::get_name() const

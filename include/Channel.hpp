@@ -12,6 +12,8 @@
 #include "Message.hpp"
 
 typedef std::set<Client>::iterator client_it;
+#define RPL_NOTOPIC(sender, ch) 						RPL_NICK_MSG(sender, "331", "TOPIC " + ch.get_name(), "No topic set for "+ ch.get_name())
+#define RPL_TOPIC(sender, ch, topic)    				RPL_NICK_MSG(sender, "332", ch.get_name(), topic)
 
 class Channel
 {
@@ -38,7 +40,7 @@ public:
     Channel(const std::string &name, const Client& client, const std::string &pwd);
     void part(Client& target);
     void join(Client& sender, const std::string & pass = "");
-    void broadcast(Client& sender, std::string message) const;
+    void broadcast_reply(Client& sender, std::string message) const;
     void privmsg(Client& sender, std::string message) const;
     void names(const Client& sender) const;
     bool correct_pass(const std::string& pass);
@@ -57,7 +59,8 @@ public:
     void mode_l_state(Client &sender);
     void mode_l_add(Client &sender, const std::string &new_pass);
     void mode_l_rem(Client &sender);
-    std::string get_prl_topic_msg();
+    std::string get_rpl_topic_msg(const Client& sender);
+
     void set_topic(Client &sender, const std::string &topic_msg);    
     void show_topic(Client &sender);
     

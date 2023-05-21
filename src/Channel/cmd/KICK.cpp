@@ -15,7 +15,7 @@ static void broadcast_kick_msg(Client &sender, Client& ban_user, const std::stri
 	std::string msg = sender.get_nick() + " has kicked " +ban_user.get_nick() +" from " +  channel.get_name();
     if (kick_reason != "")
 		msg += " (" + kick_reason +")";
-	channel.broadcast(sender, msg);
+	channel.broadcast_reply(sender, msg);
 }
 
 //<nick> has kicked <target> from <channel> (<reason>)
