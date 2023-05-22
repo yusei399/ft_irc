@@ -54,6 +54,7 @@ void ClientManager::erase_client(Client &client)
 {
 	assert(exist_client_by_nick(client.get_nick()));
 	_connect.erase(find_client_by_nick(client.get_nick()));
+	client.quit();
 }
 
 void ClientManager::privmsg(const Command&cmd, Client &sender, const std::string &reciever_name, const std::string& msg)

@@ -2,12 +2,12 @@
 
 static void pong(Client &sender, const Command &cmd)
 {
-	std::string msg = "PONG ";
+	std::string msg = "";
 	if (cmd._params.size() == 1)
 		msg += cmd._params[0];
 	else
 		msg += cmd._params[0] + " " + cmd._params[1];
-	send_msg_past(sender, msg);
+	reply(sender, PONG_MSG(msg));
 }
 
 void CmdManager::ping(Client &sender, const Command& cmd)

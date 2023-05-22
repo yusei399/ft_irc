@@ -56,7 +56,7 @@ public:
 	void set_user_info(const std::string &user, const std::string &host, const std::string &server,const std::string &real);
 	bool exist_nickname(const std::string &nick);
 	void set_auth(bool b) { authed = b;}
-	
+	void quit();
 	//set<client>を使う際に必要
 	bool operator<(const Client& rhs) const;
 	bool operator==(const Client& rhs) const;

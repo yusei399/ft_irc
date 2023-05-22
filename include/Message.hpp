@@ -18,8 +18,6 @@ const std::string server_name = "ircserv";
 #define CAP_LS ":" +server_name + " CAP * LS"
 //:<prefix> <command> <parameters> :<trailing>
 
-//todo 末尾の\r\nはsend_msgの方でつける
-
 #define REPLY(prefix, command, parameters, trailing) ":" + (std::string)prefix + " " + (std::string)command + ((std::string)parameters == "" ? (std::string)"" : (std::string)" " + (std::string)parameters) + ((std::string)trailing == "" ? (std::string)"" : ((std::string)" :" +(std::string)trailing))
 
 #define REP_REGIST(client, command, trailing)	REPLY(server_name, command, client.get_nick(), trailing)
@@ -44,7 +42,7 @@ const std::string server_name = "ircserv";
 
 #define REP_CMD(client, cmd) REPLY(client.get_user_info(), cmd.get_original_str(), "", "")
 
-//#define PONG_MSG(arg)						":" + server_name + " PONG :" + arg
+#define PONG_MSG(arg)						":" + server_name + " PONG :" + arg
 
 //RPL
 #define RPL_NONE(msg) 									REPLY(server_name, "300", "*", msg)
@@ -83,10 +81,8 @@ const std::string server_name = "ircserv";
 //#define ERR_NOPRIVILEGES(sender)						RPL_NICK_MSG(sender, "481", "", "Permission Denied- You're not an " + sever_name +" operator")
 #define ERR_CHANOPRIVSNEEDED(ch)						REPLY(":"+server_name, "482", ch.get_name(), "You're not a channel operator")
 
-
-void send_msg_past(const Client &reciever, const std::string &message);
 void reply(const Client &reciever, const std::string &message);
 
 void send_welcome_msgs(const Client &reciever);
-void send_prl_none(const Client &reciever, const std::string &msg);
+void send_rpl_none(const Client &reciever, const std::string &msg);
 #endif // MESSAGE_HPP

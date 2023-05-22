@@ -49,8 +49,7 @@ public:
     void privmsg(const Command&cmd, Client& sender, std::string message) const;
     void names(const Client& sender) const;
     bool correct_pass(const std::string& pass);
-	void quit(const Command&cmd, const Client &sender,  const std::string &quit_msg);
-    //オペレーターコマンド
+	//オペレーターコマンド
     void kick(const Command&cmd, Client &sender, Client& target, const std::string & kick_reason);
     void invite(const Command&cmd, Client &sender, Client& target);
     void mode_i_state(Client &client);

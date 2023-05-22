@@ -62,6 +62,11 @@ std::string Client::get_user_info() const
 	return get_nick() + "!" + get_user_name() + "@" + get_host_name();
 }
 
+/// @brief client情報を削除
+void Client::quit()
+{
+	get_nickname_dict().erase(*this);
+}
 
 //Setのキーに使うために必要
 bool Client::operator<(const Client& rhs) const
