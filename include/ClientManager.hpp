@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <map>
 #include "Client.hpp"
+#include "Command.hpp"
 
 //Client全体に対する操作を担う
 class ClientManager
@@ -23,7 +24,7 @@ public:
 	const std::vector<Client> get_connect_clients();
 	bool exist_client_by_nick(const std::string &nickname);
 	bool require_exist_nick(Client& sender, const std::string &target_nick);
-	void privmsg(Client &sender, const std::string &reciever_name, const std::string& msg);
+	void privmsg(const Command&cmd, Client &sender, const std::string &reciever_name, const std::string& msg);
 	void erase_client(Client &client);
 };
 

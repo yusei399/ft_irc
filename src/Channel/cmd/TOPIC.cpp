@@ -20,7 +20,7 @@ void Channel::set_topic(const Command& cmd, Client &sender, const std::string &t
 void Channel::show_topic(Client &sender)
 {
     if (!require_sender_is_member(sender)) return;
-    send_msg_past(sender, get_rpl_topic_msg(sender));
+    reply(sender, get_rpl_topic_msg(sender));
 }
 
 /*

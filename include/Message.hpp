@@ -52,8 +52,8 @@ const std::string server_name = "ircserv";
 #define RPL_NICK_MSG(sender, command, parameters, trailing)	REPLY(server_name, command, sender.get_nick() + ((std::string)parameters == "" ? (std::string)"" : (" " + (std::string)parameters)), trailing)
 #define RPL_CHANNELMODEIS(sender, ch, mode, target_nick) 			RPL_NICK_MSG(sender, "324", ch.get_name() + " " + (std::string)mode + ((std::string)target_nick == "" ? "" : " " + (std::string)target_nick), "")
 #define RPL_INVITING(sender, target, ch) 				RPL_NICK_MSG(sender, "341", target.get_nick()+ " " + ch.get_name(), "")
-//#define RPL_NAMREPLY(sender, ch, name_list) 			RPL_NICK_MSG(sender, "353", " = " + ch.get_name(),name_list)
-//#define RPL_ENDOFNAMES(sender, ch) 						RPL_NICK_MSG(sender, "366", ch.get_name(),"End of /NAMES list")
+#define RPL_NAMREPLY(sender, ch_name, name_list) 			RPL_NICK_MSG(sender, "353", ((std::string)ch_name == "*" ? "" : "= ") + ch_name ,name_list)
+#define RPL_ENDOFNAMES(sender, ch_name) 						RPL_NICK_MSG(sender, "366", ch_name,"End of /NAMES list")
 //									+k, -kなど
 //#define RPL_CREATIONTIME(nick, channelName, nowTime) RPL_NICK_MSG(sender, "329", " #" + channelName + " " + nowTime)
 

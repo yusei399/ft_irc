@@ -1,5 +1,5 @@
 PASS 1234
-NICK koromo
+NICK d
 USER a b c :d
 
 NAMES

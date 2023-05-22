@@ -29,7 +29,7 @@ class CmdManager
 	void mode_t(Client&sender, const Command&cmd);
 	void mode_k(Client&sender, const Command&cmd);
 	void mode_l(Client&sender, const Command&cmd);
-
+	void names_all_channel(Client &client, const Command& cmd);
 public:
 	CmdManager(ClientManager &clientManager, ChannelManager &channelManager, const std::string &server_pass) :clientManager(clientManager), channelManager(channelManager), server_pass(server_pass){};
 	bool require_enough_params(Client &sender, const Command& cmd, size_t ok_min, size_t ng_min = SIZE_MAX, bool require_trailing = false);

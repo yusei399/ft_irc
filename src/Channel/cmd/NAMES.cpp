@@ -8,9 +8,9 @@ static std::vector<std::string> parse_channels(const Command&cmd)
 	return split(cmd._params[0], ",");
 }
 
-static std::string get_names_str(const Channel &ch, const Client &client)
+static std::string get_name_list(const Channel &ch, const Client &client)
 {
-	std::string msg = ch.get_name() + " :";
+	std::string msg = "";
 	for(std::set<Client>::iterator cl_it = ch.get_members().begin(); cl_it != ch.get_members().end(); cl_it++)
 	{
 		if (cl_it != ch.get_members().begin())
@@ -22,11 +22,13 @@ static std::string get_names_str(const Channel &ch, const Client &client)
 	return msg;
 }
 
+/// @brief チャンネルに参加しているクライアントの一覧を出力
+/// @param sender 
+/// @param names_constraints コマンドの送信者がチャンネルに参加していない時にエラーを出すかどうか
 void Channel::names(const Client& sender) const
 {
-    if (!require_sender_is_member(sender))return;
-    send_msg_past(sender, get_names_str(*this, sender));
-	send_msg_past(sender, get_name()+ " :End of /NAMES list");
+   	reply(sender, RPL_NAMREPLY(sender, (this->get_name()), get_name_list(*this, sender)));
+	reply(sender, RPL_ENDOFNAMES(sender, (this->get_name())));
 }
 
 //NAMES       : 全てのクライアントを表示

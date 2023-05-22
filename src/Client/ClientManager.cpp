@@ -56,9 +56,11 @@ void ClientManager::erase_client(Client &client)
 	_connect.erase(find_client_by_nick(client.get_nick()));
 }
 
-void ClientManager::privmsg(Client &sender, const std::string &reciever_name, const std::string& msg)
+void ClientManager::privmsg(const Command&cmd, Client &sender, const std::string &reciever_name, const std::string& msg)
 {
 	if (!require_exist_nick(sender, reciever_name))
 		return;
-	send_msg_past(get_client_by_nick(reciever_name), ":" + sender.get_nick() +" PRIVMSG "+reciever_name +" :" + msg);
+	reply(sender, REP_CMD(sender, cmd));
+	Client reciever = get_client_by_nick(reciever_name);
+	reply(reciever, REP_CMD(sender, cmd));
 }

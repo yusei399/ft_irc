@@ -43,6 +43,6 @@ void CmdManager::privmsg(Client& client, const Command &cmd)
 		if (is_channel(targets[i]))
 			channelManager.privmsg_to_channel(cmd, client, targets[i], cmd._trailing);
 		else
-			clientManager.privmsg(client, targets[i], cmd._trailing);
+			clientManager.privmsg(cmd, client, targets[i], cmd._trailing);
 	}
 }

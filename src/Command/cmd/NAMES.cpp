@@ -1,14 +1,11 @@
 
 #include "CmdManager.hpp"
 
-static void names_all_client(const Client &sender, ClientManager&clientManager)
+void CmdManager::names_all_channel(Client &client, const Command& cmd)
 {
-	std::string msg;
-	std::vector<Client> connect_clients = clientManager.get_connect_clients();
-	for (size_t i = 0; i < connect_clients.size(); i++)
-		msg += " " + connect_clients[i].get_nick();
-	send_msg_past(sender,  msg);
-	send_msg_past(sender, " :End of /NAMES list");
+	std::vector<Client> recievers = clientManager.get_connect_clients();
+	std::set<Client> recievers_set(recievers.begin(), recievers.end());
+	channelManager.names_all(client, cmd, recievers_set);
 }
 
 void CmdManager::names(Client &client, const Command& cmd)
@@ -17,7 +14,7 @@ void CmdManager::names(Client &client, const Command& cmd)
 	if (!require_nick_user(client)) return;
 	if (!require_enough_params(client, cmd, 0, 2)) return;
 	if (cmd._params.size() == 0)
-		names_all_client(client, clientManager);
+		names_all_channel(client, cmd);
 	else
 		channelManager.names_channel(client, cmd);
 }
