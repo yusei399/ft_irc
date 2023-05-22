@@ -36,42 +36,14 @@ const std::string server_name = "ircserv";
 //INVITEは送られた人にのみINVITEの通知がいく
 //送った人にはPRL_INVITING
 
-//todo REP_CMDを使ってないもの
-//JOIN, 
-//KICK, 
-//MODE, 
-//PART,
-//PRIVMSG,
-//QUIT, 
-//TOPIC
-
 
 //コマンドを使った本人にも同じ通知がいくコマンド
 //JOIN、PART、PRIVMSG、QUIT
 //違う返答があるコマンド
 //KICK, MODE, TOPIC
 
-//通知がまで書けてないもの
-//todo
-// part
-// kick, topic, 
-
 #define REP_CMD(client, cmd) REPLY(client.get_user_info(), cmd.get_original_str(), "", "")
 
-//#define JOIN_MSG(client, ch)	REP_CMD(client, "JOIN", ch.get_name(), "")
-
-//todo ターゲットがいない場合もある      +k, -kなど
-//#define MODE_MSG(sender, target, ch, mode)	REP_CMD(sender, "MODE", ch.get_name() + " " + (std::string)mode + " " + target.get_nick_name())
-
-//#define QUIT_MSG(sender, msg)			    REP_CMD(sender, "QUIT :Quit", msg)
-#define _PRIVMSG_MSG(sender, target_name, msg)	REP_CMD(sender, "PRIVMSG", target_name, msg)
-//#define NOTICE_MSG(sender, msg)				REP_CMD(sender, "NOTICE",  target.get_nick(), msg)
-//#define INVITE_MSG(sender, msg, ch)			REP_CMD(sender, "INVITE",  target.getnick() + " " +ch.get_name())
-//#define KICK_MSG(sender, ch, target, msg)	REP_CMD(sender, "KICK",    ch.get_name() + " " + target.get_nick(), msg)
-//#define PART_MSG(sender, ch, msg) 			REP_CMD(sender, "PART", ch.get_name(), msg)
-//#define SETTOPIC_MSG(sender, ch, topic)		REP_CMD(sender, "TOPIC", ch.get_name(), topic)
-
-//#define NICK_MSG(oldNick, newNick)			":" + old_nick + " NICK :" + new_nick
 //#define PONG_MSG(arg)						":" + server_name + " PONG :" + arg
 
 //RPL

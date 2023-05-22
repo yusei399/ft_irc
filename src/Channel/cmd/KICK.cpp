@@ -26,8 +26,7 @@ void Channel::kick(const Command&cmd, Client &sender, Client& ban_user, const st
 	if (!require_nick_user(sender)) return;
 	if (!require_in_channel(sender, ban_user, *this)) return;
 	if (!require_operator(sender)) return;
-	send_kick_msg(sender, ban_user, kick_reason, *this);
-	reply_cmd_except_sender(sender, cmd);
+	reply_cmd_all(sender, cmd);
 	remove_client(ban_user);
 }
 /*

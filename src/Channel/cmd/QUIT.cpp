@@ -5,10 +5,10 @@
 void Channel::quit(const Command&cmd, const Client &sender, const std::string &quit_msg)
 {
     assert(is_member(sender));
+	reply_cmd_all(sender, cmd);
     members.erase(sender);
     if (is_operator(sender))
         operators.erase(sender);
-	reply_cmd_all(sender, cmd);
 }
 
 //QUIT [:msg] : msgは省略可、サーバーから抜け、全てのクライアントにメッセージを送る

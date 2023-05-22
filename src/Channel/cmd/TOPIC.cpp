@@ -13,8 +13,8 @@ void Channel::set_topic(const Command& cmd, Client &sender, const std::string &t
 {
     if (topic_restricted && !require_operator(sender)) return;
     this->topic_msg = topic_msg;
-    broadcast(sender, get_rpl_topic_msg(sender));
-	//todo 違う返答がある 
+    reply(sender, get_rpl_topic_msg(sender));
+    reply_cmd_except_sender(sender, cmd);
 }
 
 void Channel::show_topic(Client &sender)

@@ -31,8 +31,6 @@ void Channel::join(const Command&cmd, Client& sender, const std::string & pass)
     names(sender);
 }
 
-//todo
-//参加時トピックと、namesを表示
 void ChannelManager::join(const Command& cmd, Client &client, const std::vector<std::string> &ch_names, const std::vector<std::string> &ch_pass)
 {
 	for(size_t i = 0; i < ch_names.size(); i++)
