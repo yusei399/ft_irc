@@ -74,7 +74,6 @@ const std::string server_name = "ircserv";
 #define ERR_NOTONCHANNEL(sender, ch)					RPL_NICK_MSG(sender, "442", ch.get_name(), "You're not on that channel")
 #define ERR_USERONCHANNEL(sender, target, ch) 			RPL_NICK_MSG(sender, "443", target.get_nick()+" "+ch.get_name(), "User is already on that channel")
 #define ERR_NOTREGISTERED(sender)						RPL_NICK_MSG(sender, "451", "", "You have not registered")
-#define ERR_BADCHANNELKEY(sender, ch) 					RPL_NICK_MSG(sender, "457", ch.get_name(), "Cannot join channel (+k) - bad key")
 #define ERR_NEEDMOREPARAMS(sender, cmd_name)			RPL_NICK_MSG(sender, "461", cmd_name, "Not enough parameters")
 #define ERR_ALREADYREGISTRED(sender) 					RPL_NICK_MSG(sender, "462", "", "You may not reregister")
 #define ERR_PASSWDMISMATCH(sender)						RPL_NICK_MSG(sender, "464", "", "Password incorrect")

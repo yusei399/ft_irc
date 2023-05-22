@@ -36,7 +36,6 @@ private:
 public:
     int get_member_cnt();
     bool has_limit()const {return has_limit_;}
-    std::string get_topic();
     Channel(const std::string &name, const Client& client, const std::string &pwd);
     void part(Client& target);
     void join(Client& sender, const std::string & pass = "");

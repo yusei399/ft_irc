@@ -1,11 +1,32 @@
 #include "Client.hpp"
+#include "Channel.hpp"
 #include "ChannelManager.hpp"
 #include "CheckRegister.hpp"
-
 
 static std::vector<std::string> parse_channels(const Command&cmd)
 {
 	return split(cmd._params[0], ",");
+}
+
+static std::string get_names_str(const Channel &ch, const Client &client)
+{
+	std::string msg = ch.get_name() + " :";
+	for(std::set<Client>::iterator cl_it = ch.get_members().begin(); cl_it != ch.get_members().end(); cl_it++)
+	{
+		if (cl_it != ch.get_members().begin())
+			msg += " ";
+		if (ch.is_operator(*cl_it))
+			msg+="@";
+		msg += cl_it->get_nick();
+	}
+	return msg;
+}
+
+void Channel::names(const Client& sender) const
+{
+    if (!require_sender_is_member(sender))return;
+    send_msg_past(sender, get_names_str(*this, sender));
+	send_msg_past(sender, get_name()+ " :End of /NAMES list");
 }
 
 //NAMES       : 全てのクライアントを表示

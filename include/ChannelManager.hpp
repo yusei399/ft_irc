@@ -26,7 +26,6 @@ public:
 	void user(Client &client, const Command& cmd);
 	void privmsg_to_channel(Client &sender, const std::string &channel_name, const std::string & msg);
 	void quit_all_channel(Client &client, const Command& cmd);
-	void try_part(std::string channelName, Client& client);
 	void part_list(Client &sender, std::vector<std::string> &ch_names);
 };
 #endif

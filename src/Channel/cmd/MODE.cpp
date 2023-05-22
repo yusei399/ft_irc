@@ -32,14 +32,6 @@ void Channel::mode_o(Client &sender, bool valid, Client &target)
     }
 }
 
-std::string Channel::get_topic()
-{
-    if (topic_msg == "")
-        return "No topic is set.";
-    else
-        return topic_msg;
-}
-
 std::string Channel::get_channel_modeis(Client &sender, const std::string &mode, const std::string &param)
 {
     std::string msg =  "324 " + get_name()+ " " + mode;
