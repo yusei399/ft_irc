@@ -21,7 +21,7 @@ void CmdManager::quit(Client&client, const Command &cmd)
 	if (!require_nick_user(client)) return;
 	if (!require_enough_params(client, cmd, 0, 1)) return ;
 	send_quit_msg(client, cmd, clientManager);
-	channelManager.quit_all_channel(client, cmd._trailing);
+	channelManager.quit_all_channel(cmd, client);
 	clientManager.erase_client(client);
 	close(client.get_fd());
 }

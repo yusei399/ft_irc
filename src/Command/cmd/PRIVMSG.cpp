@@ -41,7 +41,7 @@ void CmdManager::privmsg(Client& client, const Command &cmd)
 	for (size_t i = 0; i < targets.size(); i++)
 	{
 		if (is_channel(targets[i]))
-			channelManager.privmsg_to_channel(client, targets[i], cmd._trailing);
+			channelManager.privmsg_to_channel(cmd, client, targets[i], cmd._trailing);
 		else
 			clientManager.privmsg(client, targets[i], cmd._trailing);
 	}

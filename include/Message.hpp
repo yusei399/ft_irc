@@ -15,7 +15,7 @@
 
 const std::string server_name = "ircserv";
 
-#define CAP_LS ":" +server_name + " CAP * LS\r\n"
+#define CAP_LS ":" +server_name + " CAP * LS"
 //:<prefix> <command> <parameters> :<trailing>
 
 //todo 末尾の\r\nはsend_msgの方でつける
@@ -28,8 +28,35 @@ const std::string server_name = "ircserv";
 #define RPL_CREATED(client)						REP_REGIST(client, "003", "This server was created [Thursday, June 1, 2023]")
 #define RPL_MYINFO(client) 						REP_REGIST(client, "004", server_name + " 1.0 - -")
 
+//<command>が数字のメッセージは prefixがサーバーであり、
+//コマンドの通知は全てprefixがコマンドの送信者になる
 
-#define REP_CMD(client, cmd_name, parameters, trailing) REPLY(client.get_user_info(), cmd_name, parameters, trailing)
+//#define REP_CMD(client, cmd_name, parameters, trailing) REPLY(client.get_user_info(), cmd_name, parameters, trailing)
+
+//INVITEは送られた人にのみINVITEの通知がいく
+//送った人にはPRL_INVITING
+
+//todo REP_CMDを使ってないもの
+//JOIN, 
+//KICK, 
+//MODE, 
+//PART,
+//PRIVMSG,
+//QUIT, 
+//TOPIC
+
+
+//コマンドを使った本人にも同じ通知がいくコマンド
+//JOIN、PART、PRIVMSG、QUIT
+//違う返答があるコマンド
+//KICK, MODE, TOPIC
+
+//通知がまで書けてないもの
+//todo
+// part
+// kick, topic, 
+
+#define REP_CMD(client, cmd) REPLY(client.get_user_info(), cmd.get_original_str(), "", "")
 
 //#define JOIN_MSG(client, ch)	REP_CMD(client, "JOIN", ch.get_name(), "")
 
@@ -37,7 +64,7 @@ const std::string server_name = "ircserv";
 //#define MODE_MSG(sender, target, ch, mode)	REP_CMD(sender, "MODE", ch.get_name() + " " + (std::string)mode + " " + target.get_nick_name())
 
 //#define QUIT_MSG(sender, msg)			    REP_CMD(sender, "QUIT :Quit", msg)
-#define PRIVMSG_MSG(sender, target_name, msg)	REP_CMD(sender, "PRIVMSG", target_name, msg)
+#define _PRIVMSG_MSG(sender, target_name, msg)	REP_CMD(sender, "PRIVMSG", target_name, msg)
 //#define NOTICE_MSG(sender, msg)				REP_CMD(sender, "NOTICE",  target.get_nick(), msg)
 //#define INVITE_MSG(sender, msg, ch)			REP_CMD(sender, "INVITE",  target.getnick() + " " +ch.get_name())
 //#define KICK_MSG(sender, ch, target, msg)	REP_CMD(sender, "KICK",    ch.get_name() + " " + target.get_nick(), msg)
@@ -52,7 +79,7 @@ const std::string server_name = "ircserv";
 
 #define RPL_NICK_MSG(sender, command, parameters, trailing)	REPLY(server_name, command, sender.get_nick() + ((std::string)parameters == "" ? (std::string)"" : (" " + (std::string)parameters)), trailing)
 #define RPL_CHANNELMODEIS(sender, ch, mode, target_nick) 			RPL_NICK_MSG(sender, "324", ch.get_name() + " " + (std::string)mode + ((std::string)target_nick == "" ? "" : " " + (std::string)target_nick), "")
-//#define RPL_INVITING(sender, target, ch) 				RPL_NICK_MSG(sender, "341", target.get_nick()+ " " + ch.get_name())
+#define RPL_INVITING(sender, target, ch) 				RPL_NICK_MSG(sender, "341", target.get_nick()+ " " + ch.get_name(), "")
 //#define RPL_NAMREPLY(sender, ch, name_list) 			RPL_NICK_MSG(sender, "353", " = " + ch.get_name(),name_list)
 //#define RPL_ENDOFNAMES(sender, ch) 						RPL_NICK_MSG(sender, "366", ch.get_name(),"End of /NAMES list")
 //									+k, -kなど

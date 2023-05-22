@@ -1,6 +1,5 @@
 #include "CmdManager.hpp"
 
-
 static bool require_valid_nick(Client &client, const std::string & new_nick)
 {
 	if (new_nick.size() > 9)

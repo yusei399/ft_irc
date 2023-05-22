@@ -20,12 +20,12 @@ public:
 	bool exist_channel(std::string channelName) const;
 	//const std::set<Channel> get_belong_channels(const Client &client);
 	//void join(Client &client, const Command& cmd);
-	void join(Client &client, const std::vector<std::string> &ch_names, const std::vector<std::string> &ch_pass);
-	void invite(Client&sender, const std::string &target_user, const std::string &channel);
+	void join(const Command& cmd, Client &client, const std::vector<std::string> &ch_names, const std::vector<std::string> &ch_pass);
+	//void invite(Client&sender, const std::string &target_user, const std::string &channel);
 	void names_channel(Client &client, const Command& cmd);
 	void user(Client &client, const Command& cmd);
-	void privmsg_to_channel(Client &sender, const std::string &channel_name, const std::string & msg);
-	void quit_all_channel(Client &client, const Command& cmd);
-	void part_list(Client &sender, std::vector<std::string> &ch_names);
+	void privmsg_to_channel(const Command& cmd, Client &sender, const std::string &channel_name, const std::string & msg);
+	void quit_all_channel(const Command& cmd, Client &client);
+	void part_list(const Command& cmd, Client &sender, std::vector<std::string> &ch_names);
 };
 #endif

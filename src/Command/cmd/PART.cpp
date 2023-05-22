@@ -9,5 +9,5 @@ void CmdManager::part(Client& sender, const Command& cmd)
 	if (!require_nick_user(sender)) return;
 	if (!require_enough_params(sender, cmd, 1, 2))	return;
 	std::vector<std::string> ch_names = parse_ch_names(cmd);
-	channelManager.part_list(sender, ch_names);
+	channelManager.part_list(cmd, sender, ch_names);
 }

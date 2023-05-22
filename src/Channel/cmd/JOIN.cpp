@@ -12,7 +12,7 @@ static bool require_invited_conditions(Client &client, Channel& channel)
 }
 
 //存在しないチャンネルに対してjoinを行った場合はこの関数ではなくコンストラクタで処理する
-void Channel::join(Client& sender, const std::string & pass)
+void Channel::join(const Command&cmd, Client& sender, const std::string & pass)
 {
     if (!require_invited_conditions(sender, *this)) return;
     //すでに属しているチャンネルにjoinを行った場合,本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
@@ -26,21 +26,22 @@ void Channel::join(Client& sender, const std::string & pass)
         return;
     }
     members.insert(sender);
+    reply_cmd_all(sender, cmd);
     reply(sender,get_rpl_topic_msg(sender));
     names(sender);
 }
 
 //todo
 //参加時トピックと、namesを表示
-void ChannelManager::join(Client &client, const std::vector<std::string> &ch_names, const std::vector<std::string> &ch_pass)
+void ChannelManager::join(const Command& cmd, Client &client, const std::vector<std::string> &ch_names, const std::vector<std::string> &ch_pass)
 {
 	for(size_t i = 0; i < ch_names.size(); i++)
 	{
 		if (!require_valid_channel_name(client, ch_names[i]))
 			continue;
 		if (exist_channel(ch_names[i]))
-			get_channel(ch_names[i]).join(client, ch_pass[i]);
+			get_channel(ch_names[i]).join(cmd, client, ch_pass[i]);
 		else
-		    channels.insert(Channel(ch_names[i], client, ch_pass[i]));
+		    channels.insert(Channel(cmd, ch_names[i], client, ch_pass[i]));
 	}
 }

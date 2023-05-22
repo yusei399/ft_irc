@@ -9,9 +9,9 @@ void CmdManager::mode_i(Client&sender, const Command&cmd)
 	if (flag == MODE_I)
         channel.mode_i_state(sender);
 	else if (flag == MODE_I_ADD)
-        channel.mode_i(sender, true);
+        channel.mode_i(cmd, sender, true);
     else if (flag == MODE_I_REM)
-        channel.mode_i(sender,  false);
+        channel.mode_i(cmd, sender,  false);
 	else
 		throw std::logic_error("");
 }
@@ -27,9 +27,9 @@ void CmdManager::mode_o(Client&sender, const Command&cmd)
 		return;
 	Client &target = clientManager.get_client_by_nick(target_nick);
 	if (flag == MODE_O_ADD)
-       	channel.mode_o(sender, true, target);
+       	channel.mode_o(cmd, sender, true, target);
 	else if(flag == MODE_O_REM)
-       	channel.mode_o(sender, false, target);
+       	channel.mode_o(cmd, sender, false, target);
 	else
 		throw std::logic_error("");
 }
@@ -43,9 +43,9 @@ void CmdManager::mode_t(Client&sender, const Command&cmd)
 	if (flag == MODE_T)
 		channel.mode_t_state(sender);
 	else if (flag == MODE_T_ADD)
-		channel.mode_t(sender, true);
+		channel.mode_t(cmd, sender, true);
 	else if (flag == MODE_T_REM)
-		channel.mode_t(sender, false);
+		channel.mode_t(cmd, sender, false);
 	else
 		throw std::logic_error("");
 }
@@ -61,12 +61,12 @@ void CmdManager::mode_k(Client&sender, const Command&cmd)
 	else if (flag == MODE_K_ADD)
 	{
 		if (!require_enough_params(sender, cmd, 3, 6))return;
-		channel.mode_k_add(sender, cmd._params[2]);
+		channel.mode_k_add(cmd, sender, cmd._params[2]);
 	}
 	else if (flag == MODE_K_REM)
 	{
 		//2つ channel, flag
-		channel.mode_k_rem(sender);
+		channel.mode_k_rem(cmd, sender);
 	}
 	else
 		throw std::logic_error("");
@@ -84,12 +84,12 @@ void CmdManager::mode_l(Client&sender, const Command&cmd)
 	else if (flag == MODE_L_ADD)
 	{
 		if (!require_enough_params(sender, cmd, 3, 6))return;
-		channel.mode_l_add(sender, cmd._params[2]);
+		channel.mode_l_add(cmd, sender, cmd._params[2]);
 	}
 	else if (flag == MODE_L_REM)
 	{
 		//2つ channel, flag
-		channel.mode_l_rem(sender);
+		channel.mode_l_rem(cmd, sender);
 	}
 	else
 		throw std::logic_error("");

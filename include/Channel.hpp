@@ -10,6 +10,7 @@
 #include "Client.hpp"
 #include "ostreamExtend.hpp"
 #include "Message.hpp"
+#include "Command.hpp"
 
 typedef std::set<Client>::iterator client_it;
 #define RPL_NOTOPIC(sender, ch) 						RPL_NICK_MSG(sender, "331", "TOPIC " + ch.get_name(), "No topic set for "+ ch.get_name())
@@ -30,37 +31,42 @@ private:
     bool has_limit_;// チャンネルに人数制限があるか
     size_t limit_num;
 
-    std::string get_channel_modeis(Client &sender, const std::string &mode, const std::string &param);
+  //  std::string get_channel_modeis(Client &sender, const std::string &mode, const std::string &param);
     bool require_valid_num(Client &sender, const std::string &limit_num_str);
     bool require_limit_safe(Client &sender);
 public:
     int get_member_cnt();
     bool has_limit()const {return has_limit_;}
-    Channel(const std::string &name, const Client& client, const std::string &pwd);
-    void part(Client& target);
-    void join(Client& sender, const std::string & pass = "");
-    void broadcast_reply(Client& sender, std::string message) const;
-    void privmsg(Client& sender, std::string message) const;
+    Channel(const Command& cmd, const std::string &name, const Client& client, const std::string &pwd);
+    void remove_client(Client& target);
+    void join(const Command&cmd, Client& sender, const std::string & pass = "");
+    
+    void broadcast(const Client& sender, std::string message) const;
+    void broadcast_except_sender(const Client& sender, std::string message) const;
+    void reply_cmd_all(const Client& sender, const Command& cmd) const;
+    void reply_cmd_except_sender(const Client& sender, const Command& cmd) const;
+    
+    void privmsg(const Command&cmd, Client& sender, std::string message) const;
     void names(const Client& sender) const;
     bool correct_pass(const std::string& pass);
-	void quit(const Client &target,  const std::string &quit_msg);
+	void quit(const Command&cmd, const Client &sender,  const std::string &quit_msg);
     //オペレーターコマンド
-    void kick(Client &sender, Client& target, const std::string & kick_reason);
-    void invite(Client &sender, Client& target);
+    void kick(const Command&cmd, Client &sender, Client& target, const std::string & kick_reason);
+    void invite(const Command&cmd, Client &sender, Client& target);
     void mode_i_state(Client &client);
-    void mode_i(Client &sender, bool valid);
-    void mode_o(Client &sender, bool valid, Client &target);
+    void mode_i(const Command&cmd, Client &sender, bool valid);
+    void mode_o(const Command&cmd, Client &sender, bool valid, Client &target);
     void mode_t_state(Client &sender);
-    void mode_t(Client &sender, bool valid);
+    void mode_t(const Command&cmd, Client &sender, bool valid);
     void mode_k_state(Client &sender);
-    void mode_k_add(Client &sender, const std::string &new_pass);
-    void mode_k_rem(Client &sender);
+    void mode_k_add(const Command&cmd, Client &sender, const std::string &new_pass);
+    void mode_k_rem(const Command&cmd, Client &sender);
     void mode_l_state(Client &sender);
-    void mode_l_add(Client &sender, const std::string &new_pass);
-    void mode_l_rem(Client &sender);
+    void mode_l_add(const Command&cmd, Client &sender, const std::string &new_pass);
+    void mode_l_rem(const Command&cmd, Client &sender);
     std::string get_rpl_topic_msg(const Client& sender);
 
-    void set_topic(Client &sender, const std::string &topic_msg);    
+    void set_topic(const Command&cmd, Client &sender, const std::string &topic_msg);    
     void show_topic(Client &sender);
     
     bool is_member(const Client& target) const;

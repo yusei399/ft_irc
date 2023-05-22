@@ -10,10 +10,11 @@ static bool require_not_member(Client& sender, Client& target, Channel& channel)
 	return true;
 }
 
-void Channel::invite(Client &sender, Client& target)
+void Channel::invite(const Command &cmd, Client &sender, Client& target)
 {
 	if (!require_operator(sender)) return;
 	if (!require_not_member(sender, target, *this)) return;
 	invited.insert(target);
-	send_msg_past(target, sender.get_nick() + " invites you to join " + get_name());
+	reply(sender, RPL_INVITING(sender, target, (*this)));
+	reply(target, REP_CMD(sender, cmd));
 }
