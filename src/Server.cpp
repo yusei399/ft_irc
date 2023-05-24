@@ -116,14 +116,11 @@ void Server::poll_loop()
 		{
 			if (_pfds[i].revents == 0)
 				continue;
-			//else if ((_pfds[i].revents & POLLHUP) || (_pfds[i].revents & POLLERR))
-			else if (has_event(i, POLLHUP) || has_event(i, POLLERR))
-			{
-				clientManager.erase_client(clientManager.get_client_by_fd(_pfds[i].fd), channelManager);
-			}
-			//else if (_pfds[i].revents & POLLIN)
+			Client &client = clientManager.get_client_by_fd(_pfds[i].fd);
+			if (has_event(i, POLLHUP) || has_event(i, POLLERR))
+				cmdManager.hangup_quit(client);
 			else if (has_event(i, POLLIN))
-				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->recieve_cmd(clientManager.get_client_by_fd(_pfds[i].fd));
+				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->recieve_cmd(client);
 		}
 	}
 }

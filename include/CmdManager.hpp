@@ -32,10 +32,12 @@ class CmdManager
 	void mode_l(Channel &channel, Client&sender, const Command&cmd);
 	void mode_state(Channel &channel, Client&sender, const Command&cmd);
 	void names_all_channel(Client &client, const Command& cmd);
+	void send_quit_msg(Client&sender, const Command &cmd);
 public:
 	CmdManager(ClientManager &clientManager, ChannelManager &channelManager, const std::string &server_pass) :clientManager(clientManager), channelManager(channelManager), server_pass(server_pass){};
 	bool require_enough_params(Client &sender, const Command& cmd, size_t ok_min, size_t ng_min = SIZE_MAX, bool require_trailing = false);
 	
+	void hangup_quit(Client&sender);
 	std::vector<Command> parse_commands(const std::string &commands_msg);
 	void exe_cmd(Client &sender, const Command &cmd);
 	void cap(Client &client, const Command &cmd);
