@@ -17,9 +17,10 @@ static std::set<Client> get_same_channel_clients(Client&sender, ChannelManager &
 	return clients;
 }
 
-static void send_quit_msg(Client&sender, const Command &cmd, const std::set<Client> &recievers)
+void CmdManager::send_quit_msg(Client&sender, const Command &cmd)
 {
-	reply(sender, REP_CMD(sender, cmd));
+	const std::set<Client> &recievers = get_same_channel_clients(sender, channelManager);
+	//reply(sender, REP_CMD(sender, cmd));
 	for (client_it it = recievers.begin(); it != recievers.end(); ++it)
 	{
 		Client reciever = *it;
@@ -29,14 +30,21 @@ static void send_quit_msg(Client&sender, const Command &cmd, const std::set<Clie
 	}
 }
 
+/// @brief ctrl cなどでクライアントが抜けた場合にquitする
+/// @param sender 
+/// @param cmd 
+void CmdManager::hangup_quit(Client&sender)
+{
+	send_quit_msg(sender, Command((std::string)QUIT +" : " + sender.get_nick() + " was hangup"));
+	clientManager.erase_client(sender, channelManager);
+}
+
 //QUIT #a [:reason]
 void CmdManager::quit(Client&client, const Command &cmd)
 {
 	if (!require_authed(client)) return;
 	if (!require_nick_user(client)) return;
 	if (!require_enough_params(client, cmd, 0, 1)) return ;
-	send_quit_msg(client, cmd, get_same_channel_clients(client, channelManager));
-	channelManager.quit_all_channel(cmd, client);
-	clientManager.erase_client(client);
-	close(client.get_fd());
+	send_quit_msg(client, cmd);
+	clientManager.erase_client(client, channelManager);
 }

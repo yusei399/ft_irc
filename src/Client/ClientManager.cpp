@@ -50,11 +50,14 @@ bool ClientManager::require_exist_nick(Client& sender, const std::string &target
 	return true;
 }
 
-void ClientManager::erase_client(Client &client)
+void ClientManager::erase_client(Client &client, ChannelManager& channelManager)
 {
+	std::cout << "disconnected_client : "<<  client.get_nick()<< std::endl;
+	channelManager.remove_by_all_channel(client);
 	assert(exist_client_by_nick(client.get_nick()));
 	_connect.erase(find_client_by_nick(client.get_nick()));
 	client.quit();
+	close(client.get_fd());
 }
 
 void ClientManager::privmsg(const Command&cmd, Client &sender, const std::string &reciever_name, const std::string& msg)
