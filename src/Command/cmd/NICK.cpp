@@ -1,16 +1,15 @@
 #include "CmdManager.hpp"
 
-
 static bool require_valid_nick(Client &client, const std::string & new_nick)
 {
 	if (new_nick.size() > 9)
 	{
-		send_numeric_msg(client, 432, ":Erroneus nickname");
+		reply(client, ERR_ERRONEUSNICKNAME(client));
 		return false;
 	}
 	if (client.exist_nickname(new_nick))
 	{
-		send_numeric_msg(client,433, new_nick + " :Nickname is already in use" );
+		reply(client, ERR_NICKNAMEINUSE(client, new_nick));
 		return false;
 	}
 	return true;
@@ -27,8 +26,7 @@ void CmdManager::nick(Client &client, const Command& cmd)
 	if (!client.nickname_seted && client.user_seted)
 	{
 		client.set_nick(new_nick);
-		//:irc.example.com 001 kaou :Welcome to the Internet Relay Network kaou
-		send_msg(client, "001 "+new_nick + " :Welcome to the Internet Relay Network " + client.get_nick());
+		send_welcome_msgs(client);
 	}
 	else
 	{

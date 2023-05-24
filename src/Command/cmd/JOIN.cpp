@@ -28,5 +28,5 @@ void CmdManager::join(Client &client, const Command& cmd)
 	if (!require_enough_params(client, cmd, 1, 3)) return;
 	std::vector<std::string> ch_names = parse_ch_names(cmd);
 	std::vector<std::string> ch_pass = parse_ch_pass(cmd, ch_names);
-	channelManager.join(client, ch_names, ch_pass);
+	channelManager.join(cmd, client, ch_names, ch_pass);
 }

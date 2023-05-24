@@ -1,5 +1,7 @@
 #include "CmdManager.hpp"
 
+
+//INVITE nick #channel
 void CmdManager::invite(Client& sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;
@@ -11,5 +13,5 @@ void CmdManager::invite(Client& sender, const Command& cmd)
 	if (!channelManager.require_exist_channel(sender, channel_name))return;
 	Client& target_user = clientManager.get_client_by_nick(target_user_name);
 	Channel& channel = channelManager.get_channel(channel_name);
-	channel.invite(sender, target_user);
+	channel.invite(cmd, sender, target_user);
 }

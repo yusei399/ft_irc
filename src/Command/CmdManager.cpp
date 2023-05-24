@@ -11,7 +11,7 @@ bool CmdManager::require_enough_params(Client &sender, const Command& cmd, size_
 		ok &=  cmd.has_trailing();
 	if (!ok)
 	{
-		send_numeric_msg(sender, 461, cmd.get_original_str() + " :Not enough parameters");	
+		reply(sender, ERR_NEEDMOREPARAMS(sender, cmd._cmd_name));
 		return false;
 	}
 	return true;
@@ -37,10 +37,11 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 	else if (cmd._cmd_name == PING)	ping(sender, cmd);
 	else if (cmd._cmd_name == NAMES) names(sender, cmd);
 	else if (cmd._cmd_name == MODE) mode(sender, cmd);
+	else if (cmd._cmd_name == WHO) who(sender, cmd);
 	else if (cmd._cmd_name == PRIVMSG) privmsg(sender, cmd);
 	else if (cmd._cmd_name == QUIT)	quit(sender, cmd);
 	else if (cmd._cmd_name == KICK) kick(sender, cmd);
 	else if (cmd._cmd_name == INVITE) invite(sender, cmd);
 	else if (cmd._cmd_name == PART) part(sender, cmd);
-	//else send_numeric_msg(sender, 421, cmd._cmd_name + " :Unknown command");
+	else reply(sender, ERR_UNKNOWNCOMMAND(sender, cmd._cmd_name));
 }

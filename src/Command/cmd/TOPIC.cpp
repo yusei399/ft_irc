@@ -1,5 +1,6 @@
 #include "CmdManager.hpp"
 
+//TOPIC #a :topic	チャンネル#aのトピックをtopicにする
 void CmdManager::topic(Client& sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;
@@ -9,7 +10,7 @@ void CmdManager::topic(Client& sender, const Command& cmd)
 	if (!channelManager.require_exist_channel(sender, channel_name)) return;
 	Channel &channel = channelManager.get_channel(channel_name);
 	if (cmd.has_trailing())
-		channel.set_topic(sender, cmd._trailing);
+		channel.set_topic(cmd, sender, cmd._trailing);
 	else 
 		channel.show_topic(sender);
 }

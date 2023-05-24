@@ -1,0 +1,60 @@
+PASS 1234
+NICK a
+USER a b c :d
+
+PASS 1234
+NICK b
+USER a b c :d
+
+PASS 1234
+NICK c
+USER a b c :d
+
+
+PASS 1234
+NICK d
+USER a b c :d
+
+NAMES
+NVITE c #aa
+MODE #a i
+
+/connect localhost 6667 1234
+
+
+INVITE nick #channel
+JOIN #channel1[,#channel2...]
+KICK #channel nick
+MODE #channel option [target_user]
+
+NAMES #a,#b
+NAMES
+
+NICK a
+PART #a
+PASS pass
+PRIVMSG #a :msg
+QUIT #a
+TOPIC #a :msg
+USER a b c:d
+
+INVITE, JOIN, KICK, MODE(チャンネル),  PART, TOPIC 
+
+
+//INVITE
+//JOIN
+
+KICK
+MODE
+i
+t
+o
+k
+NAMES
+NICK
+PART
+//PASS 
+//PRIVMSG 
+QUIT
+TOPIC 
+//USER

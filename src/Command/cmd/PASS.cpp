@@ -5,7 +5,7 @@ static bool require_valid_cmd(Client &client, const Command& cmd)
 {
 	if (cmd._params.size() != 1)
 	{
-		send_numeric_msg(client, 461, cmd.get_original_str() + " :Not enough parameters");
+		reply(client, ERR_NEEDMOREPARAMS(client, cmd._cmd_name));
 		return false;
 	}
 	return true;
@@ -15,7 +15,7 @@ static bool require_first_auth(Client &client)
 {
 	if (client.is_authed())
 	{
-		send_numeric_msg(client,462, ":You may not reregister");
+		reply(client, ERR_ALREADYREGISTRED(client));
 		return false;
 	}
 	return true;
@@ -25,7 +25,7 @@ static bool require_correct_pass(Client &client, const std::string & pass, const
 {
 	if (pass != server_pass)
 	{
-		send_numeric_msg(client, 464, " :Password incorrect");
+		reply(client, ERR_PASSWDMISMATCH(client));
 		return false;
 	}
 	return true;
@@ -40,5 +40,5 @@ void CmdManager::pass(Client &client, const Command& cmd)
 	const std::string &pass = cmd._params[0];
 	if (!require_correct_pass(client, pass, server_pass)) return;
 	client.set_auth(true);
-	send_msg(client, "Password correct!");//本家にはないが分かりにくいので、認証時メッセージを送る
+	send_rpl_none(client, "Password correct!");
 }

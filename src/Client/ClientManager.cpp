@@ -44,7 +44,7 @@ bool ClientManager::require_exist_nick(Client& sender, const std::string &target
 {
 	if (!exist_client_by_nick(target_nick))
 	{
-		send_numeric_msg(sender, 401, target_nick + " :No such nick");
+		reply(sender, ERR_NOSUCHNICK(sender, target_nick));
 		return false;
 	}
 	return true;
@@ -54,11 +54,14 @@ void ClientManager::erase_client(Client &client)
 {
 	assert(exist_client_by_nick(client.get_nick()));
 	_connect.erase(find_client_by_nick(client.get_nick()));
+	client.quit();
 }
 
-void ClientManager::privmsg(Client &sender, const std::string &reciever_name, const std::string& msg)
+void ClientManager::privmsg(const Command&cmd, Client &sender, const std::string &reciever_name, const std::string& msg)
 {
 	if (!require_exist_nick(sender, reciever_name))
 		return;
-	send_msg(get_client_by_nick(reciever_name), ":" + sender.get_nick() +" PRIVMSG "+reciever_name +" :" + msg);
+	reply(sender, REP_CMD(sender, cmd));
+	Client reciever = get_client_by_nick(reciever_name);
+	reply(reciever, REP_CMD(sender, cmd));
 }

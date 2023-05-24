@@ -2,19 +2,73 @@
 
 #include "CheckRegister.hpp"
 
-Channel::Channel(const std::string &name,const  Client& client, const std::string &pwd)
-    :name(name), password(pwd), invited_mode(false), topic_msg(""), topic_restricted(false), has_limit_(false), limit_num(0)
+Channel::Channel(const Command& cmd, const std::string &name,const  Client& client, const std::string &pwd)
+    :name(name), password(pwd), invited_mode(false), topic_msg(""), topic_restricted(true), has_limit_(false), limit_num(0)
 {
     //todo
     //新しくチャンネルを作った時のメッセージがあってもいい
     members.insert(client);
     operators.insert(client);
-    send_msg(client, get_prl_topic_msg());
+    reply_cmd_all(client, cmd);
+    reply(client, get_rpl_topic_msg(client));
     names(client);
 }
 
-// チャンネルから離脱する
-void Channel::part(Client& target) {
+int Channel::get_member_cnt()
+{
+    return members.size();
+}
+
+std::string Channel::get_mode()
+{
+    std::string mode = "+";
+    if (invited_mode)
+        mode += "i";
+    if (topic_restricted)
+        mode += "t";
+    if (password != "")
+        mode += "k";
+    if (has_limit())
+        mode += "l";
+    if (mode == "+")
+        return "";
+    else
+        return mode;
+}
+
+bool Channel::require_limit_safe(Client &sender)
+{
+    if (!has_limit())return true;
+    if (limit_num < members.size() + 1)
+    {
+        reply(sender, ERR_CHANNELISFULL(sender, (*this)));
+        return false;
+    }
+    return true;
+}
+
+
+void Channel::broadcast(const Client& sender, std::string message) const
+{
+    if (!require_sender_is_member(sender))return;
+    for (client_it reciever = members.begin(); reciever != members.end(); ++reciever)
+        reply(*reciever, message);
+}
+
+void Channel::broadcast_except_sender(const Client& sender, std::string message) const
+{
+    if (!require_sender_is_member(sender))return;
+    for (client_it reciever = members.begin(); reciever != members.end(); ++reciever)
+    {
+        if (*reciever == sender) 
+            continue;
+        reply(*reciever, message);
+    }
+}
+
+/// @brief チャンネルからクライアントを消す
+/// @param target 
+void Channel::remove_client(Client& target) {
     if (!require_sender_is_member(target))return;
     members.erase(target);  
     if (is_operator(target))
@@ -23,97 +77,20 @@ void Channel::part(Client& target) {
     }
 }
 
-
-static bool require_invited_conditions(Client &client, Channel& channel)
+/// @brief チャンネル内でコマンドを使った際、自分と他のクライアントにその旨を送信する
+/// @param sender 
+/// @param cmd 
+void Channel::reply_cmd_all(const Client& sender, const Command& cmd) const
 {
-    if (channel.is_invited_mode() && !channel.is_invited(client))
-	{
-		send_numeric_msg(client, 473, channel.get_name() + " :Cannot join channel (+i)");
-		return false;
-	}
-	return true;
+    broadcast(sender,  REP_CMD(sender, cmd));
 }
 
-int Channel::get_member_cnt()
+/// @brief チャンネル内でコマンドを使った際、自分を除く他のクライアントにその旨を送信する
+/// @param sender 
+/// @param cmd 
+void Channel::reply_cmd_except_sender(const Client& sender, const Command& cmd) const
 {
-    return members.size();
-}
-
-bool Channel::require_limit_safe(Client &sender)
-{
-    if (!has_limit())return true;
-    if (limit_num < members.size() + 1)
-    {
-        send_numeric_msg(sender, 471,  get_name() + " :Cannot join channel (+l)");
-        return false;
-    }
-    return true;
-}
-
-//存在しないチャンネルに対してjoinを行った場合はこの関数ではなくコンストラクタで処理する
-void Channel::join(Client& sender, const std::string & pass)
-{
-    if (!require_invited_conditions(sender, *this)) return;
-    //すでに属しているチャンネルにjoinを行った場合,本家はエラーをおこさないらしいので、とりあえず何もしないことにする。
-    if (is_member(sender))
-        return;
-    if (!require_limit_safe(sender)) 
-        return;
-    if (!correct_pass(pass))
-    {
-        send_numeric_msg(sender, 475, get_name()+ " :Cannot join channel (+k)");
-        return;
-    }
-    members.insert(sender);
-    send_msg(sender, get_prl_topic_msg());
-    names(sender);
-}
-
-void Channel::broadcast(Client& sender, std::string message) const
-{
-    if (!require_sender_is_member(sender))return;
-    for (client_it reciever = members.begin(); reciever != members.end(); ++reciever)
-        send_msg(*reciever, message);
-}
-
-//ユーザーがチャンネルに属していない場合442エラー
-void Channel::privmsg(Client& sender, std::string message) const
-{
-    broadcast(sender,  ":" + sender.get_nick() +" PRIVMSG " + get_name()+ " :"+message);
-}
-
-
-
-
-static std::string get_names_str(const Channel &ch, const Client &client)
-{
-	std::string msg = ch.get_name() + " :";
-	for(std::set<Client>::iterator cl_it = ch.get_members().begin(); cl_it != ch.get_members().end(); cl_it++)
-	{
-		if (cl_it != ch.get_members().begin())
-			msg += " ";
-		if (ch.is_operator(*cl_it))
-			msg+="@";
-		msg += cl_it->get_nick();
-	}
-	return msg;
-}
-
-void Channel::names(const Client& sender) const
-{
-    if (!require_sender_is_member(sender))return;
-    send_msg(sender, get_names_str(*this, sender));
-	send_msg(sender, get_name()+ " :End of /NAMES list");
-}
-
-
-
-void Channel::quit(const Client &target, const std::string &quit_msg)
-{
-    assert(is_member(target));
-    members.erase(target);
-    if (is_operator(target))
-        operators.erase(target);
+    broadcast_except_sender(sender,  REP_CMD(sender, cmd));
 }
 
 bool Channel::correct_pass(const std::string& pass)
@@ -137,7 +114,7 @@ bool Channel::require_operator(Client& sender) const
 {
 	if (!is_operator(sender))
 	{
-		send_numeric_msg(sender, 482, get_name()+ " :You're not channel operator");
+        reply(sender, ERR_CHANOPRIVSNEEDED((*this)));
 		return false;
 	}
 	return true;
@@ -148,7 +125,7 @@ bool Channel::require_target_is_member(Client& sender, Client &target) const
 {
     if (!is_member(target))
 	{
-		send_numeric_msg(sender, 441, target.get_nick()+ " " +get_name() + " :They aren't on that channel");
+        reply(sender, ERR_USERNOTINCHANNEL(sender, target, (*this)));
         return false;
 	}
 	return true;
@@ -159,53 +136,12 @@ bool Channel::require_sender_is_member(const Client& sender) const
 {
     if (!is_member(sender))
 	{
-		send_numeric_msg(sender, 442, get_name() + " :You're not on that channel");
+        reply(sender, ERR_NOTONCHANNEL(sender, (*this)));
         return false;
 	}
     return true;
 }
 
-
-static bool require_not_member(Client& sender, Client& target, Channel& channel)
-{
-	if (channel.is_member(target))
-	{
-		send_numeric_msg(sender, 443, target.get_nick()+ " "+channel.get_name() +" :is already on channel");
-		return false;
-	}
-	return true;
-}
-
-void Channel::invite(Client &sender, Client& target)
-{
-	if (!require_operator(sender)) return;
-	if (!require_not_member(sender, target, *this)) return;
-	invited.insert(target);
-	send_msg(target, sender.get_nick() + " invites you to join " + get_name());
-}
-
-std::string Channel::get_prl_topic_msg()
-{
-    std::string msg_base = get_name()+ " :" + get_topic();
-    if (this->topic_msg == "")
-        return  "331 " + msg_base;
-    else
-        return  "332 " + msg_base;
-}
-
-void Channel::set_topic(Client &sender, const std::string &topic_msg)
-{
-    if (topic_restricted && !require_operator(sender)) return;
-    this->topic_msg = topic_msg;
-    broadcast(sender,get_prl_topic_msg());
-}
-
-void Channel::show_topic(Client &sender)
-{
-    if (!require_sender_is_member(sender)) return;
-    send_msg(sender, get_prl_topic_msg());
-}
-    
 std::string Channel::get_name() const
 {
     return name;

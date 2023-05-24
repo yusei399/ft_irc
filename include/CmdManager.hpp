@@ -18,18 +18,20 @@
 #define  KICK  "KICK"	
 #define  INVITE  "INVITE"	
 #define  PART  "PART"	
+#define  WHO  "WHO"	
 
 class CmdManager
 {
 	ClientManager &clientManager;
 	ChannelManager &channelManager;
 	std::string server_pass;
-	void mode_i(Client&sender, const Command&cmd);
-	void mode_o(Client&sender, const Command&cmd);
-	void mode_t(Client&sender, const Command&cmd);
-	void mode_k(Client&sender, const Command&cmd);
-	void mode_l(Client&sender, const Command&cmd);
-
+	void mode_i(Channel &channel, Client&sender, const Command&cmd);
+	void mode_o(Channel &channel, Client&sender, const Command&cmd);
+	void mode_t(Channel &channel, Client&sender, const Command&cmd);
+	void mode_k(Channel &channel, Client&sender, const Command&cmd);
+	void mode_l(Channel &channel, Client&sender, const Command&cmd);
+	void mode_state(Channel &channel, Client&sender, const Command&cmd);
+	void names_all_channel(Client &client, const Command& cmd);
 public:
 	CmdManager(ClientManager &clientManager, ChannelManager &channelManager, const std::string &server_pass) :clientManager(clientManager), channelManager(channelManager), server_pass(server_pass){};
 	bool require_enough_params(Client &sender, const Command& cmd, size_t ok_min, size_t ng_min = SIZE_MAX, bool require_trailing = false);
@@ -52,6 +54,7 @@ public:
 	void part(Client& sender, const Command& cmd);
 	void topic(Client& sender, const Command& cmd);
 	void ping(Client &sender, const Command& cmd);
+	void who(Client &client, const Command& cmd);
 };
 
 #endif // CMD_MANAGER_HPP

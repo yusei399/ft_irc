@@ -5,7 +5,7 @@ static bool require_valid_param(Client &client, const Command &cmd, CmdManager &
 	bool is_ok = true;
 	if (cmd._params.size() == 0)
 	{
-		send_numeric_msg(client, 411, ":No recipient given (" + cmd.get_original_str()+ ")");
+		reply(client, ERR_NORECIPIENT(client, cmd.get_original_str()));
 		is_ok = false;
 	}
 	else if (!cmdManager.require_enough_params(client, cmd, 1, 2))
@@ -14,7 +14,7 @@ static bool require_valid_param(Client &client, const Command &cmd, CmdManager &
 	}
 	if (!cmd.has_trailing())
 	{
-		send_numeric_msg(client, 412, ":No text to send");
+		reply(client, ERR_NOTEXTTOSEND(client));
 		is_ok = false;	
 	}
 	return is_ok;
@@ -32,6 +32,7 @@ static bool is_channel(const std::string &reicieve)
 	return reicieve != "" && reicieve[0] == '#';
 }
 
+//PRIVMSG #a :msg
 void CmdManager::privmsg(Client& client, const Command &cmd)
 {
 	if (!require_authed(client)) return;
@@ -41,8 +42,8 @@ void CmdManager::privmsg(Client& client, const Command &cmd)
 	for (size_t i = 0; i < targets.size(); i++)
 	{
 		if (is_channel(targets[i]))
-			channelManager.privmsg_to_channel(client, targets[i], cmd._trailing);
+			channelManager.privmsg_to_channel(cmd, client, targets[i], cmd._trailing);
 		else
-			clientManager.privmsg(client, targets[i], cmd._trailing);
+			clientManager.privmsg(cmd, client, targets[i], cmd._trailing);
 	}
 }

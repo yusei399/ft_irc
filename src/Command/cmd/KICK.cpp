@@ -1,5 +1,6 @@
 #include "CmdManager.hpp"
 
+//KICK #channel nick
 void CmdManager::kick(Client &sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;
@@ -12,5 +13,5 @@ void CmdManager::kick(Client &sender, const Command& cmd)
 	Channel& channel = channelManager.get_channel(channel_name);
 	Client &ban_user = clientManager.get_client_by_nick(kick_user_name);
 	std::string kick_reason = cmd._trailing;
-	channel.kick(sender, ban_user, kick_reason);
+	channel.kick(cmd, sender, ban_user, kick_reason);
 }
