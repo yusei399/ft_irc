@@ -98,8 +98,12 @@ static std::string recieve_msg(Client &client)
 		}
 	}
 	std::string res = std::string(buff);
-	std::cout << "recieve : \n"<<  res<< "\n\n"<< std::endl;
+	std::cout << "recieve by " << client.get_nick()<<" : \n"<<  res<< "\n\n"<< std::endl;
 	return res;
+}
+bool Server::has_event(size_t i, size_t event_mask)
+{
+	return _pfds[i].revents & event_mask;
 }
 
 void Server::poll_loop()
@@ -112,7 +116,13 @@ void Server::poll_loop()
 		{
 			if (_pfds[i].revents == 0)
 				continue;
-			if (_pfds[i].revents == POLLIN)
+			//else if ((_pfds[i].revents & POLLHUP) || (_pfds[i].revents & POLLERR))
+			else if (has_event(i, POLLHUP) || has_event(i, POLLERR))
+			{
+				clientManager.erase_client(clientManager.get_client_by_fd(_pfds[i].fd), channelManager);
+			}
+			//else if (_pfds[i].revents & POLLIN)
+			else if (has_event(i, POLLIN))
 				(_pfds[i].fd == _socket_fd) ?  this->allow() : this->recieve_cmd(clientManager.get_client_by_fd(_pfds[i].fd));
 		}
 	}
@@ -129,7 +139,7 @@ void Server::start()
 //todo コマンドが複数に分割されている場合
 void Server::recieve_cmd(Client &sender)
 {
-	std::vector<Command> cmds = cmdManager.parse_commands(recieve_msg(sender));
-	for(size_t i = 0; i < cmds.size(); i++)
-		cmdManager.exe_cmd(sender, cmds[i]);
+	sender.cmd_buffer.appendBuffer(recieve_msg(sender));
+	while (sender.cmd_buffer.hasComamnd())
+		cmdManager.exe_cmd(sender, sender.cmd_buffer.popFrontCommand());;
 }

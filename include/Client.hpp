@@ -11,7 +11,7 @@
 #include <map>
 #include <cassert>
 #include <cstring>
-
+#include "CmdBuffer.hpp"
 
 
 //todo 簡単だったらクライアントのホスト名の取得を実装する
@@ -38,6 +38,7 @@ private:
 	void set_server_name(const std::string &server_name) {_server_name = server_name;}
 	
 public:
+	CmdBuffer cmd_buffer;
 	bool nickname_seted;//nicknameとuserが設定されると001メッセージが返される
 	bool user_seted;
 	Client();

@@ -27,7 +27,7 @@ public:
  	void names_all(const Client &sender, const Command& cmd, std::set<Client> all_clients);
 	void user(Client &client, const Command& cmd);
 	void privmsg_to_channel(const Command& cmd, Client &sender, const std::string &channel_name, const std::string & msg);
-	void quit_all_channel(const Command& cmd, Client &client);
+	void remove_by_all_channel(Client &client);
 	void part_list(const Command& cmd, Client &sender, std::vector<std::string> &ch_names);
 };
 #endif

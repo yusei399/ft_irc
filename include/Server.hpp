@@ -36,6 +36,7 @@ private:
 	void create_poll(int socket_fd);
 	void signal_handler(int signal);
 	void set_signal();
+	bool has_event(size_t i, size_t event_mask);
 public:
 	CmdManager cmdManager;
 	Server();
