@@ -1,5 +1,6 @@
 #include "CmdManager.hpp"
 
+//TOPIC #a :topic	チャンネル#aのトピックをtopicにする
 void CmdManager::topic(Client& sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;

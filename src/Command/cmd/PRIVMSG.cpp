@@ -32,6 +32,7 @@ static bool is_channel(const std::string &reicieve)
 	return reicieve != "" && reicieve[0] == '#';
 }
 
+//PRIVMSG #a :msg
 void CmdManager::privmsg(Client& client, const Command &cmd)
 {
 	if (!require_authed(client)) return;

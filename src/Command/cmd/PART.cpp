@@ -3,6 +3,8 @@ static std::vector<std::string> parse_ch_names(const Command& cmd)
 {
 	return split(cmd._params[0], ",");;
 }
+
+//PART #a
 void CmdManager::part(Client& sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;

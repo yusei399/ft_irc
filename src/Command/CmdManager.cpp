@@ -37,6 +37,7 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 	else if (cmd._cmd_name == PING)	ping(sender, cmd);
 	else if (cmd._cmd_name == NAMES) names(sender, cmd);
 	else if (cmd._cmd_name == MODE) mode(sender, cmd);
+	else if (cmd._cmd_name == WHO) who(sender, cmd);
 	else if (cmd._cmd_name == PRIVMSG) privmsg(sender, cmd);
 	else if (cmd._cmd_name == QUIT)	quit(sender, cmd);
 	else if (cmd._cmd_name == KICK) kick(sender, cmd);

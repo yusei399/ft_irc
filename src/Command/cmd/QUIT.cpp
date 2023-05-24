@@ -29,6 +29,7 @@ static void send_quit_msg(Client&sender, const Command &cmd, const std::set<Clie
 	}
 }
 
+//QUIT #a [:reason]
 void CmdManager::quit(Client&client, const Command &cmd)
 {
 	if (!require_authed(client)) return;

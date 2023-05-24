@@ -36,6 +36,7 @@ private:
     bool require_limit_safe(Client &sender);
 public:
     int get_member_cnt();
+    std::string get_mode();
     bool has_limit()const {return has_limit_;}
     Channel(const Command& cmd, const std::string &name, const Client& client, const std::string &pwd);
     void remove_client(Client& target);

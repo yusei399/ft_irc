@@ -3,7 +3,7 @@
 #include "CheckRegister.hpp"
 
 Channel::Channel(const Command& cmd, const std::string &name,const  Client& client, const std::string &pwd)
-    :name(name), password(pwd), invited_mode(false), topic_msg(""), topic_restricted(false), has_limit_(false), limit_num(0)
+    :name(name), password(pwd), invited_mode(false), topic_msg(""), topic_restricted(true), has_limit_(false), limit_num(0)
 {
     //todo
     //新しくチャンネルを作った時のメッセージがあってもいい
@@ -17,6 +17,23 @@ Channel::Channel(const Command& cmd, const std::string &name,const  Client& clie
 int Channel::get_member_cnt()
 {
     return members.size();
+}
+
+std::string Channel::get_mode()
+{
+    std::string mode = "+";
+    if (invited_mode)
+        mode += "i";
+    if (topic_restricted)
+        mode += "t";
+    if (password != "")
+        mode += "k";
+    if (has_limit())
+        mode += "l";
+    if (mode == "+")
+        return "";
+    else
+        return mode;
 }
 
 bool Channel::require_limit_safe(Client &sender)

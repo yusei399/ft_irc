@@ -1,5 +1,6 @@
 #include "CmdManager.hpp"
 
+//KICK #channel nick
 void CmdManager::kick(Client &sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;

@@ -22,10 +22,3 @@ void Channel::show_topic(Client &sender)
     if (!require_sender_is_member(sender)) return;
     reply(sender, get_rpl_topic_msg(sender));
 }
-
-/*
-todo
-送信者には、トピックが設定されたことを示すRPL_TOPICが送られます。
-その他のチャンネルの人間には、トピックが変更されたことと、変更したユーザーの名前を示すTOPICが送られます。
-
-*/

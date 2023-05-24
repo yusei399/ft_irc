@@ -8,6 +8,8 @@ void CmdManager::names_all_channel(Client &client, const Command& cmd)
 	channelManager.names_all(client, cmd, recievers_set);
 }
 
+//NAMES #a　指定したチャンネルに属するユーザーを表示
+//NAMES		全てのチャンネルについて属するユーザーを表示、どのチャンネルにも属さないユーザーはチャンネル名を*として表示
 void CmdManager::names(Client &client, const Command& cmd)
 {
 	if (!require_authed(client)) return;

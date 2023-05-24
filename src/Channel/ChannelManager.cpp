@@ -22,6 +22,9 @@ bool ChannelManager::exist_channel(std::string channelName) const
 	return find_it(channelName) != channels.end();
 }
 
+/// @brief pdfによると、ユーザーに対してのMODEコマンドは実装しなくていいので無視する
+/// @param channel_name 
+/// @return 
 bool ChannelManager::is_valid_channel_name(const std::string & channel_name)
 {
 	return !(channel_name == "" || channel_name[0] != '#' || channel_name == "#");

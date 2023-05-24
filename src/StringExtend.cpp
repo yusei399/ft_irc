@@ -37,16 +37,3 @@ std::vector<std::string> split_lines(const std::string& s)
     delims.push_back(std::string("\n"));
     return split(s, delims);
 }
-
-/*
-int main()
-{
-    std::vector<std::string> ret =    split_lines("1234¥n5678¥r¥n¥r¥n¥r¥n¥r¥n9012¥r¥n3456¥r¥n¥r¥n");
-    for(int i = 0; i < (int)ret.size(); i++)
-    {
-        std::cout<<"<"<<ret[i]<<">"<<std::endl;
-    }
-    return 0;
-}*/
-
-//c++ -Wall -Wextra -Werror -std=c++98 StringExtend.cpps

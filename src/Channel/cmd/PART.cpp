@@ -7,7 +7,7 @@ void ChannelManager::part_list(const Command& cmd, Client &sender, std::vector<s
 	{
 		if (!require_exist_channel(sender, ch_names[i]))
 			continue;
-		get_channel(ch_names[i]).remove_client(sender);
 		get_channel(ch_names[i]).reply_cmd_all(sender, cmd);
+		get_channel(ch_names[i]).remove_client(sender);
 	}
 }

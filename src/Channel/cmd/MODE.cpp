@@ -12,7 +12,6 @@ void Channel::mode_i(const Command&cmd, Client &sender, bool valid)
     if (!require_operator(sender)) return;
     invited_mode = valid;
     reply_cmd_all(sender, cmd);
-    reply(sender ,RPL_CHANNELMODEIS(sender, (*this), (valid ? "+i" : "-i"), ""));
 }
 
 void Channel::mode_o(const Command&cmd, Client &sender, bool valid, Client &target)
@@ -24,22 +23,13 @@ void Channel::mode_o(const Command&cmd, Client &sender, bool valid, Client &targ
     if (valid)
     {
         operators.insert(target);
-        reply(sender, RPL_CHANNELMODEIS(sender, (*this), "+o", target.get_nick()));
     }
     else
     {
         if (operators.count(target))
-            operators.erase(target);
-        reply(sender, RPL_CHANNELMODEIS(sender, (*this), "-o", target.get_nick()));
+            operators.erase(target);    
     }
 }
-/*
-std::string Channel::get_channel_modeis(Client &sender, const std::string &mode, const std::string &param)
-{
-    std::string msg =  "324 " + get_name()+ " " + mode;
-    if (param != "") msg += " " + param;
-    return msg;
-}*/
 
 void Channel::mode_t_state(Client &sender)
 {
@@ -51,17 +41,15 @@ void Channel::mode_t(const Command&cmd, Client &sender, bool valid)
 {
     if (!require_operator(sender)) return;
     topic_restricted = valid;
-    std::string mode = valid ? "mode +t" : "mode -t";
     reply_cmd_all(sender, cmd);
-    reply(sender , RPL_CHANNELMODEIS(sender, (*this), (valid ? "+t" : "-t"), ""));
 }
 
 void Channel::mode_k_state(Client &sender)
 {
     if (!require_sender_is_member(sender))return;
-    std::string mode = "MODE ";
-    if (password == "") mode += "-k";
-    else                mode += "+k";
+    std::string mode;
+    if (password == "") mode = "-k";
+    else                mode = "+k";
     reply(sender , RPL_CHANNELMODEIS(sender, (*this), mode, ""));
 }
 
@@ -70,7 +58,6 @@ void Channel::mode_k_add(const Command&cmd, Client &sender, const std::string &n
     if (!require_operator(sender)) return;
     password = new_pass;
     reply_cmd_all(sender, cmd);
-    reply(sender , RPL_CHANNELMODEIS(sender, (*this), "+k", password));
 }
 
 void Channel::mode_k_rem(const Command&cmd, Client &sender)
@@ -78,7 +65,6 @@ void Channel::mode_k_rem(const Command&cmd, Client &sender)
     if (!require_operator(sender)) return;
     password = "";
     reply_cmd_all(sender, cmd);
-    reply(sender , RPL_CHANNELMODEIS(sender, (*this), "-k", password));
 }
 
 /// @brief 人数制限がない場合、何も出力されない仕様
@@ -107,7 +93,6 @@ void Channel::mode_l_add(const Command&cmd, Client &sender, const std::string &l
     has_limit_ = true;
     limit_num = ft_atoi(limit_num_str, 0, 32767, allow_one_plus);
     reply_cmd_all(sender, cmd);
-    reply(sender , RPL_CHANNELMODEIS(sender, (*this), "+l", limit_num_str));
 }
 
 
@@ -117,23 +102,4 @@ void Channel::mode_l_rem(const Command&cmd, Client &sender)
     has_limit_ = false;
     limit_num = 0;
     reply_cmd_all(sender, cmd);
-    reply(sender , RPL_CHANNELMODEIS(sender, (*this), "-l", ""));
 }
-/*
-送信者は、以下の2つのメッセージを受け取ります。
-:prefix MODE <channel> <mode> <mode params>
-:prefix 324 <nick> <channel> <mode> <mode params>
-
-その他のクライアントは、以下の1つのメッセージを受け取ります。
-:prefix MODE <channel> <mode> <mode params>
-例えば、aliceが#fooのモードを+o bobに変更した場合、以下のようなメッセージが送られます。
-
-aliceは、以下の2つのメッセージを受け取ります。
-:alice!~alice@irc.example.com MODE #foo +o bob
-:irc.example.com 324 alice #foo +ntko bob secret
-
-その他のクライアントは、以下の1つのメッセージを受け取ります。
-:alice!~alice@irc.example.com MODE #foo +o bob
-
-bobも同じ
-*/

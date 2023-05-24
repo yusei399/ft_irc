@@ -1,5 +1,7 @@
 #include "CmdManager.hpp"
 
+
+//INVITE nick #channel
 void CmdManager::invite(Client& sender, const Command& cmd)
 {
 	if (!require_authed(sender)) return;
