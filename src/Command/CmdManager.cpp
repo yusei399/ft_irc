@@ -28,7 +28,6 @@ std::vector<Command> CmdManager::parse_commands(const std::string &commands_msg)
 
 void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 {
-	std::cout << "exe_cmd by" <<sender.get_nick()<<" "<<cmd.get_original_str() << std::endl;
 	if 		(cmd._cmd_name == CAP) cap(sender, cmd);
 	else if (cmd._cmd_name == PASS) pass(sender, cmd);
 	else if (cmd._cmd_name == NICK) nick(sender, cmd);
@@ -44,5 +43,6 @@ void CmdManager::exe_cmd(Client &sender, const Command &cmd)
 	else if (cmd._cmd_name == KICK) kick(sender, cmd);
 	else if (cmd._cmd_name == INVITE) invite(sender, cmd);
 	else if (cmd._cmd_name == PART) part(sender, cmd);
+	else if (cmd._cmd_name == NOTICE) notice(sender, cmd);
 	else reply(sender, ERR_UNKNOWNCOMMAND(sender, cmd._cmd_name));
 }

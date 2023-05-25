@@ -64,7 +64,14 @@ void ClientManager::privmsg(const Command&cmd, Client &sender, const std::string
 {
 	if (!require_exist_nick(sender, reciever_name))
 		return;
-	reply(sender, REP_CMD(sender, cmd));
+	Client reciever = get_client_by_nick(reciever_name);
+	reply(reciever, REP_CMD(sender, cmd));
+}
+
+void ClientManager::notice(const Command&cmd, Client &sender, const std::string &reciever_name, const std::string& msg)
+{
+	if (!exist_client_by_nick(reciever_name))
+		return;
 	Client reciever = get_client_by_nick(reciever_name);
 	reply(reciever, REP_CMD(sender, cmd));
 }

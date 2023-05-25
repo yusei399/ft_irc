@@ -3,7 +3,7 @@
 //trailingはスペースを含むことができ、二つ目以降の:は通常の文字列として使われる
 Command::Command(const std::string& cmd) : _original_string(cmd)
 {
-    size_t trailing_begin = cmd.find(":");
+    size_t trailing_begin = cmd.find(" :");
     if (trailing_begin == std::string::npos)
     {
         _has_trailing = false;
@@ -12,6 +12,7 @@ Command::Command(const std::string& cmd) : _original_string(cmd)
     else
     {
         _has_trailing = true;
+        trailing_begin = trailing_begin + 1;
     }
     std::vector<std::string> prefix_trailing = split(cmd.substr(0, trailing_begin), std::vector<std::string>(1, " "));
     _cmd_name = prefix_trailing[0];
