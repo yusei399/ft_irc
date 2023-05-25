@@ -19,6 +19,7 @@
 #define  INVITE  "INVITE"	
 #define  PART  "PART"	
 #define  WHO  "WHO"	
+#define  NOTICE  "NOTICE"
 
 class CmdManager
 {
@@ -57,6 +58,7 @@ public:
 	void topic(Client& sender, const Command& cmd);
 	void ping(Client &sender, const Command& cmd);
 	void who(Client &client, const Command& cmd);
+	void notice(Client &client, const Command& cmd);
 };
 
 #endif // CMD_MANAGER_HPP
