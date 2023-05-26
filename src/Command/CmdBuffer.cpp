@@ -2,17 +2,18 @@
 
 static std::string trimPrefixSpace(std::string s)
 {
-	while(s.size() > 0 && s[0] == ' ')s.erase(s.begin());
+	while (s.size() > 0 && s[0] == ' ')
+		s.erase(s.begin());
 	return s;
 }
 
 static std::string trimPrefixLf(std::string s)
 {
-	while(s.size())
+	while (s.size())
 	{
-		if(s[0] == ' ' || s[0] == '\n')
+		if (s[0] == ' ' || s[0] == '\n')
 			s.erase(s.begin());
-		else if(s.size() > 1 && s.substr(0, 2) == "\r\n")
+		else if (s.size() > 1 && s.substr(0, 2) == "\r\n")
 			s.erase(s.begin(), s.begin() + 2);
 		else
 			break;
@@ -21,12 +22,13 @@ static std::string trimPrefixLf(std::string s)
 }
 
 /// @brief 改行コードがあることを前提とする
-/// @param s 
-/// @return 
+/// @param s
+/// @return
 std::string CmdBuffer::trimPrefix(std::string s)
 {
 	s = trimPrefixSpace(s);
-	if (s.size() == 0)return s;
+	if (s.size() == 0)
+		return s;
 	if (s[0] == ':')
 	{
 		size_t space_pos = s.find(' ');
@@ -52,12 +54,12 @@ void CmdBuffer::appendBuffer(std::string s)
 
 bool CmdBuffer::hasComamnd()
 {
-	bool ret = command_buffer.find("\n") !=std::string::npos;
-	return command_buffer.find("\n") !=std::string::npos;
+	bool ret = command_buffer.find("\n") != std::string::npos;
+	return ret;
 }
 
 /// @brief コマンドがあることが保証される
-/// @return 
+/// @return
 Command CmdBuffer::popFrontCommand()
 {
 	size_t cur_cmd_end;
