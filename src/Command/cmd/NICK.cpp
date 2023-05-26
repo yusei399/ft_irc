@@ -15,6 +15,13 @@ static bool require_valid_nick(Client &client, const std::string & new_nick)
 	return true;
 }
 
+static void set_nick(Client& client, const std::string &new_nick, const Command& cmd, ChannelManager& channelManager)
+{
+	channelManager.cmd_reply_to_same_channel(client, cmd);
+	reply(client, REP_CMD(client, cmd));
+	client.set_nick(new_nick);
+}
+
 //NICK a : 自分のニックネームをaにする
 void CmdManager::nick(Client &client, const Command& cmd)
 {
@@ -25,11 +32,11 @@ void CmdManager::nick(Client &client, const Command& cmd)
 	//nickとuserを使わないとpass以外のコマンドが使えない
 	if (!client.nickname_seted && client.user_seted)
 	{
-		client.set_nick(new_nick);
+		set_nick(client, new_nick, cmd, channelManager);
 		send_welcome_msgs(client);
 	}
 	else
 	{
-		client.set_nick(new_nick);
+		set_nick(client, new_nick, cmd, channelManager);
 	}
 }

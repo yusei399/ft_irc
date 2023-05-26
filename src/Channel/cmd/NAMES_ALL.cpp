@@ -24,9 +24,8 @@ static std::string get_not_on_channel_names(const std::set<Client> &all_clients)
 	return name_list;
 }
 
-void ChannelManager::names_all_channel(const Client &sender, const Command &cmd, std::set<Client> &all_clients)
+void ChannelManager::names_all_channel(const Client &sender, std::set<Client> &all_clients)
 {
-	(void)cmd;
 	std::set<Channel> channels = get_all_channels();
 	for (channel_it it = channels.begin(); it != channels.end(); it++)
 	{
@@ -36,9 +35,8 @@ void ChannelManager::names_all_channel(const Client &sender, const Command &cmd,
 	}
 }
 
-static void names_not_on_channel(const Client &sender, const Command &cmd, std::set<Client> &all_clients)
+static void names_not_on_channel(const Client &sender,  std::set<Client> &all_clients)
 {
-	(void)cmd;
 	reply(sender, RPL_NAMREPLY(sender, "*", get_not_on_channel_names(all_clients)));
 	reply(sender, RPL_ENDOFNAMES(sender, "*"));
 }
@@ -47,8 +45,8 @@ static void names_not_on_channel(const Client &sender, const Command &cmd, std::
 /// @param sender
 /// @param cmd
 /// @param all_clients
-void ChannelManager::names_all(const Client &sender, const Command &cmd, std::set<Client> all_clients)
+void ChannelManager::names_all(const Client &sender, std::set<Client> all_clients)
 {
-	names_all_channel(sender, cmd, all_clients);
-	names_not_on_channel(sender, cmd, all_clients);
+	names_all_channel(sender, all_clients);
+	names_not_on_channel(sender, all_clients);
 }

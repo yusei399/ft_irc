@@ -90,29 +90,22 @@ void CmdManager::mode_l(Channel &channel, Client &sender, const Command &cmd)
 		throw std::logic_error("");
 }
 
-void CmdManager::mode_state(Channel &channel, Client &sender, const Command &cmd)
+void CmdManager::mode_state(Channel &channel, Client &sender)
 {
-	(void)cmd;
 	std::string mode = channel.get_mode();
 	reply(sender, RPL_CHANNELMODEIS(sender, channel, mode, ""));
 }
 
-// todoリファクタ
 void CmdManager::mode(Client &sender, const Command &cmd)
 {
-	if (!require_authed(sender))
-		return;
-	if (!require_nick_user(sender))
-		return;
-	if (!require_enough_params(sender, cmd, 1))
-		return;
-	if (!channelManager.is_valid_channel_name(cmd._params[0]))
-		return;
-	if (!channelManager.require_exist_channel(sender, cmd._params[0]))
-		return;
+	if (!require_authed(sender)) return;
+	if (!require_nick_user(sender)) return;
+	if (!require_enough_params(sender, cmd, 1)) return;
+	if (!channelManager.is_valid_channel_name(cmd._params[0])) return;
+	if (!channelManager.require_exist_channel(sender, cmd._params[0])) return;
 	Channel &channel = channelManager.get_channel(cmd._params[0]);
 	if (cmd._params.size() == 1)
-		mode_state(channel, sender, cmd);
+		mode_state(channel, sender);
 	else if (is_mode_i(cmd))
 		mode_i(channel, sender, cmd);
 	else if (is_mode_o(cmd))

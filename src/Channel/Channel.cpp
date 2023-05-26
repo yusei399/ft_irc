@@ -5,13 +5,19 @@
 Channel::Channel(const Command& cmd, const std::string &name,const  Client& client, const std::string &pwd)
     :name(name), password(pwd), invited_mode(false), topic_msg(""), topic_restricted(true), has_limit_(false), limit_num(0)
 {
-    //todo
-    //新しくチャンネルを作った時のメッセージがあってもいい
     members.insert(client);
     operators.insert(client);
     reply_cmd_all(client, cmd);
     reply(client, get_rpl_topic_msg(client));
     names(client);
+}
+
+std::string Channel::get_member_flag(const Client&client) const
+{
+    if (!is_member(client))
+        throw std::runtime_error("get_member_flag must member");
+    if (is_operator(client)) return "@";
+    else return "";
 }
 
 int Channel::get_member_cnt()

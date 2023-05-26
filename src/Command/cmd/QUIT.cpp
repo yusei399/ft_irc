@@ -1,33 +1,8 @@
 #include "CmdManager.hpp"
 
-/// @brief senderと同じチャンネルに属すクライアントを返す
-/// @param sender 
-/// @param channelManager 
-/// @return 
-static std::set<Client> get_same_channel_clients(Client&sender, ChannelManager &channelManager)
-{
-	std::set<Client> clients;
-	std::set<Channel> channels = channelManager.get_all_channels();
-	for(channel_it it = channels.begin(); it != channels.end(); it++)
-	{
-		const Channel &channel = *it;
-		if (channel.is_member(sender))
-			clients.insert(channel.get_members().begin(), channel.get_members().end());
-	}
-	return clients;
-}
-
 void CmdManager::send_quit_msg(Client&sender, const Command &cmd)
 {
-	const std::set<Client> &recievers = get_same_channel_clients(sender, channelManager);
-	//reply(sender, REP_CMD(sender, cmd));
-	for (client_it it = recievers.begin(); it != recievers.end(); ++it)
-	{
-		Client reciever = *it;
-    	if (reciever == sender)
-			continue;
-		reply(reciever, REP_CMD(sender, cmd));
-	}
+	channelManager.cmd_reply_to_same_channel(sender, cmd);
 }
 
 /// @brief ctrl cなどでクライアントが抜けた場合にquitする

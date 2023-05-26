@@ -133,7 +133,6 @@ void Server::start()
 }
 
 
-//todo コマンドが複数に分割されている場合
 void Server::recieve_cmd(Client &sender)
 {
 	sender.cmd_buffer.appendBuffer(recieve_msg(sender));

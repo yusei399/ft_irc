@@ -14,11 +14,6 @@
 #include "CmdBuffer.hpp"
 
 
-//todo 簡単だったらクライアントのホスト名の取得を実装する
-//todo nickネームなどの情報が全て揃ったらwelcomeみたいなメッセージ出す処理かく
-
-//todo 認証まわり
-
 //^cなどでのClientの切断に対応する
 class Client
 {

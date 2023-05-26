@@ -45,9 +45,9 @@ void CmdManager::privmsg(Client& client, const Command &cmd)
 	for (size_t i = 0; i < targets.size(); i++)
 	{
 		if (is_channel(targets[i]))
-			channelManager.privmsg_to_channel(cmd, client, targets[i], cmd._trailing);
+			channelManager.privmsg_to_channel(cmd, client, targets[i]);
 		else
-			clientManager.privmsg(cmd, client, targets[i], cmd._trailing);
+			clientManager.privmsg(cmd, client, targets[i]);
 	}
 }
 
@@ -63,8 +63,8 @@ void CmdManager::notice(Client &sender, const Command& cmd)
 	for (size_t i = 0; i < targets.size(); i++)
 	{
 		if (is_channel(targets[i]))
-			channelManager.notice_to_channel(cmd, sender, targets[i], cmd._trailing);
+			channelManager.notice_to_channel(cmd, sender, targets[i]);
 		else
-			clientManager.notice(cmd, sender, targets[i], cmd._trailing);
+			clientManager.notice(cmd, sender, targets[i]);
 	}
 }

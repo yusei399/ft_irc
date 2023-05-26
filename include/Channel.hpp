@@ -35,6 +35,7 @@ private:
     bool require_valid_num(Client &sender, const std::string &limit_num_str);
     bool require_limit_safe(Client &sender);
 public:
+    std::string get_member_flag(const Client&client) const;
     int get_member_cnt();
     std::string get_mode();
     bool has_limit()const {return has_limit_;}
@@ -47,12 +48,12 @@ public:
     void reply_cmd_all(const Client& sender, const Command& cmd) const;
     void reply_cmd_except_sender(const Client& sender, const Command& cmd) const;
     
-    void privmsg(const Command&cmd, Client& sender, std::string message) const;
-    void notice(const Command&cmd, Client& sender, std::string message) const;
+    void privmsg(const Command&cmd, Client& sender) const;
+    void notice(const Command&cmd, Client& sender) const;
     void names(const Client& sender) const;
     bool correct_pass(const std::string& pass);
 	//オペレーターコマンド
-    void kick(const Command&cmd, Client &sender, Client& target, const std::string & kick_reason);
+    void kick(const Command&cmd, Client &sender, Client& target);
     void invite(const Command&cmd, Client &sender, Client& target);
     void mode_i_state(Client &client);
     void mode_i(const Command&cmd, Client &sender, bool valid);
