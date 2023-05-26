@@ -62,12 +62,13 @@ $(NAME): $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
-	$(RM) $(NAME)
 	$(RM) $(OBJDIR)
 
-fclean: clean
+fclean:
+	$(RM) $(OBJS)
+	$(RM) $(OBJDIR)
+	$(RM) $(NAME)
 
 re: fclean all
 
 .PHONY: all clean fclean re
-

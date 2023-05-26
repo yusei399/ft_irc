@@ -13,6 +13,7 @@ static bool require_in_channel(Client &sender, Client& kick_user, Channel& chann
 //senderの権限でban_userをチャンネルから追い出す
 void Channel::kick(const Command&cmd, Client &sender, Client& ban_user, const std::string & kick_reason)
 {
+	(void)kick_reason;
 	if (!require_authed(sender)) return;
 	if (!require_nick_user(sender)) return;
 	if (!require_in_channel(sender, ban_user, *this)) return;
