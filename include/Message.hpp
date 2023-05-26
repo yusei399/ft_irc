@@ -50,6 +50,11 @@ const std::string server_name = "ircserv";
 #define RPL_NICK_MSG(sender, command, parameters, trailing)	REPLY(server_name, command, sender.get_nick() + ((std::string)parameters == "" ? (std::string)"" : (" " + (std::string)parameters)), trailing)
 #define RPL_CHANNELMODEIS(sender, ch, mode, target_nick) 			RPL_NICK_MSG(sender, "324", ch.get_name() + ((std::string)mode == "" ? "" : " " + (std::string)mode) + ((std::string)target_nick == "" ? "" : " " + (std::string)target_nick), "")
 #define RPL_INVITING(sender, target, ch) 				RPL_NICK_MSG(sender, "341", target.get_nick()+ " " + ch.get_name(), "")
+
+																										//  "<channel> <user> <host> <server> <nick> <H|G>[*][@|+] :<hopcount> <real name>"
+#define RPL_WHOREPLY(sender, ch, target)					RPL_NICK_MSG(sender, "352", ch.get_name() + " " + target.get_user_name() + " " + target.get_host_name() + " " + server_name+" " + target.get_nick()+ (std::string)" H" + ch.get_member_flag(target), "0 " + target.get_real_name())
+#define RPL_ENDOFWHO(sender, ch) 							RPL_NICK_MSG(sender, "315", ch.get_name(), "End of /WHO list")
+
 #define RPL_NAMREPLY(sender, ch_name, name_list) 			RPL_NICK_MSG(sender, "353", ((std::string)ch_name == "*" ? "" : "= ") + ch_name ,name_list)
 #define RPL_ENDOFNAMES(sender, ch_name) 						RPL_NICK_MSG(sender, "366", ch_name,"End of /NAMES list")
 //									+k, -kなど
@@ -62,7 +67,7 @@ const std::string server_name = "ircserv";
 //#define ERR_TOOMANYCHANNELS(sender, ch)					RPL_NICK_MSG(sender, "405", ch.get_name(), "Too many channel")
 #define ERR_NORECIPIENT(sender, command) 				RPL_NICK_MSG(sender, "411", "", "No recipient given (" + command + ")")
 #define ERR_NOTEXTTOSEND(sender)						RPL_NICK_MSG(sender, "412", "", "No text to send")
-//todo unknown
+
 #define ERR_UNKNOWNCOMMAND(sender, cmd_name)			RPL_NICK_MSG(sender, "421", cmd_name, "Unknown command")
 //#define ERR_NONICKNAMEGIVEN 							REPLY(":"+server_name, "431", "", "No nickname given")
 #define ERR_ERRONEUSNICKNAME(sender)					RPL_NICK_MSG(sender, "432", "", "Error one use nickname")

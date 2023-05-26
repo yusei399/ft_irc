@@ -35,6 +35,7 @@ private:
     bool require_valid_num(Client &sender, const std::string &limit_num_str);
     bool require_limit_safe(Client &sender);
 public:
+    std::string get_member_flag(const Client&client) const;
     int get_member_cnt();
     std::string get_mode();
     bool has_limit()const {return has_limit_;}

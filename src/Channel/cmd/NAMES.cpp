@@ -15,8 +15,7 @@ static std::string get_name_list(const Channel &ch)
 	{
 		if (cl_it != ch.get_members().begin())
 			msg += " ";
-		if (ch.is_operator(*cl_it))
-			msg += "@";
+		msg += ch.get_member_flag(*cl_it);
 		msg += cl_it->get_nick();
 	}
 	return msg;
