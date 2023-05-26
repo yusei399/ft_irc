@@ -50,3 +50,34 @@ bool ChannelManager::require_exist_channel(Client &client, const std::string & c
 	return true;
 }
 
+
+
+/// @brief senderと同じチャンネルに属すクライアントを返す
+/// @param sender 
+/// @param channelManager 
+/// @return 
+std::set<Client> ChannelManager::get_same_channel_clients(Client&sender)
+{
+	std::set<Client> clients;
+	std::set<Channel> channels = get_all_channels();
+	for(channel_it it = channels.begin(); it != channels.end(); it++)
+	{
+		const Channel &channel = *it;
+		if (channel.is_member(sender))
+			clients.insert(channel.get_members().begin(), channel.get_members().end());
+	}
+	return clients;
+}
+
+/// @brief 同じチャンネルに属す全てのクライアントにコマンドのリプライをする, 送り手には返さない
+void ChannelManager::cmd_reply_to_same_channel(Client&sender, const Command &cmd)
+{
+	const std::set<Client> &recievers = get_same_channel_clients(sender);
+	for (client_it it = recievers.begin(); it != recievers.end(); ++it)
+	{
+		Client reciever = *it;
+    	if (reciever == sender)
+			continue;
+		reply(reciever, REP_CMD(sender, cmd));
+	}
+}

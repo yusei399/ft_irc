@@ -52,7 +52,7 @@ public:
     void names(const Client& sender) const;
     bool correct_pass(const std::string& pass);
 	//オペレーターコマンド
-    void kick(const Command&cmd, Client &sender, Client& target, const std::string & kick_reason);
+    void kick(const Command&cmd, Client &sender, Client& target);
     void invite(const Command&cmd, Client &sender, Client& target);
     void mode_i_state(Client &client);
     void mode_i(const Command&cmd, Client &sender, bool valid);

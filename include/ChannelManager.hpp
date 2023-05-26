@@ -30,5 +30,7 @@ public:
 	void notice_to_channel(const Command& cmd, Client &sender, const std::string &channel_name, const std::string & msg);
 	void remove_by_all_channel(Client &client);
 	void part_list(const Command& cmd, Client &sender, std::vector<std::string> &ch_names);
+	std::set<Client> get_same_channel_clients(Client&sender);
+	void cmd_reply_to_same_channel(Client&sender, const Command &cmd);
 };
 #endif

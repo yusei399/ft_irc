@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include <map>
+#include <set>
 #include <sys/socket.h>
 #include "Client.hpp"
 
@@ -46,7 +47,6 @@ const std::string server_name = "ircserv";
 
 //RPL
 #define RPL_NONE(msg) 									REPLY(server_name, "300", "*", msg)
-
 #define RPL_NICK_MSG(sender, command, parameters, trailing)	REPLY(server_name, command, sender.get_nick() + ((std::string)parameters == "" ? (std::string)"" : (" " + (std::string)parameters)), trailing)
 #define RPL_CHANNELMODEIS(sender, ch, mode, target_nick) 			RPL_NICK_MSG(sender, "324", ch.get_name() + ((std::string)mode == "" ? "" : " " + (std::string)mode) + ((std::string)target_nick == "" ? "" : " " + (std::string)target_nick), "")
 #define RPL_INVITING(sender, target, ch) 				RPL_NICK_MSG(sender, "341", target.get_nick()+ " " + ch.get_name(), "")
@@ -85,4 +85,5 @@ void reply(const Client &reciever, const std::string &message);
 
 void send_welcome_msgs(const Client &reciever);
 void send_rpl_none(const Client &reciever, const std::string &msg);
+
 #endif // MESSAGE_HPP
