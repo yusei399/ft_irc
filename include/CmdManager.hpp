@@ -31,8 +31,8 @@ class CmdManager
 	void mode_t(Channel &channel, Client&sender, const Command&cmd);
 	void mode_k(Channel &channel, Client&sender, const Command&cmd);
 	void mode_l(Channel &channel, Client&sender, const Command&cmd);
-	void mode_state(Channel &channel, Client&sender, const Command&cmd);
-	void names_all_channel(Client &client, const Command& cmd);
+	void mode_state(Channel &channel, Client&sender);
+	void names_all_channel(Client &client);
 	void send_quit_msg(Client&sender, const Command &cmd);
 public:
 	CmdManager(ClientManager &clientManager, ChannelManager &channelManager, const std::string &server_pass) :clientManager(clientManager), channelManager(channelManager), server_pass(server_pass){};

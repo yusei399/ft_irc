@@ -47,8 +47,8 @@ public:
     void reply_cmd_all(const Client& sender, const Command& cmd) const;
     void reply_cmd_except_sender(const Client& sender, const Command& cmd) const;
     
-    void privmsg(const Command&cmd, Client& sender, std::string message) const;
-    void notice(const Command&cmd, Client& sender, std::string message) const;
+    void privmsg(const Command&cmd, Client& sender) const;
+    void notice(const Command&cmd, Client& sender) const;
     void names(const Client& sender) const;
     bool correct_pass(const std::string& pass);
 	//オペレーターコマンド

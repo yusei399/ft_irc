@@ -90,9 +90,8 @@ void CmdManager::mode_l(Channel &channel, Client &sender, const Command &cmd)
 		throw std::logic_error("");
 }
 
-void CmdManager::mode_state(Channel &channel, Client &sender, const Command &cmd)
+void CmdManager::mode_state(Channel &channel, Client &sender)
 {
-	(void)cmd;
 	std::string mode = channel.get_mode();
 	reply(sender, RPL_CHANNELMODEIS(sender, channel, mode, ""));
 }
@@ -112,7 +111,7 @@ void CmdManager::mode(Client &sender, const Command &cmd)
 		return;
 	Channel &channel = channelManager.get_channel(cmd._params[0]);
 	if (cmd._params.size() == 1)
-		mode_state(channel, sender, cmd);
+		mode_state(channel, sender);
 	else if (is_mode_i(cmd))
 		mode_i(channel, sender, cmd);
 	else if (is_mode_o(cmd))

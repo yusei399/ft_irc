@@ -60,18 +60,16 @@ void ClientManager::erase_client(Client &client, ChannelManager &channelManager)
 	close(client.get_fd());
 }
 
-void ClientManager::privmsg(const Command &cmd, Client &sender, const std::string &reciever_name, const std::string &msg)
+void ClientManager::privmsg(const Command &cmd, Client &sender, const std::string &reciever_name)
 {
-	(void)msg;
 	if (!require_exist_nick(sender, reciever_name))
 		return;
 	Client reciever = get_client_by_nick(reciever_name);
 	reply(reciever, REP_CMD(sender, cmd));
 }
 
-void ClientManager::notice(const Command &cmd, Client &sender, const std::string &reciever_name, const std::string &msg)
+void ClientManager::notice(const Command &cmd, Client &sender, const std::string &reciever_name)
 {
-	(void)msg;
 	if (!exist_client_by_nick(reciever_name))
 		return;
 	Client reciever = get_client_by_nick(reciever_name);

@@ -10,7 +10,7 @@ typedef std::set<Channel>::iterator channel_it;
 class ChannelManager
 {
 	std::set<Channel> channels;
-	void names_all_channel(const Client &sender, const Command& cmd, std::set<Client> &all_clients);
+	void names_all_channel(const Client &sender, std::set<Client> &all_clients);
 public:
 	channel_it find_it(std::string channelName) const;
 	Channel& get_channel(std::string channelName) const;
@@ -24,10 +24,10 @@ public:
 	void join(const Command& cmd, Client &client, const std::vector<std::string> &ch_names, const std::vector<std::string> &ch_pass);
 	//void invite(Client&sender, const std::string &target_user, const std::string &channel);
 	void names_channel(Client &client, const Command& cmd);
- 	void names_all(const Client &sender, const Command& cmd, std::set<Client> all_clients);
+ 	void names_all(const Client &sender, std::set<Client> all_clients);
 	void user(Client &client, const Command& cmd);
-	void privmsg_to_channel(const Command& cmd, Client &sender, const std::string &channel_name, const std::string & msg);
-	void notice_to_channel(const Command& cmd, Client &sender, const std::string &channel_name, const std::string & msg);
+	void privmsg_to_channel(const Command& cmd, Client &sender, const std::string &channel_name);
+	void notice_to_channel(const Command& cmd, Client &sender, const std::string &channel_name);
 	void remove_by_all_channel(Client &client);
 	void part_list(const Command& cmd, Client &sender, std::vector<std::string> &ch_names);
 	std::set<Client> get_same_channel_clients(Client&sender);

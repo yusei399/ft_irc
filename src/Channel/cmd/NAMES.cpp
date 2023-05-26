@@ -8,9 +8,8 @@ static std::vector<std::string> parse_channels(const Command &cmd)
 	return split(cmd._params[0], ",");
 }
 
-static std::string get_name_list(const Channel &ch, const Client &client)
+static std::string get_name_list(const Channel &ch)
 {
-	(void)client;
 	std::string msg = "";
 	for (std::set<Client>::iterator cl_it = ch.get_members().begin(); cl_it != ch.get_members().end(); cl_it++)
 	{
@@ -28,7 +27,7 @@ static std::string get_name_list(const Channel &ch, const Client &client)
 /// @param names_constraints コマンドの送信者がチャンネルに参加していない時にエラーを出すかどうか
 void Channel::names(const Client &sender) const
 {
-	reply(sender, RPL_NAMREPLY(sender, (this->get_name()), get_name_list(*this, sender)));
+	reply(sender, RPL_NAMREPLY(sender, (this->get_name()), get_name_list(*this)));
 	reply(sender, RPL_ENDOFNAMES(sender, (this->get_name())));
 }
 
